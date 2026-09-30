@@ -21,40 +21,7 @@ let showCreate = document.getElementById("show-create");
 let notification = document.getElementById("notification");
 let inventoryNotification = document.getElementById("inventory-notification");
 
-price.addEventListener("blur", () => {
-  if (price.value !== "") {
-    price.value = Number(price.value).toFixed(3);
-  }
-});
 
-function showInventoryTable() {
-  showInventory.addEventListener("click", () => {
-    managementSection.classList.add("hide");
-    inventorySection.classList.add("show");
-  });
-}
-showInventoryTable();
-
-function showCreatePage() {
-  showCreate.addEventListener("click", () => {
-    managementSection.classList.remove("hide");
-    inventorySection.classList.remove("show");
-  });
-}
-showCreatePage();
-
-
-//scroll table smoothly
-const container = document.querySelector(".table");
-
-container.addEventListener(
-  "wheel",
-  (event) => {
-    event.preventDefault();
-    container.scrollTop += event.deltaY * 0.1;
-  },
-  { passive: false },
-);
 ////////////////////1- Calculate discount  -//////////////////////////
 
 //initialize empty variable;
@@ -237,18 +204,13 @@ submit.onclick = function () {
           //save product in localstorage
           localStorage.setItem("product", JSON.stringify(dataProduct));
           count.style.display = "block";
-          totalTitle.innerText = " ";
+          totalTitle.innerText = "";
 
           showProductData();
           clearData();
 
           notification.classList.remove("error-notification");
           showNotification("Updated successfully");
-
-          window.scrollTo({
-            top: 0,
-            behavior: "smooth",
-          });
 
           //catch error
         } catch (error) {
@@ -406,5 +368,39 @@ function showNotification(message) {
   }, 5000);
 }
 
-//search
+
+price.addEventListener("blur", () => {
+  if (price.value !== "") {
+    price.value = Number(price.value).toFixed(3);
+  }
+});
+
+function showInventoryTable() {
+  showInventory.addEventListener("click", () => {
+    managementSection.classList.add("hide");
+    inventorySection.classList.add("show");
+  });
+}
+showInventoryTable();
+
+function showCreatePage() {
+  showCreate.addEventListener("click", () => {
+    managementSection.classList.remove("hide");
+    inventorySection.classList.remove("show");
+  });
+}
+showCreatePage();
+
+//scroll table smoothly
+const container = document.querySelector(".table");
+
+container.addEventListener(
+  "wheel",
+  (event) => {
+    event.preventDefault();
+    container.scrollTop += event.deltaY * 0.1;
+  },
+  { passive: false },
+);
+
 //clean data
