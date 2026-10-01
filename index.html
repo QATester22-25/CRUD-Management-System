@@ -117,9 +117,10 @@
         </div>
         <div id="aside">
           <div class="search">
-            <label for="search">Search for product</label>
-            <input type="search" placeholder="Enter search key-word">
-            <button>Search</button>
+            <label for="search-title">Search for product</label>
+            <input onChange="searchProduct(this.value)" id="search" type="text">
+            <button onclick="getSearchMood(this.id)" id="search-title">Search by title</button>
+            <button onclick="getSearchMood(this.id)" id="search-category">Search by category</button>
           </div>
           
             <div class="return"><button onclick="showCreatePage()" id="show-create">Create New

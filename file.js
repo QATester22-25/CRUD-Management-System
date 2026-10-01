@@ -20,6 +20,8 @@ let showInventory = document.getElementById("show-inventory");
 let showCreate = document.getElementById("show-create");
 let notification = document.getElementById("notification");
 let inventoryNotification = document.getElementById("inventory-notification");
+let titleSearch = document.getElementById("search-title");
+let categorySearch = document.getElementById('search-category');
 
 
 ////////////////////1- Calculate discount  -//////////////////////////
@@ -100,8 +102,8 @@ submit.onclick = function () {
   //declare product object
   let newProduct = {
     reference: reference.value,
-    title: title.value,
-    category: category.value,
+    title: title.value.toLowerCase(),
+    category: category.toLowerCase(), 
     count: count.value,
     price: price.value,
     discount: discount.value,
@@ -252,6 +254,7 @@ function clearData() {
 
 //Read - show products
 function showProductData() {
+ 
   let table = "";
   for (let i = 0; i < dataProduct.length; i++) {
     table += `<tr>
@@ -403,4 +406,87 @@ container.addEventListener(
   { passive: false },
 );
 
-//clean data
+
+/////////////////////////////////Search//////////////////////////////////////////
+
+
+let searchMood = 'title';
+
+function getSearchMood(id)
+{
+
+  let searchType = document.getElementById("search");
+  if (id == 'search-title')
+  {
+    searchMood = 'title'
+    searchType.placeholder = "Search by title"
+    
+  } else {
+    searchMood = 'category'
+    searchType.placeholder = "Search by category";
+  }
+  setTimeout(() => {
+    searchType.focus();
+  }, 1000);
+  
+  }
+
+function searchProduct(value) {
+  let table = ""; 
+  if (searchMood == 'title') {
+    
+    for (let i = 0; i < dataProduct.length; i++){
+      if (dataProduct[i].title.toLowerCase().includes(value.toLowerCase())) {
+        
+        
+
+        table += `<tr>
+        <td class="data">${dataProduct[i].reference}</td>
+        <td class="data" >${dataProduct[i].title}</td>
+        <td class="data">${dataProduct[i].category}</td>
+        <td class="data">${dataProduct[i].count}</td>
+        <td class="data">${Number(dataProduct[i].price).toLocaleString(
+          "fr-FR",
+          {
+            minimumFractionDigits: 3,
+            maximumFractionDigits: 3,
+          },
+        )}</td>
+        <td class="data">${dataProduct[i].discount}%</td>
+        <td class="data">${dataProduct[i].discountAmount}</td>
+        <td class="data">${dataProduct[i].total}</td>
+        <td><button onclick="updateProduct(${i})" id="update">update</button></td>
+        <td><button onclick="deleteProduct(${i})" id="delete">delete</button></td>
+      </tr>`;
+      }
+      document.getElementById("tbody").innerHTML = table;
+    }
+
+   }else {
+    for (let i = 0; i < dataProduct.length; i++) {
+      if (dataProduct[i].category.toLowerCase().includes(value.toLowerCase())) {
+        table += `<tr>
+        <td class="data">${dataProduct[i].reference}</td>
+        <td class="data" >${dataProduct[i].title}</td>
+        <td class="data">${dataProduct[i].category}</td>
+        <td class="data">${dataProduct[i].count}</td>
+        <td class="data">${Number(dataProduct[i].price).toLocaleString(
+          "fr-FR",
+          {
+            minimumFractionDigits: 3,
+            maximumFractionDigits: 3,
+          },
+        )}</td>
+        <td class="data">${dataProduct[i].discount}%</td>
+        <td class="data">${dataProduct[i].discountAmount}</td>
+        <td class="data">${dataProduct[i].total}</td>
+        <td><button onclick="updateProduct(${i})" id="update">update</button></td>
+        <td><button onclick="deleteProduct(${i})" id="delete">delete</button></td>
+      </tr>`;
+        
+      }
+    }
+  }
+  document.getElementById("tbody").innerHTML = table;
+}
+

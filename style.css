@@ -25,7 +25,7 @@ html {
   width: 100%;
   background-color: #325375;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: auto;
   transform: translateX(100%);
   opacity: 0;
   z-index: 1;
@@ -467,11 +467,11 @@ table th {
 table .data {
   border: 2px solid rgb(135, 134, 134);
   font-family: "Poppins", sans-serif;
-  font-size: 17px;
+  font-size: 20px;
   font-weight: 500;
   background: white;
   color: #324172;
-  padding: 0 1px;
+  padding: 0 2px;
 }
 
 table button {
