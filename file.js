@@ -103,7 +103,7 @@ submit.onclick = function () {
   let newProduct = {
     reference: reference.value,
     title: title.value.toLowerCase(),
-    category: category.toLowerCase(), 
+    category: category.value.toLowerCase(), 
     count: count.value,
     price: price.value,
     discount: discount.value,
@@ -436,9 +436,9 @@ function searchProduct(value) {
   if (searchMood == 'title') {
     
     for (let i = 0; i < dataProduct.length; i++){
-      if (dataProduct[i].title.toLowerCase().includes(value.toLowerCase())) {
+      if (dataProduct[i].title.toLowerCase().includes(value.toLowerCase()) || dataProduct[i].category.toLowerCase().includes(value.toLowerCase())) {
         
-        
+        console.log(dataProduct);
 
         table += `<tr>
         <td class="data">${dataProduct[i].reference}</td>
