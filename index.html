@@ -118,11 +118,9 @@
         <div id="aside">
           <div class="search">
             <label for="search-title">Search for product</label>
-            <input onChange="searchProduct(this.value)" id="search" type="text">
-            <button onclick="getSearchMood(this.id)" id="search-title">Search</button>
-            <button onclick="getSearchMood(this.id)" id="search-category">Search by category</button>
+            <input onchange="searchProduct(this.value)" id="search" type="text" placeholder="Ref / Title / Category">
+            <button  id="search-title">Search</button>
           </div>
-          
             <div class="return"><button onclick="showCreatePage()" id="show-create">Create New
                 Product</button>
             </div>
