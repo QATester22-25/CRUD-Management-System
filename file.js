@@ -20,8 +20,9 @@ let showInventory = document.getElementById("show-inventory");
 let showCreate = document.getElementById("show-create");
 let notification = document.getElementById("notification");
 let inventoryNotification = document.getElementById("inventory-notification");
-let titleSearch = document.getElementById("search-title");
-let categorySearch = document.getElementById('search-category');
+let searchBtn = document.getElementById("search-title");
+let inputSearch = document.getElementById("search");
+
 
 
 ////////////////////1- Calculate discount  -//////////////////////////
@@ -44,7 +45,7 @@ function getDiscount() {
         maximumFractionDigits: 3,
       },
     );
-  } else {
+  } else  {
     discountAmount.innerHTML = "";
   }
   let newPrice = price.value - convertedDiscount;
@@ -102,8 +103,8 @@ submit.onclick = function () {
   //declare product object
   let newProduct = {
     reference: reference.value,
-    title: title.value.toLowerCase(),
-    category: category.value.toLowerCase(), 
+    title: title.value,
+    category: category.value, 
     count: count.value,
     price: price.value,
     discount: discount.value,
@@ -250,6 +251,7 @@ function clearData() {
   errorCount.innerText = "";
   errorPrice.innerText = "";
   total.classList.remove("total");
+  inputSearch.value = "";
 }
 
 //Read - show products
@@ -284,6 +286,7 @@ function showProductData() {
 
   //add products to the table
   document.getElementById("tbody").innerHTML = table;
+  deleteAllBtn.classList.remove("delete-all-hide");
 }
 
 //call showProduct function
@@ -410,83 +413,62 @@ container.addEventListener(
 /////////////////////////////////Search//////////////////////////////////////////
 
 
-let searchMood = 'title';
-
-function getSearchMood(id)
-{
-
-  let searchType = document.getElementById("search");
-  if (id == 'search-title')
-  {
-    searchMood = 'title'
-    searchType.placeholder = "Search by title"
+function searchProduct(value) {
+  let table = "";
+  
+  for (let i = 0; i < dataProduct.length; i++) {
+    if (
+      dataProduct[i].title.toLowerCase().includes(value.toLowerCase()) ||
+      dataProduct[i].category.toLowerCase().includes(value.toLowerCase()) || dataProduct[i].reference === value.trim()
+    ) {
+      table += `<tr>
+        <td class="data">${dataProduct[i].reference}</td>
+        <td class="data" >${dataProduct[i].title}</td>
+        <td class="data">${dataProduct[i].category}</td>
+        <td class="data">${dataProduct[i].count}</td>
+        <td class="data">${Number(dataProduct[i].price).toLocaleString(
+        "fr-FR",
+        {
+          minimumFractionDigits: 3,
+          maximumFractionDigits: 3,
+        },
+      )}</td>
+        <td class="data">${dataProduct[i].discount}%</td>
+        <td class="data">${dataProduct[i].discountAmount}</td>
+        <td class="data">${dataProduct[i].total}</td>
+        <td><button onclick="updateProduct(${i})" id="update">update</button></td>
+        <td><button onclick="deleteProduct(${i})" id="delete">delete</button></td>
+      </tr>`;
+    }
+    document.getElementById("tbody").innerHTML = table;
+    
+    
+  }
+}
+  
+searchBtn.addEventListener("click", () => {
+  if (inputSearch.value) {
+    searchProduct(inputSearch.value);
+    deleteAllBtn.classList.add("delete-all-hide");
+    inputSearch.value = "";
     
   } else {
-    searchMood = 'category'
-    searchType.placeholder = "Search by category";
+    deleteAllBtn.classList.remove("delete-all-hide");
+    showProductData();
   }
-  setTimeout(() => {
-    searchType.focus();
-  }, 1000);
+});
   
+  
+inputSearch.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter')
+  if(inputSearch.value){
+    searchProduct(inputSearch.value);
+    deleteAllBtn.classList.add("delete-all-hide");
+    inputSearch.value = "";
+  } else {
+    deleteAllBtn.classList.remove("delete-all-hide");
+    showProductData();
   }
+})
 
-function searchProduct(value) {
-  let table = ""; 
-  if (searchMood == 'title') {
-    
-    for (let i = 0; i < dataProduct.length; i++){
-      if (dataProduct[i].title.toLowerCase().includes(value.toLowerCase()) || dataProduct[i].category.toLowerCase().includes(value.toLowerCase())) {
-        
-        console.log(dataProduct);
-
-        table += `<tr>
-        <td class="data">${dataProduct[i].reference}</td>
-        <td class="data" >${dataProduct[i].title}</td>
-        <td class="data">${dataProduct[i].category}</td>
-        <td class="data">${dataProduct[i].count}</td>
-        <td class="data">${Number(dataProduct[i].price).toLocaleString(
-          "fr-FR",
-          {
-            minimumFractionDigits: 3,
-            maximumFractionDigits: 3,
-          },
-        )}</td>
-        <td class="data">${dataProduct[i].discount}%</td>
-        <td class="data">${dataProduct[i].discountAmount}</td>
-        <td class="data">${dataProduct[i].total}</td>
-        <td><button onclick="updateProduct(${i})" id="update">update</button></td>
-        <td><button onclick="deleteProduct(${i})" id="delete">delete</button></td>
-      </tr>`;
-      }
-      document.getElementById("tbody").innerHTML = table;
-    }
-
-   }else {
-    for (let i = 0; i < dataProduct.length; i++) {
-      if (dataProduct[i].category.toLowerCase().includes(value.toLowerCase())) {
-        table += `<tr>
-        <td class="data">${dataProduct[i].reference}</td>
-        <td class="data" >${dataProduct[i].title}</td>
-        <td class="data">${dataProduct[i].category}</td>
-        <td class="data">${dataProduct[i].count}</td>
-        <td class="data">${Number(dataProduct[i].price).toLocaleString(
-          "fr-FR",
-          {
-            minimumFractionDigits: 3,
-            maximumFractionDigits: 3,
-          },
-        )}</td>
-        <td class="data">${dataProduct[i].discount}%</td>
-        <td class="data">${dataProduct[i].discountAmount}</td>
-        <td class="data">${dataProduct[i].total}</td>
-        <td><button onclick="updateProduct(${i})" id="update">update</button></td>
-        <td><button onclick="deleteProduct(${i})" id="delete">delete</button></td>
-      </tr>`;
-        
-      }
-    }
-  }
-  document.getElementById("tbody").innerHTML = table;
-}
 

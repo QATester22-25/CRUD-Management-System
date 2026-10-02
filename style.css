@@ -520,10 +520,6 @@ table button {
   background: rgb(205, 137, 132);
 }
 
-#deleteAll:hover {
-  background: rgb(208, 49, 37);
-}
-
 
 #deleteAll {
   width: 70%;
@@ -533,6 +529,14 @@ table button {
   margin: 0 auto;
   margin-right: 50px;
   margin-bottom: 20px;
+}
+
+#deleteAll:hover {
+  background: rgb(208, 49, 37);
+}
+
+.delete-all-hide{
+  display: none;
 }
 
 #right-section{
