@@ -1,5 +1,16 @@
-let managementSection = document.querySelector(".left");
-let inventorySection = document.querySelector(".right");
+
+
+const homeBtn = document.getElementById("home-btn");
+const createBtn = document.getElementById('create-btn');
+const inventoryBtn = document.getElementById('inventory-btn');
+const createSection = document.getElementById("create-section");
+const inventorySection = document.getElementById("inventory-section");
+const homeSection = document.getElementById("home-section");
+const landingCreateBtn = document.getElementById("create");
+const landingInventoryBtn = document.getElementById('inventory');
+const searchSection = document.querySelector('.search');
+
+
 let errorRef = document.getElementById("ref");
 let errorCount = document.getElementById("count-error");
 let errorPrice = document.getElementById("price-error");
@@ -16,14 +27,13 @@ let submit = document.getElementById("submit");
 let deleteAllBtn = document.getElementById("delete-all");
 let countLabel = document.querySelector(".count-label");
 let totalTitle = document.querySelector(".total-title");
-let showInventory = document.getElementById("show-inventory");
+let showInventoryBtn = document.getElementById("show-inventory");
 let showCreate = document.getElementById("show-create");
 let notification = document.getElementById("notification");
 let inventoryNotification = document.getElementById("inventory-notification");
 let searchBtn = document.getElementById("search-title");
-let inputSearch = document.getElementById("search");
-
-
+const inputSearch = document.getElementById("search");
+let bodyContainer = document.querySelector(".container");
 
 ////////////////////1- Calculate discount  -//////////////////////////
 
@@ -45,7 +55,7 @@ function getDiscount() {
         maximumFractionDigits: 3,
       },
     );
-  } else  {
+  } else {
     discountAmount.innerHTML = "";
   }
   let newPrice = price.value - convertedDiscount;
@@ -72,7 +82,7 @@ function getTotal() {
 
     total.classList.add("total");
     totalTitle.innerText = "TOTAL";
-    total.style.background = "rgb(51, 88, 127)";
+    total.style.background = "rgb(88, 12, 12)";
 
     //price is empty
   } else {
@@ -104,7 +114,7 @@ submit.onclick = function () {
   let newProduct = {
     reference: reference.value,
     title: title.value,
-    category: category.value, 
+    category: category.value,
     count: count.value,
     price: price.value,
     discount: discount.value,
@@ -138,45 +148,25 @@ submit.onclick = function () {
           localStorage.setItem("product", JSON.stringify(dataProduct));
 
           showProductData();
+          
           clearData();
 
           notification.classList.remove("error-notification");
           showNotification("Product created successfully");
-          window.scrollTo({
-            bottom: 0,
-            behavior: "smooth",
-          });
 
           errorRef.classList.remove("ref-error");
           errorRef.innerText = "";
           totalTitle.innerText = "";
 
-          //display inventory section
-
-          setTimeout(() => {
-            managementSection.classList.add("hide");
-            inventorySection.classList.add("show");
-          }, 2000);
-
           //Catch error
         } catch (error) {
           showNotification("An error has occured");
-          window.scrollTo({
-            bottom: 0,
-            behavior: "smooth",
-          });
 
           console.log(error.message);
         }
       }
     } else {
       mood != " create";
-
-      //display inventory section after update
-      setTimeout(() => {
-        managementSection.classList.add("hide");
-        inventorySection.classList.add("show");
-      }, 2000);
 
       //////////////////Update product///////////////////////////////////
       let refer = document.getElementById("reference").value.trim();
@@ -210,6 +200,7 @@ submit.onclick = function () {
           totalTitle.innerText = "";
 
           showProductData();
+
           clearData();
 
           notification.classList.remove("error-notification");
@@ -247,7 +238,7 @@ function clearData() {
   total.innerHTML = "";
   count.value = "";
   category.value = "";
-  total.style.background = "gray";
+  total.style.background = "transparent";
   errorCount.innerText = "";
   errorPrice.innerText = "";
   total.classList.remove("total");
@@ -256,7 +247,6 @@ function clearData() {
 
 //Read - show products
 function showProductData() {
- 
   let table = "";
   for (let i = 0; i < dataProduct.length; i++) {
     table += `<tr>
@@ -306,12 +296,7 @@ function deleteProduct(i) {
   //notification
   showNotification("The product has been deleted");
   inventoryNotification.classList.add("error-notification");
-   notification.classList.add("error-notification");
-  //window scroll
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
+  notification.classList.add("error-notification");
 }
 
 //delete All
@@ -323,11 +308,6 @@ function deleteAll() {
   //notification
   showNotification("All products has been deleted");
   notification.classList.add("error-notification");
-  //window scroll
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
 }
 
 //Update
@@ -339,10 +319,6 @@ function updateProduct(i) {
   price.value = dataProduct[i].price;
   discount.value = dataProduct[i].discount;
   count.value = dataProduct[i].count;
-
-  //display product management to update data
-  managementSection.classList.remove("hide");
-  inventorySection.classList.remove("show");
 
   //hide count input and label
   count.style.display = "none";
@@ -363,8 +339,6 @@ function updateProduct(i) {
 
 //Notification
 function showNotification(message) {
-  
-
   notification.innerText = message;
   notification.classList.add("show");
   submit.style.background = "#59ac87";
@@ -374,28 +348,14 @@ function showNotification(message) {
   }, 5000);
 }
 
-
 price.addEventListener("blur", () => {
   if (price.value !== "") {
     price.value = Number(price.value).toFixed(3);
   }
 });
 
-function showInventoryTable() {
-  showInventory.addEventListener("click", () => {
-    managementSection.classList.add("hide");
-    inventorySection.classList.add("show");
-  });
-}
-showInventoryTable();
 
-function showCreatePage() {
-  showCreate.addEventListener("click", () => {
-    managementSection.classList.remove("hide");
-    inventorySection.classList.remove("show");
-  });
-}
-showCreatePage();
+
 
 //scroll table smoothly
 const container = document.querySelector(".table");
@@ -409,17 +369,16 @@ container.addEventListener(
   { passive: false },
 );
 
-
 /////////////////////////////////Search//////////////////////////////////////////
-
 
 function searchProduct(value) {
   let table = "";
-  
+
   for (let i = 0; i < dataProduct.length; i++) {
     if (
       dataProduct[i].title.toLowerCase().includes(value.toLowerCase()) ||
-      dataProduct[i].category.toLowerCase().includes(value.toLowerCase()) || dataProduct[i].reference === value.trim()
+      dataProduct[i].category.toLowerCase().includes(value.toLowerCase()) ||
+      dataProduct[i].reference === value.trim()
     ) {
       table += `<tr>
         <td class="data">${dataProduct[i].reference}</td>
@@ -427,12 +386,12 @@ function searchProduct(value) {
         <td class="data">${dataProduct[i].category}</td>
         <td class="data">${dataProduct[i].count}</td>
         <td class="data">${Number(dataProduct[i].price).toLocaleString(
-        "fr-FR",
-        {
-          minimumFractionDigits: 3,
-          maximumFractionDigits: 3,
-        },
-      )}</td>
+          "fr-FR",
+          {
+            minimumFractionDigits: 3,
+            maximumFractionDigits: 3,
+          },
+        )}</td>
         <td class="data">${dataProduct[i].discount}%</td>
         <td class="data">${dataProduct[i].discountAmount}</td>
         <td class="data">${dataProduct[i].total}</td>
@@ -441,34 +400,104 @@ function searchProduct(value) {
       </tr>`;
     }
     document.getElementById("tbody").innerHTML = table;
-    
-    
   }
 }
-  
+
 searchBtn.addEventListener("click", () => {
   if (inputSearch.value) {
     searchProduct(inputSearch.value);
     deleteAllBtn.classList.add("delete-all-hide");
     inputSearch.value = "";
-    
   } else {
     deleteAllBtn.classList.remove("delete-all-hide");
     showProductData();
   }
 });
-  
-  
-inputSearch.addEventListener('keydown', (event) => {
-  if (event.key === 'Enter')
-  if(inputSearch.value){
-    searchProduct(inputSearch.value);
-    deleteAllBtn.classList.add("delete-all-hide");
-    inputSearch.value = "";
-  } else {
-    deleteAllBtn.classList.remove("delete-all-hide");
-    showProductData();
-  }
+
+inputSearch.addEventListener("keydown", (event) => {
+  if (event.key === "Enter")
+    if (inputSearch.value) {
+      searchProduct(inputSearch.value);
+      deleteAllBtn.classList.add("delete-all-hide");
+      inputSearch.value = "";
+    } else {
+      deleteAllBtn.classList.remove("delete-all-hide");
+      showProductData();
+    }
+});
+
+//JavaScript SPA router
+
+//Nav buttons
+homeBtn.addEventListener("click", () => {
+  homeSection.classList.remove("hide");
+  homeSection.classList.add("show");
+
+  createSection.classList.remove("show");
+  createSection.classList.add("hide");
+
+  inventorySection.classList.remove("show");
+  inventorySection.classList.add("hide");
+
+  searchSection.classList.add("hide");
+  searchSection.classList.remove("show");
+});
+
+createBtn.addEventListener("click", () => {
+  homeSection.classList.remove("show");
+  homeSection.classList.add("hide");
+
+  createSection.classList.remove("hide");
+  createSection.classList.add("show");
+
+  inventorySection.classList.remove("show");
+  inventorySection.classList.add("hide");
+
+  searchSection.classList.add("hide");
+  searchSection.classList.remove("show");
+});
+
+inventoryBtn.addEventListener("click", () => {
+  homeSection.classList.remove("show");
+  homeSection.classList.add("hide");
+
+  createSection.classList.remove("show");
+  createSection.classList.add("hide");
+
+  inventorySection.classList.remove("hide");
+  inventorySection.classList.add("show");
+
+  searchSection.classList.add("show");
+  searchSection.classList.remove("hide");
+}); 
+
+
+//landing buttons
+
+landingCreateBtn.addEventListener('click', () => {
+  homeSection.classList.remove("show");
+  homeSection.classList.add("hide");
+
+  createSection.classList.remove("hide");
+  createSection.classList.add("show");
+
+  inventorySection.classList.remove("show");
+  inventorySection.classList.add("hide");
+
+  searchSection.classList.add("hide");
+  searchSection.classList.remove("show");
 })
 
+landingInventoryBtn.addEventListener('click', () => {
+  homeSection.classList.remove("show");
+  homeSection.classList.add("hide");
 
+  createSection.classList.remove("show");
+  createSection.classList.add("hide");
+
+  inventorySection.classList.remove("hide");
+  inventorySection.classList.add("show");
+
+  searchSection.classList.add("show");
+  searchSection.classList.remove("hide");
+})

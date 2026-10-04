@@ -9,130 +9,152 @@
 </head>
 
 <body>
-  <div class="container">
-    <div class="left">
-      <div class="crud">
-        <div class="head">
-          <h2>PRODUCT MANAGEMENT SYSTEM</h2>
-        </div>
-        <div id="notification" class="notification">
-        </div>
-        <div class="inputs">
-          <div id="header">
-            <div id="reference-label">
-              <label for="reference">Reference</label>
-              <input type="number" placeholder="Enter product reference" id="reference" autofocus>
-              <P id="ref"></P>
-            </div>
-
-            <div id="title-label">
-              <label for="title">Title</label>
-              <input placeholder="Product title" type="text" id="title" required>
-            </div>
-            <div id="category-label">
-              <label for="category">Category</label>
-              <input placeholder="Product category" type="text" id="category">
-            </div>
-            <div id="count-label">
-              <label class="count" for="count">Count</label>
-              <div class="count-error-section">
-                <input placeholder="Count" type="number" onkeydown="if(event.key === '-') event.preventDefault()"
-                  id="count" min="1" step="1" oninput="if(this.value < 1) this.value = ''">
-                <P id="count-error"></P>
-              </div>
-            </div>
-          </div>
-          <div class="price-discount-labels">
-            <div id="price-label"><label label for="price">Price</label></div>
-            <div id="discount-label"><label for="discount">Discount</label></div>
-          </div>
-          <div class="price">
-            <div class="price-label">
-              <input onkeyup="getDiscount()" onkeydown="if(event.key === '-') event.preventDefault()"
-                pLaceholder="price" type="number" id="price" min="0" step="0.01" required inputmode="decimal">
-                <P id="price-error"></P>
-            </div>
-            <div class="discount">
-              <div class="discount-label">
-                <select onselect="getTotal()" name="select" id="discount">
-                  <option value="0" selected class="discount-option"></option>
-                  <option value="10">10%</option>
-                  <option value="15">15%</option>
-                  <option value="20">20%</option>
-                  <option value="25">25%</option>
-                  <option value="30">30%</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <div class="amount-section">
-            <span class="span span-hide"></span>
-            <p class="discount-amount amount-hide"></p>
-          </div>
-        </div>
-        <div class="total-section">
-          <h3 class="total-title"></h3>
-          <small id="total"> </small>
-        </div>
-        <button class="submit-btn" id="submit">Create</button>
-        <button onclick="showInventoryTable()" class="submit-inventory" id="show-inventory">Show Inventory
-          Management</button>
-
-        <div class="outputs">
-
-        </div>
-
+  <nav class="navbar">
+    <h2>Product Manager</h2>
+    <div class="nav">
+      <div>
+        <button id="home-btn">Home</button>
+        <button id="create-btn">Create Product</button>
+        <button id="inventory-btn">Inventory Management</button>
+      </div>
+      <div class="search hide">
+        <input onchange="searchProduct(this.value)" id="search" type="text" placeholder="Ref / Title / Category"> <button id="search-title" type="button">🔍</button>
+      </input>
+        
       </div>
     </div>
-    <div id="right-section">
-      <div class="right">
-        <div class="inventary-head">
-          <div class="inventory-header">
+  </nav>
+     <main>
+      <section id="home-section" class="show">
+      
+        <div class="landing">
+          <h1>PRODUCT MANAGEMENT SYSTEM</h1>
+      
+          <p>
+            Manage your products easily.
+          </p>
+      
+          <div class="landing-btn">
+            <button id="create">
+              Create Your First Product
+            </button>
+            <button id="inventory">
+              Show Inventory
+            </button>
+          </div>
+        </div>
+      
+      </section>
+      <!-- CREATE PRODUCT -->
+      <div class="section hide" id="create-section" >
+        <div class="crud">
+          <div class="head">
+            <h2>PRODUCT MANAGEMENT SYSTEM</h2>
+          </div>
+          <div id="notification" class="notification">
+          </div>
+          <div class="inputs">
+            <div id="header">
+              <div id="reference-label">
+                <label for="reference">Reference</label>
+                <input type="number" placeholder="Enter product reference" id="reference" autofocus>
+                <P id="ref"></P>
+              </div>
+              <div id="title-label">
+                <label for="title">Title</label>
+                <input placeholder="Product title" type="text" id="title" required>
+              </div>
+              <div id="category-label">
+                <label for="category">Category</label>
+                <input placeholder="Product category" type="text" id="category">
+              </div>
+              <div id="count-label">
+                <label class="count" for="count">Count</label>
+                <div class="count-error-section">
+                  <input placeholder="Count" type="number" onkeydown="if(event.key === '-') event.preventDefault()"
+                    id="count" min="1" step="1" oninput="if(this.value < 1) this.value = ''">
+                  <P id="count-error"></P>
+                </div>
+              </div>
+            </div>
+            <div class="price-discount-labels">
+              <div id="price-label"><label label for="price">Price</label></div>
+              <div id="discount-label"><label for="discount">Discount</label></div>
+            </div>
+            <div class="price">
+              <div class="price-label">
+                <input onkeyup="getDiscount()" onkeydown="if(event.key === '-') event.preventDefault()"
+                  pLaceholder="price" type="number" id="price" min="0" step="0.01" required inputmode="decimal">
+                <P id="price-error"></P>
+              </div>
+              <div class="discount">
+                <div class="discount-label">
+                  <select onselect="getTotal()" name="select" id="discount">
+                    <option value="0" selected class="discount-option"></option>
+                    <option value="10" class="discount-option">10%</option>
+                    <option value="15" class="discount-option">15%</option>
+                    <option value="20" class="discount-option" >20%</option>
+                    <option value="25" class="discount-option">25%</option>
+                    <option value="30" class="discount-option">30%</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="amount-section">
+              <span class="span span-hide"></span>
+              <p class="discount-amount amount-hide"></p>
+            </div>
+          </div>
+          <div class="total-section">
+            <h3 class="total-title"></h3>
+            <small id="total"> </small>
+          </div>
+          <button  class="submit-btn" id="submit" type="button">Create</button>
+          <div class="outputs">
+          </div>
+        </div>
+      </div>
+      <!-- INVENTORY -->
+      <div class="section hide" id="inventory-section" >
+      
             <div class="title">
               <h2>INVENTORY MANAGEMENT</h2>
               <p>Create - Read - Update - Delete</p>
             </div>
-          </div>
+      
           <div class="table">
             <table id="table-body">
-              <tr>
-                <th>ref</th>
-                <th>title</th>
-                <th>category</th>
-                <th>count</th>
-                <th>price</th>
-                <th>discount rate</th>
-                <th>discount amount</th>
-                <th>total</th>
-                <th>update</th>
-                <th>delete</th>
-              </tr>
+              <thead>
+                <tr>
+                  <th>ref</th>
+                  <th>title</th>
+                  <th>category</th>
+                  <th>count</th>
+                  <th>price</th>
+                  <th>discount rate</th>
+                  <th>discount amount</th>
+                  <th>total</th>
+                  <th>update</th>
+                  <th>delete</th>
+                </tr>
+              </thead>
               <tbody id="tbody">
               </tbody>
             </table>
+            
           </div>
           <div id="delete-all">
           </div>
-        </div>
-        <div id="aside">
-          <div class="search">
-            <label for="search-title">Search for product</label>
-            <input onchange="searchProduct(this.value)" id="search" type="text" placeholder="Ref / Title / Category">
-            <button  id="search-title">Search</button>
-          </div>
-            <div class="return"><button onclick="showCreatePage()" id="show-create">Create New
-                Product</button>
-            </div>
-          <div id="inventory-notification" class="notification"></div>
+            
+            
+          
         </div>
         
+          
+          <div id="inventory-notification" class="notification"></div>
+        
       </div>
-      
-      </div>
-    </div>
-
-  </div>
+    </main>
 
   <script src="file.js"></script>
 </body>
