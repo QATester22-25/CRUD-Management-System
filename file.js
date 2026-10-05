@@ -29,11 +29,12 @@ let countLabel = document.querySelector(".count-label");
 let totalTitle = document.querySelector(".total-title");
 let showInventoryBtn = document.getElementById("show-inventory");
 let showCreate = document.getElementById("show-create");
-let notification = document.getElementById("notification");
+let createNotification = document.getElementById("create-notification");
 let inventoryNotification = document.getElementById("inventory-notification");
-let searchBtn = document.getElementById("search-title");
+const searchBtn = document.getElementById("search-title");
 const inputSearch = document.getElementById("search");
-let bodyContainer = document.querySelector(".container");
+const bodyContainer = document.querySelector(".container");
+const cancelBtn = document.querySelector('.cancel-btn');
 
 ////////////////////1- Calculate discount  -//////////////////////////
 
@@ -43,7 +44,7 @@ let rate;
 function getDiscount() {
   const select = discount;
   let index = select.selectedIndex;
-  selectedValue = select.options[index].value;
+  let selectedValue = select.options[index].value;
   let t = selectedValue / 100;
   let convertedDiscount = price.value * t;
 
@@ -124,7 +125,9 @@ submit.onclick = function () {
 
   //price and count are not empty
   if (price.value > 0 && count.value > 0) {
+
     //////////////////////Create Product///////////////////////////////////////
+
     if (mood === "create") {
       //check reference
       let refer = document.getElementById("reference").value;
@@ -135,7 +138,7 @@ submit.onclick = function () {
       if (existsRef) {
         errorRef.classList.add("ref-error");
         errorRef.innerText =
-          "This Reference already exists, please try another!";
+          "Reference already exists, please try another!";
         return;
 
         //reference doesn't exist
@@ -151,24 +154,25 @@ submit.onclick = function () {
           
           clearData();
 
-          notification.classList.remove("error-notification");
+          createNotification.classList.remove("error-notification");
           showNotification("Product created successfully");
 
           errorRef.classList.remove("ref-error");
           errorRef.innerText = "";
-          totalTitle.innerText = "";
-
+          totalTitle.innerText = "";      
+          //submit.style.background = "#1a543e";
+          console.log("mood: " + mood)
           //Catch error
         } catch (error) {
           showNotification("An error has occured");
-
           console.log(error.message);
         }
       }
     } else {
-      mood != " create";
-
       //////////////////Update product///////////////////////////////////
+
+      mood != "create";
+      
       let refer = document.getElementById("reference").value.trim();
       let data = JSON.parse(localStorage.getItem("product")) || [];
       let existsRef = data.some(
@@ -192,20 +196,21 @@ submit.onclick = function () {
           mood = "update";
 
           submit.innerHTML = "Create";
-          count.removeAttribute("disabled", "");
-
-          //save product in localstorage
+          count.removeAttribute("disabled","");
+             
+            //save product in localstorage
           localStorage.setItem("product", JSON.stringify(dataProduct));
           count.style.display = "block";
           totalTitle.innerText = "";
-
+          //submit.style.background = "#2d5382";
           showProductData();
 
           clearData();
 
-          notification.classList.remove("error-notification");
+          createNotification.classList.remove("error-notification");
           showNotification("Updated successfully");
-
+          showInventorySection();
+          console.log("mood: " + mood);
           //catch error
         } catch (error) {
           showNotification("An error has been occured");
@@ -243,6 +248,7 @@ function clearData() {
   errorPrice.innerText = "";
   total.classList.remove("total");
   inputSearch.value = "";
+  submit.style.background = "#2d5382";
 }
 
 //Read - show products
@@ -251,7 +257,7 @@ function showProductData() {
   for (let i = 0; i < dataProduct.length; i++) {
     table += `<tr>
         <td class="data">${dataProduct[i].reference}</td>
-        <td class="data" >${dataProduct[i].title}</td>
+        <td class="data">${dataProduct[i].title}</td>
         <td class="data">${dataProduct[i].category}</td>
         <td class="data">${dataProduct[i].count}</td>
         <td class="data">${Number(dataProduct[i].price).toLocaleString(
@@ -264,7 +270,7 @@ function showProductData() {
         <td class="data">${dataProduct[i].discount}%</td>
         <td class="data">${dataProduct[i].discountAmount}</td>
         <td class="data">${dataProduct[i].total}</td>
-        <td><button onclick="updateProduct(${i})" id="update">update</button></td>
+        <td><button onclick="updateProduct(${i}),showCreateSection()" id="update">update</button></td>
         <td><button onclick="deleteProduct(${i})" id="delete">delete</button></td>
       </tr>`;
 
@@ -293,10 +299,11 @@ function deleteProduct(i) {
   //update localstorage
   localStorage.product = JSON.stringify(dataProduct);
   showProductData();
+
   //notification
   showNotification("The product has been deleted");
   inventoryNotification.classList.add("error-notification");
-  notification.classList.add("error-notification");
+  createNotification.classList.remove("error-notification");
 }
 
 //delete All
@@ -307,7 +314,7 @@ function deleteAll() {
   showProductData();
   //notification
   showNotification("All products has been deleted");
-  notification.classList.add("error-notification");
+  createNotification.classList.add("error-notification");
 }
 
 //Update
@@ -339,13 +346,16 @@ function updateProduct(i) {
 
 //Notification
 function showNotification(message) {
-  notification.innerText = message;
-  notification.classList.add("show");
-  submit.style.background = "#59ac87";
+  createNotification.innerText = message;
+  createNotification.classList.add("show");
+  inventoryNotification.innerText = message;
+  inventoryNotification.classList.add('show');  
+  submit.style.background = "#2d5382";
 
   setTimeout(() => {
-    notification.classList.remove("show");
-  }, 5000);
+    createNotification.classList.remove("show");
+    inventoryNotification.classList.remove('show');     
+  }, 5000); 
 }
 
 price.addEventListener("blur", () => {
@@ -382,7 +392,7 @@ function searchProduct(value) {
     ) {
       table += `<tr>
         <td class="data">${dataProduct[i].reference}</td>
-        <td class="data" >${dataProduct[i].title}</td>
+        <td class="data">${dataProduct[i].title}</td>
         <td class="data">${dataProduct[i].category}</td>
         <td class="data">${dataProduct[i].count}</td>
         <td class="data">${Number(dataProduct[i].price).toLocaleString(
@@ -395,11 +405,12 @@ function searchProduct(value) {
         <td class="data">${dataProduct[i].discount}%</td>
         <td class="data">${dataProduct[i].discountAmount}</td>
         <td class="data">${dataProduct[i].total}</td>
-        <td><button onclick="updateProduct(${i})" id="update">update</button></td>
+        <td><button onclick="updateProduct(${i}),showCreateSection()" id="update">update</button></td>
         <td><button onclick="deleteProduct(${i})" id="delete">delete</button></td>
       </tr>`;
     }
     document.getElementById("tbody").innerHTML = table;
+    
   }
 }
 
@@ -429,21 +440,41 @@ inputSearch.addEventListener("keydown", (event) => {
 //JavaScript SPA router
 
 //Nav buttons
-homeBtn.addEventListener("click", () => {
-  homeSection.classList.remove("hide");
-  homeSection.classList.add("show");
+//show landing page
+function showHomeSection() {
+   homeSection.classList.remove("hide");
+   homeSection.classList.add("show");
 
-  createSection.classList.remove("show");
-  createSection.classList.add("hide");
+   createSection.classList.remove("show");
+   createSection.classList.add("hide");
 
-  inventorySection.classList.remove("show");
-  inventorySection.classList.add("hide");
+   inventorySection.classList.remove("show");
+   inventorySection.classList.add("hide");
 
-  searchSection.classList.add("hide");
+   searchSection.classList.add("hide");
   searchSection.classList.remove("show");
-});
+  clearData()
+ }
 
-createBtn.addEventListener("click", () => {
+
+//landing buttons
+//show inventory section
+function showInventorySection() {
+   homeSection.classList.remove("show");
+   homeSection.classList.add("hide");
+
+   createSection.classList.remove("show");
+   createSection.classList.add("hide");
+
+   inventorySection.classList.remove("hide");
+   inventorySection.classList.add("show");
+
+   searchSection.classList.add("show");
+   searchSection.classList.remove("hide");
+}
+
+//show create section
+function showCreateSection() {
   homeSection.classList.remove("show");
   homeSection.classList.add("hide");
 
@@ -455,24 +486,13 @@ createBtn.addEventListener("click", () => {
 
   searchSection.classList.add("hide");
   searchSection.classList.remove("show");
-});
-
-inventoryBtn.addEventListener("click", () => {
-  homeSection.classList.remove("show");
-  homeSection.classList.add("hide");
-
-  createSection.classList.remove("show");
-  createSection.classList.add("hide");
-
-  inventorySection.classList.remove("hide");
-  inventorySection.classList.add("show");
-
-  searchSection.classList.add("show");
-  searchSection.classList.remove("hide");
-}); 
+}
 
 
-//landing buttons
+
+
+
+
 
 landingCreateBtn.addEventListener('click', () => {
   homeSection.classList.remove("show");
@@ -501,3 +521,15 @@ landingInventoryBtn.addEventListener('click', () => {
   searchSection.classList.add("show");
   searchSection.classList.remove("hide");
 })
+
+createBtn.addEventListener('click',()=>{
+  mood = "create";
+}
+)
+
+//cancel listener
+
+function cancel() {
+  showHomeSection();
+  clearData();
+}

@@ -30,18 +30,18 @@ body {
 
 .navbar button,
 #search {
-  margin-left: 10px;
+  margin-left: 10px;  
   background: #F0E9B6;
-  color: #6e0c42;
+  color: #74204e;
   height: 45px;
 }
 
 .navbar button:hover {
-   color: #F0E9B6;
-  background: #6e0c42;
+   color: #f6f2d0;
+  background: #734a60;
   padding-bottom: 10px;
   border-bottom: 0.1px solid #F0E9B6;
-}
+} 
 
 #search-title:hover{
   background: none;
@@ -310,9 +310,9 @@ input:focus {
   justify-content: center;
   color: rgb(104, 44, 85);
   font-family: "Poppins", sans-serif;
-  font-size: 28px;
+  font-size: 20px;
   font-weight: 500;
-  margin: 10px auto;
+  margin: 25px auto 15px auto;
 }
 
 .title h2{
@@ -324,7 +324,7 @@ input:focus {
   font-family: "Poppins", sans-serif;
   font-size: 20px;
   font-weight: 300;
-  margin-top: 15px;
+  margin-top: 5px;
   margin-bottom: 5px;
   text-align: left;
 }
@@ -378,7 +378,7 @@ button {
 }
 
 .submit-btn:active {
-  background: #69ab8e;
+  background:#3c5b81;
 }
 
 button:hover {
@@ -409,6 +409,12 @@ button:active {
   background: #af8b9f;
 }
 
+.cancel-btn{
+  width: 100%;
+  display: none;    
+}
+
+
 .searchBtn {
   display: flex;
   justify-content: space-between;
@@ -421,9 +427,9 @@ button:active {
 }
 
 .table {
-  width: 70%;
+  width: 80%;
   text-align: center;
-  font-size: 20px;
+  font-size: 15px;
   color: #ccf5f4;
   font-weight: 350;
   height: 550px;
@@ -442,7 +448,7 @@ table th {
   font-size: 8x;
   padding: 10px 5px;
   color: #ece7e7;
-  font-weight: 500;
+  font-weight: 400;
   border: 2px solid rgb(135, 134, 134);
   border-bottom: 3px solid rgb(135, 134, 134);
   position: sticky;
@@ -458,7 +464,7 @@ table .data {
   font-weight: 500;
   background: white;
   color: #324172;
-  padding: 0 2px;
+  padding: 2px 8px;
 }
 
 table button {
@@ -538,7 +544,7 @@ table button {
 
 .search {
   position: relative;
-  width: 250px;
+  width: 300px;
 }
 
 .search label {
@@ -600,7 +606,7 @@ table button {
   right: 0;
   margin: 0 8px 8px 0;
 
-  background-color: #59ac87;
+  background-color: #266345db;
   color: white;
 
   padding: 20px 25px;
