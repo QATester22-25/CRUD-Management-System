@@ -1,5 +1,16 @@
-let managementSection = document.querySelector(".left");
-let inventorySection = document.querySelector(".right");
+
+
+const homeBtn = document.getElementById("home-btn");
+const createBtn = document.getElementById('create-btn');
+const inventoryBtn = document.getElementById('inventory-btn');
+const createSection = document.getElementById("create-section");
+const inventorySection = document.getElementById("inventory-section");
+const homeSection = document.getElementById("home-section");
+const landingCreateBtn = document.getElementById("create");
+const landingInventoryBtn = document.getElementById('inventory');
+const searchSection = document.querySelector('.search');
+
+
 let errorRef = document.getElementById("ref");
 let errorCount = document.getElementById("count-error");
 let errorPrice = document.getElementById("price-error");
@@ -16,14 +27,14 @@ let submit = document.getElementById("submit");
 let deleteAllBtn = document.getElementById("delete-all");
 let countLabel = document.querySelector(".count-label");
 let totalTitle = document.querySelector(".total-title");
-let showInventory = document.getElementById("show-inventory");
+let showInventoryBtn = document.getElementById("show-inventory");
 let showCreate = document.getElementById("show-create");
-let notification = document.getElementById("notification");
+let createNotification = document.getElementById("create-notification");
 let inventoryNotification = document.getElementById("inventory-notification");
-let searchBtn = document.getElementById("search-title");
-let inputSearch = document.getElementById("search");
-
-
+const searchBtn = document.getElementById("search-title");
+const inputSearch = document.getElementById("search");
+const bodyContainer = document.querySelector(".container");
+const cancelBtn = document.querySelector('.cancel-btn');
 
 ////////////////////1- Calculate discount  -//////////////////////////
 
@@ -33,7 +44,7 @@ let rate;
 function getDiscount() {
   const select = discount;
   let index = select.selectedIndex;
-  selectedValue = select.options[index].value;
+  let selectedValue = select.options[index].value;
   let t = selectedValue / 100;
   let convertedDiscount = price.value * t;
 
@@ -45,7 +56,7 @@ function getDiscount() {
         maximumFractionDigits: 3,
       },
     );
-  } else  {
+  } else {
     discountAmount.innerHTML = "";
   }
   let newPrice = price.value - convertedDiscount;
@@ -72,7 +83,7 @@ function getTotal() {
 
     total.classList.add("total");
     totalTitle.innerText = "TOTAL";
-    total.style.background = "rgb(51, 88, 127)";
+    total.style.background = "rgb(88, 12, 12)";
 
     //price is empty
   } else {
@@ -104,7 +115,7 @@ submit.onclick = function () {
   let newProduct = {
     reference: reference.value,
     title: title.value,
-    category: category.value, 
+    category: category.value,
     count: count.value,
     price: price.value,
     discount: discount.value,
@@ -114,9 +125,12 @@ submit.onclick = function () {
 
   //price and count are not empty
   if (price.value > 0 && count.value > 0) {
+
     //////////////////////Create Product///////////////////////////////////////
+
     if (mood === "create") {
       //check reference
+      cancelBtn.style.display = "none";
       let refer = document.getElementById("reference").value;
       let data = JSON.parse(localStorage.getItem("product")) || [];
       let existsRef = data.some((product) => product.reference === refer);
@@ -125,7 +139,7 @@ submit.onclick = function () {
       if (existsRef) {
         errorRef.classList.add("ref-error");
         errorRef.innerText =
-          "This Reference already exists, please try another!";
+          "Reference already exists, please try another!";
         return;
 
         //reference doesn't exist
@@ -140,45 +154,25 @@ submit.onclick = function () {
           showProductData();
           clearData();
 
-          notification.classList.remove("error-notification");
+          createNotification.classList.remove("error-notification");
           showNotification("Product created successfully");
-          window.scrollTo({
-            bottom: 0,
-            behavior: "smooth",
-          });
 
           errorRef.classList.remove("ref-error");
           errorRef.innerText = "";
-          totalTitle.innerText = "";
-
-          //display inventory section
-
-          setTimeout(() => {
-            managementSection.classList.add("hide");
-            inventorySection.classList.add("show");
-          }, 2000);
-
+          totalTitle.innerText = "";      
+          //submit.style.background = "#1a543e";
+          console.log("mood: " + mood)
           //Catch error
         } catch (error) {
           showNotification("An error has occured");
-          window.scrollTo({
-            bottom: 0,
-            behavior: "smooth",
-          });
-
           console.log(error.message);
         }
       }
     } else {
-      mood != " create";
-
-      //display inventory section after update
-      setTimeout(() => {
-        managementSection.classList.add("hide");
-        inventorySection.classList.add("show");
-      }, 2000);
-
       //////////////////Update product///////////////////////////////////
+
+      mood != "create";
+      
       let refer = document.getElementById("reference").value.trim();
       let data = JSON.parse(localStorage.getItem("product")) || [];
       let existsRef = data.some(
@@ -202,19 +196,23 @@ submit.onclick = function () {
           mood = "update";
 
           submit.innerHTML = "Create";
-          count.removeAttribute("disabled", "");
-
-          //save product in localstorage
+          count.removeAttribute("disabled","");
+             
+            //save product in localstorage
           localStorage.setItem("product", JSON.stringify(dataProduct));
           count.style.display = "block";
           totalTitle.innerText = "";
-
+          //submit.style.background = "#2d5382";
           showProductData();
+          /////////////////////////////
+          showInventorySection();
+          /////////////////////////////////
           clearData();
 
-          notification.classList.remove("error-notification");
+          createNotification.classList.remove("error-notification");
           showNotification("Updated successfully");
-
+          showInventorySection();
+          console.log("mood: " + mood);
           //catch error
         } catch (error) {
           showNotification("An error has been occured");
@@ -247,21 +245,21 @@ function clearData() {
   total.innerHTML = "";
   count.value = "";
   category.value = "";
-  total.style.background = "gray";
+  total.style.background = "transparent";
   errorCount.innerText = "";
   errorPrice.innerText = "";
   total.classList.remove("total");
   inputSearch.value = "";
+  submit.style.background = "#2d5382";
 }
 
 //Read - show products
 function showProductData() {
- 
   let table = "";
   for (let i = 0; i < dataProduct.length; i++) {
     table += `<tr>
         <td class="data">${dataProduct[i].reference}</td>
-        <td class="data" >${dataProduct[i].title}</td>
+        <td class="data">${dataProduct[i].title}</td>
         <td class="data">${dataProduct[i].category}</td>
         <td class="data">${dataProduct[i].count}</td>
         <td class="data">${Number(dataProduct[i].price).toLocaleString(
@@ -274,7 +272,7 @@ function showProductData() {
         <td class="data">${dataProduct[i].discount}%</td>
         <td class="data">${dataProduct[i].discountAmount}</td>
         <td class="data">${dataProduct[i].total}</td>
-        <td><button onclick="updateProduct(${i})" id="update">update</button></td>
+        <td><button onclick="updateProduct(${i}),showCreateSection()" id="update">update</button></td>
         <td><button onclick="deleteProduct(${i})" id="delete">delete</button></td>
       </tr>`;
 
@@ -303,15 +301,11 @@ function deleteProduct(i) {
   //update localstorage
   localStorage.product = JSON.stringify(dataProduct);
   showProductData();
+
   //notification
   showNotification("The product has been deleted");
   inventoryNotification.classList.add("error-notification");
-   notification.classList.add("error-notification");
-  //window scroll
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
+  createNotification.classList.remove("error-notification");
 }
 
 //delete All
@@ -322,12 +316,7 @@ function deleteAll() {
   showProductData();
   //notification
   showNotification("All products has been deleted");
-  notification.classList.add("error-notification");
-  //window scroll
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
+  createNotification.classList.add("error-notification");
 }
 
 //Update
@@ -339,10 +328,6 @@ function updateProduct(i) {
   price.value = dataProduct[i].price;
   discount.value = dataProduct[i].discount;
   count.value = dataProduct[i].count;
-
-  //display product management to update data
-  managementSection.classList.remove("hide");
-  inventorySection.classList.remove("show");
 
   //hide count input and label
   count.style.display = "none";
@@ -356,24 +341,24 @@ function updateProduct(i) {
   getTotal();
 
   mood = "update";
-
+  cancelBtn.style.display = "block";
   submit.style.background = "rgb(147, 100, 147)";
   totalTitle.innerText = "";
 }
 
 //Notification
 function showNotification(message) {
-  
-
-  notification.innerText = message;
-  notification.classList.add("show");
-  submit.style.background = "#59ac87";
+  createNotification.innerText = message;
+  createNotification.classList.add("show");
+  inventoryNotification.innerText = message;
+  inventoryNotification.classList.add('show');  
+  submit.style.background = "#2d5382";
 
   setTimeout(() => {
-    notification.classList.remove("show");
-  }, 5000);
+    createNotification.classList.remove("show");
+    inventoryNotification.classList.remove('show');     
+  }, 5000); 
 }
-
 
 price.addEventListener("blur", () => {
   if (price.value !== "") {
@@ -381,21 +366,8 @@ price.addEventListener("blur", () => {
   }
 });
 
-function showInventoryTable() {
-  showInventory.addEventListener("click", () => {
-    managementSection.classList.add("hide");
-    inventorySection.classList.add("show");
-  });
-}
-showInventoryTable();
 
-function showCreatePage() {
-  showCreate.addEventListener("click", () => {
-    managementSection.classList.remove("hide");
-    inventorySection.classList.remove("show");
-  });
-}
-showCreatePage();
+
 
 //scroll table smoothly
 const container = document.querySelector(".table");
@@ -409,66 +381,156 @@ container.addEventListener(
   { passive: false },
 );
 
-
 /////////////////////////////////Search//////////////////////////////////////////
-
 
 function searchProduct(value) {
   let table = "";
-  
+
   for (let i = 0; i < dataProduct.length; i++) {
     if (
       dataProduct[i].title.toLowerCase().includes(value.toLowerCase()) ||
-      dataProduct[i].category.toLowerCase().includes(value.toLowerCase()) || dataProduct[i].reference === value.trim()
+      dataProduct[i].category.toLowerCase().includes(value.toLowerCase()) ||
+      dataProduct[i].reference === value.trim()
     ) {
       table += `<tr>
         <td class="data">${dataProduct[i].reference}</td>
-        <td class="data" >${dataProduct[i].title}</td>
+        <td class="data">${dataProduct[i].title}</td>
         <td class="data">${dataProduct[i].category}</td>
         <td class="data">${dataProduct[i].count}</td>
         <td class="data">${Number(dataProduct[i].price).toLocaleString(
-        "fr-FR",
-        {
-          minimumFractionDigits: 3,
-          maximumFractionDigits: 3,
-        },
-      )}</td>
+          "fr-FR",
+          {
+            minimumFractionDigits: 3,
+            maximumFractionDigits: 3,
+          },
+        )}</td>
         <td class="data">${dataProduct[i].discount}%</td>
         <td class="data">${dataProduct[i].discountAmount}</td>
         <td class="data">${dataProduct[i].total}</td>
-        <td><button onclick="updateProduct(${i})" id="update">update</button></td>
+        <td><button onclick="updateProduct(${i}),showCreateSection()" id="update">update</button></td>
         <td><button onclick="deleteProduct(${i})" id="delete">delete</button></td>
       </tr>`;
     }
     document.getElementById("tbody").innerHTML = table;
     
-    
   }
 }
-  
+
 searchBtn.addEventListener("click", () => {
   if (inputSearch.value) {
     searchProduct(inputSearch.value);
     deleteAllBtn.classList.add("delete-all-hide");
     inputSearch.value = "";
-    
   } else {
     deleteAllBtn.classList.remove("delete-all-hide");
     showProductData();
   }
 });
-  
-  
-inputSearch.addEventListener('keydown', (event) => {
-  if (event.key === 'Enter')
-  if(inputSearch.value){
-    searchProduct(inputSearch.value);
-    deleteAllBtn.classList.add("delete-all-hide");
-    inputSearch.value = "";
-  } else {
-    deleteAllBtn.classList.remove("delete-all-hide");
-    showProductData();
-  }
+
+inputSearch.addEventListener("keydown", (event) => {
+  if (event.key === "Enter")
+    if (inputSearch.value) {
+      searchProduct(inputSearch.value);
+      deleteAllBtn.classList.add("delete-all-hide");
+      inputSearch.value = "";
+    } else {
+      deleteAllBtn.classList.remove("delete-all-hide");
+      showProductData();
+    }
+});
+
+//JavaScript SPA router
+
+//Nav buttons
+//show landing page
+function showHomeSection() {
+   homeSection.classList.remove("hide");
+   homeSection.classList.add("show");
+
+   createSection.classList.remove("show");
+   createSection.classList.add("hide");
+
+   inventorySection.classList.remove("show");
+   inventorySection.classList.add("hide");
+
+   searchSection.classList.add("hide");
+  searchSection.classList.remove("show");
+  clearData()
+ }
+
+
+//landing buttons
+//show inventory section
+function showInventorySection() {
+   homeSection.classList.remove("show");
+   homeSection.classList.add("hide");
+
+   createSection.classList.remove("show");
+   createSection.classList.add("hide");
+
+   inventorySection.classList.remove("hide");
+   inventorySection.classList.add("show");
+
+   searchSection.classList.add("show");
+   searchSection.classList.remove("hide");
+}
+
+//show create section
+function showCreateSection() {
+  homeSection.classList.remove("show");
+  homeSection.classList.add("hide");
+
+  createSection.classList.remove("hide");
+  createSection.classList.add("show");
+
+  inventorySection.classList.remove("show");
+  inventorySection.classList.add("hide");
+
+  searchSection.classList.add("hide");
+  searchSection.classList.remove("show");
+}
+
+
+
+
+
+
+
+landingCreateBtn.addEventListener('click', () => {
+  homeSection.classList.remove("show");
+  homeSection.classList.add("hide");
+
+  createSection.classList.remove("hide");
+  createSection.classList.add("show");
+
+  inventorySection.classList.remove("show");
+  inventorySection.classList.add("hide");
+
+  searchSection.classList.add("hide");
+  searchSection.classList.remove("show");
 })
 
+landingInventoryBtn.addEventListener('click', () => {
+  homeSection.classList.remove("show");
+  homeSection.classList.add("hide");
 
+  createSection.classList.remove("show");
+  createSection.classList.add("hide");
+
+  inventorySection.classList.remove("hide");
+  inventorySection.classList.add("show");
+
+  searchSection.classList.add("show");
+  searchSection.classList.remove("hide");
+})
+
+createBtn.addEventListener('click',()=>{
+  mood = "create";
+}
+)
+
+//cancel listener
+
+function cancel() {
+  location.reload(); 
+}
