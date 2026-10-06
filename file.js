@@ -130,6 +130,7 @@ submit.onclick = function () {
 
     if (mood === "create") {
       //check reference
+      cancelBtn.style.display = "none";
       let refer = document.getElementById("reference").value;
       let data = JSON.parse(localStorage.getItem("product")) || [];
       let existsRef = data.some((product) => product.reference === refer);
@@ -151,7 +152,6 @@ submit.onclick = function () {
           localStorage.setItem("product", JSON.stringify(dataProduct));
 
           showProductData();
-          
           clearData();
 
           createNotification.classList.remove("error-notification");
@@ -204,7 +204,9 @@ submit.onclick = function () {
           totalTitle.innerText = "";
           //submit.style.background = "#2d5382";
           showProductData();
-
+          /////////////////////////////
+          showInventorySection();
+          /////////////////////////////////
           clearData();
 
           createNotification.classList.remove("error-notification");
@@ -339,7 +341,7 @@ function updateProduct(i) {
   getTotal();
 
   mood = "update";
-
+  cancelBtn.style.display = "block";
   submit.style.background = "rgb(147, 100, 147)";
   totalTitle.innerText = "";
 }
@@ -530,6 +532,5 @@ createBtn.addEventListener('click',()=>{
 //cancel listener
 
 function cancel() {
-  showHomeSection();
-  clearData();
+  location.reload(); 
 }

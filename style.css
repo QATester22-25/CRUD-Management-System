@@ -34,6 +34,8 @@ body {
   background: #F0E9B6;
   color: #74204e;
   height: 45px;
+  border: none;
+  outline: none;
 }
 
 .navbar button:hover {
@@ -410,8 +412,8 @@ button:active {
 }
 
 .cancel-btn{
-  width: 100%;
-  display: none;    
+  display: none;
+  width: 100%;    
 }
 
 
@@ -427,7 +429,7 @@ button:active {
 }
 
 .table {
-  width: 80%;
+  width: 60%;
   text-align: center;
   font-size: 15px;
   color: #ccf5f4;
@@ -480,7 +482,7 @@ table button {
   font-size: 20px;
   font-weight: 300;
   text-align: center;
-  padding: 5px 10px;
+  padding: 5px;
   position: relative;
   top: 0;
   cursor: pointer;
@@ -498,7 +500,7 @@ table button {
   background: rgb(150, 35, 27);
   color: white;
   border-radius: 5px;
-  padding: 10px 20px;
+  padding: 5px;
   position: relative;
 }
 
