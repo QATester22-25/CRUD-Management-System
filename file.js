@@ -1,40 +1,40 @@
-
-
 const homeBtn = document.getElementById("home-btn");
 const createBtn = document.getElementById('create-btn');
 const inventoryBtn = document.getElementById('inventory-btn');
+const landingCreateBtn = document.getElementById("create");
+const landingInventoryBtn = document.getElementById("inventory");
+const deleteAllBtn = document.getElementById("delete-all");
+const showInventoryBtn = document.getElementById("show-inventory");
+const searchBtn = document.getElementById("search-title");
+const submit = document.getElementById("submit");
+const cancelBtn = document.querySelector(".cancel-btn");
+
+const bodyContainer = document.querySelector(".container");
 const createSection = document.getElementById("create-section");
 const inventorySection = document.getElementById("inventory-section");
 const homeSection = document.getElementById("home-section");
-const landingCreateBtn = document.getElementById("create");
-const landingInventoryBtn = document.getElementById('inventory');
 const searchSection = document.querySelector('.search');
+const showCreate = document.getElementById("show-create");
 
+const errorRef = document.getElementById("ref");
+const errorCount = document.getElementById("count-error");
+const errorPrice = document.getElementById("price-error");
+const createNotification = document.getElementById("create-notification");
+const inventoryNotification = document.getElementById("inventory-notification");
 
-let errorRef = document.getElementById("ref");
-let errorCount = document.getElementById("count-error");
-let errorPrice = document.getElementById("price-error");
-let reference = document.getElementById("reference");
-let title = document.getElementById("title");
-let price = document.getElementById("price");
-let discount = document.getElementById("discount");
-let discountAmount = document.querySelector(".discount-amount");
-let amountSpan = document.querySelector(".span");
-let total = document.getElementById("total");
-let count = document.getElementById("count");
-let category = document.getElementById("category");
-let submit = document.getElementById("submit");
-let deleteAllBtn = document.getElementById("delete-all");
-let countLabel = document.querySelector(".count-label");
-let totalTitle = document.querySelector(".total-title");
-let showInventoryBtn = document.getElementById("show-inventory");
-let showCreate = document.getElementById("show-create");
-let createNotification = document.getElementById("create-notification");
-let inventoryNotification = document.getElementById("inventory-notification");
-const searchBtn = document.getElementById("search-title");
+const reference = document.getElementById("reference");
+const title = document.getElementById("title");
+const price = document.getElementById("price");
+const discount = document.getElementById("discount");
+const discountAmount = document.querySelector(".discount-amount");
+const amountSpan = document.querySelector(".span");
+const total = document.getElementById("total");
+const count = document.getElementById("count");
+const category = document.getElementById("category");
+const countLabel = document.querySelector(".count-label");
+const totalTitle = document.querySelector(".total-title");
 const inputSearch = document.getElementById("search");
-const bodyContainer = document.querySelector(".container");
-const cancelBtn = document.querySelector('.cancel-btn');
+
 
 ////////////////////1- Calculate discount  -//////////////////////////
 
@@ -42,8 +42,11 @@ const cancelBtn = document.querySelector('.cancel-btn');
 let rate;
 
 function getDiscount() {
-  const select = discount;
+  const select = document.getElementById("discount");;
   let index = select.selectedIndex;
+  ///////////////////////////
+  console.log(index);
+  //////////////////////////
   let selectedValue = select.options[index].value;
   let t = selectedValue / 100;
   let convertedDiscount = price.value * t;
@@ -59,23 +62,24 @@ function getDiscount() {
   } else {
     discountAmount.innerHTML = "";
   }
+  //price after discount
   let newPrice = price.value - convertedDiscount;
+
   rate = newPrice;
+  
   getTotal();
 }
 
-//initialize mood
-let mood = "create";
 
-//initialize empty variable;
-let tmp;
+
 
 ///////////////// 2- get total - //////////////////////////////
-
 function getTotal() {
   //result is required
   if (price.value != "") {
+
     let result = rate;
+
     total.innerHTML = Number(result).toLocaleString("fr-FR", {
       minimumFractionDigits: 3,
       maximumFractionDigits: 3,
@@ -98,9 +102,14 @@ discount.addEventListener("change", function () {
   getDiscount();
 });
 
+
+
+
+
+
 let dataProduct;
 
-// product in local storage
+// If product in local storage
 if (localStorage.product != null) {
   dataProduct = JSON.parse(localStorage.product);
 
@@ -109,8 +118,15 @@ if (localStorage.product != null) {
   dataProduct = [];
 }
 
+//initialize empty variable;
+let tmp;
+
+//initialize mood
+let mood = "create";
+
 //////////////// 3- Submit for Create / Update product - ////////////////////////////
 submit.onclick = function () {
+
   //declare product object
   let newProduct = {
     reference: reference.value,
@@ -129,8 +145,8 @@ submit.onclick = function () {
     //////////////////////Create Product///////////////////////////////////////
 
     if (mood === "create") {
-      //check reference
       cancelBtn.style.display = "none";
+      //check reference
       let refer = document.getElementById("reference").value;
       let data = JSON.parse(localStorage.getItem("product")) || [];
       let existsRef = data.some((product) => product.reference === refer);
@@ -138,8 +154,7 @@ submit.onclick = function () {
       //same reference
       if (existsRef) {
         errorRef.classList.add("ref-error");
-        errorRef.innerText =
-          "Reference already exists, please try another!";
+        errorRef.innerText = "Reference already exists, please try another!";
         return;
 
         //reference doesn't exist
@@ -159,15 +174,17 @@ submit.onclick = function () {
 
           errorRef.classList.remove("ref-error");
           errorRef.innerText = "";
-          totalTitle.innerText = "";      
-          //submit.style.background = "#1a543e";
-          console.log("mood: " + mood)
+          totalTitle.innerText = "";
+
+          console.log("mood: " + mood);
+
           //Catch error
         } catch (error) {
           showNotification("An error has occured");
           console.log(error.message);
         }
       }
+      //////else if mood is !create
     } else {
       //////////////////Update product///////////////////////////////////
 
@@ -193,8 +210,9 @@ submit.onclick = function () {
           errorRef.innerText = "";
 
           dataProduct[tmp] = newProduct;
+          console.log(dataProduct[tmp]);
           mood = "update";
-
+          console.log("I'm the product index in update mood " + tmp)
           submit.innerHTML = "Create";
           count.removeAttribute("disabled","");
              
@@ -202,7 +220,7 @@ submit.onclick = function () {
           localStorage.setItem("product", JSON.stringify(dataProduct));
           count.style.display = "block";
           totalTitle.innerText = "";
-          //submit.style.background = "#2d5382";
+          
           showProductData();
           /////////////////////////////
           showInventorySection();
@@ -213,6 +231,7 @@ submit.onclick = function () {
           showNotification("Updated successfully");
           showInventorySection();
           console.log("mood: " + mood);
+          
           //catch error
         } catch (error) {
           showNotification("An error has been occured");
@@ -321,6 +340,7 @@ function deleteAll() {
 
 //Update
 function updateProduct(i) {
+
   //restore values to input fields
   reference.value = dataProduct[i].reference;
   title.value = dataProduct[i].title;
@@ -331,16 +351,17 @@ function updateProduct(i) {
 
   //hide count input and label
   count.style.display = "none";
-  //countLabel.style.display = "none";
 
   //change create button to update
   submit.innerHTML = "Update";
 
   tmp = i;
+
   getDiscount();
   getTotal();
 
   mood = "update";
+  
   cancelBtn.style.display = "block";
   submit.style.background = "rgb(147, 100, 147)";
   totalTitle.innerText = "";
