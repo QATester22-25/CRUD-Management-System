@@ -15,16 +15,16 @@
       <div>
         <button onclick="showHomeSection()" id="home-btn">Home</button>
         <button onclick="showCreateSection()" id="create-btn">Create Product</button>
+        <button onclick=" showSaleSection()" id="sale-btn">Sale Product</button>
         <button onclick="showInventorySection()" id="inventory-btn">Inventory Management</button>
       </div>
       <div class="search hide">
-        <input onchange="searchProduct(this.value)" id="search" type="text" placeholder="Search ref-title-category">
+        <input onchange="searchProduct(this.value)" id="search" type="text" placeholder="reference-title-category">
         <button id="search-title" type="button">🔍</button>
         </input>
-
       </div>
     </div>
-  </nav>
+  </nav>      
   <main>
     <section id="home-section" class="show">
 
@@ -37,9 +37,12 @@
 
         <div class="landing-btn">
           <button  onclick="showCreateSection()" id="create">
-            Create Your First Product
+            Create Product
           </button>
-          <button onclick="showInventorySection()" id="inventory">
+          <button  onclick=" showSaleSection()" id="sale">
+            Sale Product
+          </button>
+          <button onclick="showInventorySection()" id="inventory">      
             Show Inventory
           </button>
         </div>
@@ -115,7 +118,47 @@
         <div class="outputs">
         </div>
       </div>
-    </div>      
+    </div> 
+    <!-- Sale section--> 
+    <div class="section hide" id="sale-section">
+      <div class="  ">
+        <div class="sale-title">
+          <h2>Sale Products</h2>
+        </div>
+        <div class="sale-search">
+          <label for="sale">Search Product</label>
+          <div class="sale-s">
+            <input onchange="saleSearch(this.value)" type="text" placeholder="reference title category" id="sale-input">
+            <button  id="sale-icon" type="button">🔍</button>
+          </div>
+        </div>
+      </div>
+        <div class="sale-table">
+          <div class="table">
+            <div id="table-bod">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ref</th>
+                    <th>title</th>
+                    <th>category</th>
+                    <th>count</th>
+                    <th>price</th>
+                    <th>discount rate</th>
+                    <th>discount amount</th>
+                    <th>total</th>
+                    <th>sale</th>
+                  </tr>
+                </thead>
+                <tbody id="tbod">
+          
+                </tbody>
+              </table>
+        </div>
+          </div>
+        </div>
+      
+    </div>    
     <!-- INVENTORY -->
     <div class="section hide" id="inventory-section">
 

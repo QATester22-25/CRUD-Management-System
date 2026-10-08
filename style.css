@@ -36,10 +36,11 @@ body {
   height: 45px;
   border: none;
   outline: none;
+  padding: 10px 20px;
 }
 
 .navbar button:hover {
-   color: #f6f2d0;
+  color: #f6f2d0;
   background: #734a60;
   padding-bottom: 10px;
   border-bottom: 0.1px solid #F0E9B6;
@@ -86,13 +87,13 @@ body {
   margin-top: 50px;
   
 }
-#create,#inventory{
+#create,#inventory,#sale{
 margin-right: 20px;
 background: #31549f;
 padding: 10px 20px;
 }
 
-#create:hover,#inventory:hover{
+#create:hover,#inventory:hover,#sale:hover{
 background: #183675;
 letter-spacing: 1px;
 box-shadow:3px 2px 3px 3px #232323;
@@ -533,12 +534,6 @@ table button {
   display: none;
 }
 
-#right-section {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 
 #aside button:hover {
   border: none;
@@ -547,7 +542,7 @@ table button {
 
 .search {
   position: relative;
-  width: 300px;
+  width: 250px;
 }
 
 .search label {
@@ -659,3 +654,58 @@ table button {
   visibility: visible;
 }
 
+#sale-section{
+  width: 80%;
+  margin: 0 auto;
+  overflow-y: hidden; 
+}
+
+.sale-header{
+  width: 80%;
+  margin: 10px auto;
+}
+
+
+.sale-title{
+  align-self: center; 
+  color: rgb(104, 44, 85);
+  font-family: "Poppins", sans-serif;
+  font-size: 30px;
+  font-weight: 500;
+  margin-top: 100px;
+}
+
+.sale-search{
+  margin-top: 80px;  
+}
+
+.sale-search label{
+  color: #5a1943f7;
+}
+
+#sale-input{
+color: #5a1943f7;
+  height: 40px;
+}
+
+.sale-table{
+  display: none;
+  height: 300px;
+}
+
+.sale-s{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#sale-icon{
+  height: 40px;
+  background: white;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  margin: 5px;
+  padding: 4px;
+    
+}
