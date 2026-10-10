@@ -1,6 +1,6 @@
 const homeBtn = document.getElementById("home-btn");
-const createBtn = document.getElementById('create-btn');
-const inventoryBtn = document.getElementById('inventory-btn');
+const createBtn = document.getElementById("create-btn");
+const inventoryBtn = document.getElementById("inventory-btn");
 const landingCreateBtn = document.getElementById("create");
 const landingInventoryBtn = document.getElementById("inventory");
 const deleteAllBtn = document.getElementById("delete-all");
@@ -8,19 +8,26 @@ const showInventoryBtn = document.getElementById("show-inventory");
 const searchBtn = document.getElementById("search-title");
 const submit = document.getElementById("submit");
 const cancelBtn = document.querySelector(".cancel-btn");
+const saleBtn = document.getElementById("sale-icon");
+const saleInput = document.getElementById("sale-input");
 
 const bodyContainer = document.querySelector(".container");
 const createSection = document.getElementById("create-section");
 const inventorySection = document.getElementById("inventory-section");
 const homeSection = document.getElementById("home-section");
-const searchSection = document.querySelector('.search');
+const searchSection = document.querySelector(".search");
 const showCreate = document.getElementById("show-create");
+const saleSection = document.getElementById("sale-section");
+const saleTable = document.querySelector(".sale-table");
+const saleHeader = document.querySelector(".sale-search");
+
 
 const errorRef = document.getElementById("ref");
 const errorCount = document.getElementById("count-error");
 const errorPrice = document.getElementById("price-error");
 const createNotification = document.getElementById("create-notification");
 const inventoryNotification = document.getElementById("inventory-notification");
+const saleErrorMsg = document.querySelector(".sale-error-msg");
 
 const reference = document.getElementById("reference");
 const title = document.getElementById("title");
@@ -35,14 +42,13 @@ const countLabel = document.querySelector(".count-label");
 const totalTitle = document.querySelector(".total-title");
 const inputSearch = document.getElementById("search");
 
-
 ////////////////////1- Calculate discount  -//////////////////////////
 
 //initialize empty variable;
 let rate;
 
 function getDiscount() {
-  const select = document.getElementById("discount");;
+  const select = document.getElementById("discount");
   let index = select.selectedIndex;
   ///////////////////////////
   console.log(index);
@@ -66,18 +72,14 @@ function getDiscount() {
   let newPrice = price.value - convertedDiscount;
 
   rate = newPrice;
-  
+
   getTotal();
 }
-
-
-
 
 ///////////////// 2- get total - //////////////////////////////
 function getTotal() {
   //result is required
   if (price.value != "") {
-
     let result = rate;
 
     total.innerHTML = Number(result).toLocaleString("fr-FR", {
@@ -102,11 +104,6 @@ discount.addEventListener("change", function () {
   getDiscount();
 });
 
-
-
-
-
-
 let dataProduct;
 
 // If product in local storage
@@ -126,12 +123,11 @@ let mood = "create";
 
 //////////////// 3- Submit for Create / Update product - ////////////////////////////
 submit.onclick = function () {
-
   //declare product object
   let newProduct = {
     reference: reference.value,
-    title: title.value,
-    category: category.value,
+    title: title.value.toLowerCase(),
+    category: category.value.toLowerCase(),
     count: count.value,
     price: price.value,
     discount: discount.value,
@@ -141,7 +137,6 @@ submit.onclick = function () {
 
   //price and count are not empty
   if (price.value > 0 && count.value > 0) {
-
     //////////////////////Create Product///////////////////////////////////////
 
     if (mood === "create") {
@@ -189,7 +184,7 @@ submit.onclick = function () {
       //////////////////Update product///////////////////////////////////
 
       mood != "create";
-      
+
       let refer = document.getElementById("reference").value.trim();
       let data = JSON.parse(localStorage.getItem("product")) || [];
       let existsRef = data.some(
@@ -212,15 +207,14 @@ submit.onclick = function () {
           dataProduct[tmp] = newProduct;
           console.log(dataProduct[tmp]);
           mood = "update";
-          console.log("I'm the product index in update mood " + tmp)
+          console.log("I'm the product index in update mood " + tmp);
           submit.innerHTML = "Create";
-          count.removeAttribute("disabled","");
-             
-            //save product in localstorage
+          count.removeAttribute("disabled", "");
+
+          //save product in localstorage
           localStorage.setItem("product", JSON.stringify(dataProduct));
           count.style.display = "block";
           totalTitle.innerText = "";
-          
           showProductData();
           /////////////////////////////
           showInventorySection();
@@ -231,7 +225,6 @@ submit.onclick = function () {
           showNotification("Updated successfully");
           showInventorySection();
           console.log("mood: " + mood);
-          
           //catch error
         } catch (error) {
           showNotification("An error has been occured");
@@ -340,7 +333,6 @@ function deleteAll() {
 
 //Update
 function updateProduct(i) {
-
   //restore values to input fields
   reference.value = dataProduct[i].reference;
   title.value = dataProduct[i].title;
@@ -361,10 +353,37 @@ function updateProduct(i) {
   getTotal();
 
   mood = "update";
-  
+
   cancelBtn.style.display = "block";
   submit.style.background = "rgb(147, 100, 147)";
   totalTitle.innerText = "";
+}
+
+///////////////////////////Sale product/////////////////////////////////////
+
+function showSaleProduct() {
+  let table = "";
+  for (let i = 0; i < dataProduct.length; i++) {
+    table += `
+      <tr>
+         <td class="data">${dataProduct[i].reference}</td>
+         <td class="data">${dataProduct[i].title}</td>
+         <td class="data">${dataProduct[i].category}</td>
+         <td class="data">${dataProduct[i].count}</td>
+         <td class="data">${dataProduct[i].price}</td>
+         <td class="data">${dataProduct[i].discount}</td>
+         <td class="data">${dataProduct[i].discountAmount}</td>
+         <td class="data">${dataProduct[i].total}</td>
+         <td><button>Sale</button></td> 
+        </tr>
+    `;
+  }
+  document.getElementById("tbod").innerHTML = table;
+}
+
+//call sale function
+if (dataProduct.length) {
+  showSaleProduct();
 }
 
 //Notification
@@ -372,13 +391,13 @@ function showNotification(message) {
   createNotification.innerText = message;
   createNotification.classList.add("show");
   inventoryNotification.innerText = message;
-  inventoryNotification.classList.add('show');  
+  inventoryNotification.classList.add("show");
   submit.style.background = "#2d5382";
 
   setTimeout(() => {
     createNotification.classList.remove("show");
-    inventoryNotification.classList.remove('show');     
-  }, 5000); 
+    inventoryNotification.classList.remove("show");
+  }, 5000);
 }
 
 price.addEventListener("blur", () => {
@@ -386,9 +405,6 @@ price.addEventListener("blur", () => {
     price.value = Number(price.value).toFixed(3);
   }
 });
-
-
-
 
 //scroll table smoothly
 const container = document.querySelector(".table");
@@ -414,6 +430,7 @@ function searchProduct(value) {
       dataProduct[i].reference === value.trim()
     ) {
       table += `<tr>
+      
         <td class="data">${dataProduct[i].reference}</td>
         <td class="data">${dataProduct[i].title}</td>
         <td class="data">${dataProduct[i].category}</td>
@@ -432,9 +449,9 @@ function searchProduct(value) {
         <td><button onclick="deleteProduct(${i})" id="delete">delete</button></td>
       </tr>`;
     }
-    document.getElementById("tbody").innerHTML = table;
-    
   }
+
+  document.getElementById("tbody").innerHTML = table;
 }
 
 searchBtn.addEventListener("click", () => {
@@ -460,40 +477,106 @@ inputSearch.addEventListener("keydown", (event) => {
     }
 });
 
-//JavaScript SPA router
+
+//////////////////////SaleSearch function////////////////////////////////
+function saleSearch(value) {
+  let table = "";
+  value = value.trim().toLowerCase();
+
+  // 1. Vérifier si le champ est vide
+  if (value === "") {
+    saleErrorMsg.classList.remove("hide");
+    saleErrorMsg.classList.add("show");
+    saleErrorMsg.innerHTML = "Please enter product first";
+
+    saleTable.classList.remove("show");
+    saleTable.classList.add("hide");
+    document.getElementById("tbod").innerHTML = "";
+    return;
+  }
+
+  // 2. Rechercher les produits correspondants
+  for (let i = 0; i < dataProduct.length; i++) {
+    if (
+      dataProduct[i].title.toLowerCase().includes(value) ||
+      dataProduct[i].category.toLowerCase().includes(value) ||
+      dataProduct[i].reference === value
+    ) {
+      table += `
+        <tr>
+          <td class="data">${dataProduct[i].reference}</td>
+          <td class="data">${dataProduct[i].title}</td>
+          <td class="data">${dataProduct[i].category}</td>
+          <td class="data">${dataProduct[i].count}</td>
+          <td class="data">${dataProduct[i].price}</td>
+          <td class="data">${dataProduct[i].discount}</td>
+          <td class="data">${dataProduct[i].discountAmount}</td>
+          <td class="data">${dataProduct[i].total}</td>
+          <td><button>Sale</button></td>
+        </tr>
+      `;
+    }
+  }
+
+  // 3. Vérifier le résultat après la boucle
+  if (table === "") {
+    saleErrorMsg.classList.remove("hide");
+    saleErrorMsg.classList.add("show");
+    saleErrorMsg.innerHTML = "No product found";
+    saleHeader.style.marginTop = "80px"
+    saleTable.classList.remove("show");
+    saleTable.classList.add("hide");
+    document.getElementById("tbod").innerHTML = "";
+
+  } else {
+    saleErrorMsg.classList.remove("show");
+    saleErrorMsg.classList.add("hide");
+    saleErrorMsg.innerHTML = "";
+    saleHeader.style.marginTop = "10px";
+    saleTable.classList.remove("hide");
+    saleTable.classList.add("show");
+    document.getElementById("tbod").innerHTML = table;
+  }
+}
+
 
 //Nav buttons
 //show landing page
 function showHomeSection() {
-   homeSection.classList.remove("hide");
-   homeSection.classList.add("show");
+  homeSection.classList.remove("hide");
+  homeSection.classList.add("show");
 
-   createSection.classList.remove("show");
-   createSection.classList.add("hide");
+  createSection.classList.remove("show");
+  createSection.classList.add("hide");
 
-   inventorySection.classList.remove("show");
-   inventorySection.classList.add("hide");
+  inventorySection.classList.remove("show");
+  inventorySection.classList.add("hide");
 
-   searchSection.classList.add("hide");
+  searchSection.classList.add("hide");
   searchSection.classList.remove("show");
-  clearData()
- }
 
+  saleSection.classList.remove("show");
+  saleSection.classList.add("hide");
+  clearData();
+}
 
 //landing buttons
 //show inventory section
 function showInventorySection() {
-   homeSection.classList.remove("show");
-   homeSection.classList.add("hide");
+  homeSection.classList.remove("show");
+  homeSection.classList.add("hide");
 
-   createSection.classList.remove("show");
-   createSection.classList.add("hide");
+  createSection.classList.remove("show");
+  createSection.classList.add("hide");
 
-   inventorySection.classList.remove("hide");
-   inventorySection.classList.add("show");
+  inventorySection.classList.remove("hide");
+  inventorySection.classList.add("show");
 
-   searchSection.classList.add("show");
-   searchSection.classList.remove("hide");
+  searchSection.classList.add("show");
+  searchSection.classList.remove("hide");
+
+  saleSection.classList.remove("show");
+  saleSection.classList.add("hide");
 }
 
 //show create section
@@ -509,15 +592,30 @@ function showCreateSection() {
 
   searchSection.classList.add("hide");
   searchSection.classList.remove("show");
+
+  saleSection.classList.remove("show");
+  saleSection.classList.add("hide");
 }
 
+//show sale section
+function showSaleSection() {
+  homeSection.classList.remove("show");
+  homeSection.classList.add("hide");
 
+  createSection.classList.remove("show");
+  createSection.classList.add("hide");
 
+  inventorySection.classList.remove("show");
+  inventorySection.classList.add("hide");
 
+  searchSection.classList.add("hide");
+  searchSection.classList.remove("show");
 
+  saleSection.classList.add("show");
+  saleSection.classList.remove("hide");
+}
 
-
-landingCreateBtn.addEventListener('click', () => {
+landingCreateBtn.addEventListener("click", () => {
   homeSection.classList.remove("show");
   homeSection.classList.add("hide");
 
@@ -529,9 +627,12 @@ landingCreateBtn.addEventListener('click', () => {
 
   searchSection.classList.add("hide");
   searchSection.classList.remove("show");
-})
 
-landingInventoryBtn.addEventListener('click', () => {
+  saleSection.classList.remove("show");
+  saleSection.classList.add("hide");
+});
+
+landingInventoryBtn.addEventListener("click", () => {
   homeSection.classList.remove("show");
   homeSection.classList.add("hide");
 
@@ -543,15 +644,31 @@ landingInventoryBtn.addEventListener('click', () => {
 
   searchSection.classList.add("show");
   searchSection.classList.remove("hide");
-})
 
-createBtn.addEventListener('click',()=>{
+  saleSection.classList.remove("show");
+  saleSection.classList.add("hide");
+});
+
+createBtn.addEventListener("click", () => {
   mood = "create";
-}
-)
+});
+
+//sale listeners
+saleBtn.addEventListener("click", () => {
+  saleSearch(saleInput.value);
+  saleInput.value = "";
+  console.log("this is the click listener");
+});
+
+saleInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    saleSearch(saleInput.value);
+    saleInput.value = "";
+    console.log("this is the keydown listener");
+  }
+});
 
 //cancel listener
-
 function cancel() {
-  location.reload(); 
+  location.reload();
 }
