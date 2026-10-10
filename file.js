@@ -19,12 +19,15 @@ const searchSection = document.querySelector(".search");
 const showCreate = document.getElementById("show-create");
 const saleSection = document.getElementById("sale-section");
 const saleTable = document.querySelector(".sale-table");
+const saleHeader = document.querySelector(".sale-search");
+
 
 const errorRef = document.getElementById("ref");
 const errorCount = document.getElementById("count-error");
 const errorPrice = document.getElementById("price-error");
 const createNotification = document.getElementById("create-notification");
 const inventoryNotification = document.getElementById("inventory-notification");
+const saleErrorMsg = document.querySelector(".sale-error-msg");
 
 const reference = document.getElementById("reference");
 const title = document.getElementById("title");
@@ -361,7 +364,6 @@ function updateProduct(i) {
 function showSaleProduct() {
   let table = "";
   for (let i = 0; i < dataProduct.length; i++) {
-    
     table += `
       <tr>
          <td class="data">${dataProduct[i].reference}</td>
@@ -376,7 +378,7 @@ function showSaleProduct() {
         </tr>
     `;
   }
-  document.getElementById('tbod').innerHTML = table;
+  document.getElementById("tbod").innerHTML = table;
 }
 
 //call sale function
@@ -447,8 +449,9 @@ function searchProduct(value) {
         <td><button onclick="deleteProduct(${i})" id="delete">delete</button></td>
       </tr>`;
     }
-    document.getElementById("tbody").innerHTML = table;
   }
+
+  document.getElementById("tbody").innerHTML = table;
 }
 
 searchBtn.addEventListener("click", () => {
@@ -475,7 +478,67 @@ inputSearch.addEventListener("keydown", (event) => {
 });
 
 
-//JavaScript SPA router
+//////////////////////SaleSearch function////////////////////////////////
+function saleSearch(value) {
+  let table = "";
+  value = value.trim().toLowerCase();
+
+  // 1. Vérifier si le champ est vide
+  if (value === "") {
+    saleErrorMsg.classList.remove("hide");
+    saleErrorMsg.classList.add("show");
+    saleErrorMsg.innerHTML = "Please enter product first";
+
+    saleTable.classList.remove("show");
+    saleTable.classList.add("hide");
+    document.getElementById("tbod").innerHTML = "";
+    return;
+  }
+
+  // 2. Rechercher les produits correspondants
+  for (let i = 0; i < dataProduct.length; i++) {
+    if (
+      dataProduct[i].title.toLowerCase().includes(value) ||
+      dataProduct[i].category.toLowerCase().includes(value) ||
+      dataProduct[i].reference === value
+    ) {
+      table += `
+        <tr>
+          <td class="data">${dataProduct[i].reference}</td>
+          <td class="data">${dataProduct[i].title}</td>
+          <td class="data">${dataProduct[i].category}</td>
+          <td class="data">${dataProduct[i].count}</td>
+          <td class="data">${dataProduct[i].price}</td>
+          <td class="data">${dataProduct[i].discount}</td>
+          <td class="data">${dataProduct[i].discountAmount}</td>
+          <td class="data">${dataProduct[i].total}</td>
+          <td><button>Sale</button></td>
+        </tr>
+      `;
+    }
+  }
+
+  // 3. Vérifier le résultat après la boucle
+  if (table === "") {
+    saleErrorMsg.classList.remove("hide");
+    saleErrorMsg.classList.add("show");
+    saleErrorMsg.innerHTML = "No product found";
+    saleHeader.style.marginTop = "80px"
+    saleTable.classList.remove("show");
+    saleTable.classList.add("hide");
+    document.getElementById("tbod").innerHTML = "";
+
+  } else {
+    saleErrorMsg.classList.remove("show");
+    saleErrorMsg.classList.add("hide");
+    saleErrorMsg.innerHTML = "";
+    saleHeader.style.marginTop = "10px";
+    saleTable.classList.remove("hide");
+    saleTable.classList.add("show");
+    document.getElementById("tbod").innerHTML = table;
+  }
+}
+
 
 //Nav buttons
 //show landing page
@@ -552,37 +615,6 @@ function showSaleSection() {
   saleSection.classList.remove("hide");
 }
 
-
-
-//sale search
-function saleSearch(value) {
-  let table = "";
-  for (let i = 0; i < dataProduct.length; i++){ 
-    if (dataProduct[i].reference.includes(value) ||
-      dataProduct[i].title.includes(value.toLowerCase()) ||
-      dataProduct[i].category.includes(value.toLowerCase())
-    ) {
-      table += `
-                <tr>
-         <td class="data">${dataProduct[i].reference}</td>
-         <td class="data">${dataProduct[i].title}</td>
-         <td class="data">${dataProduct[i].category}</td>
-         <td class="data">${dataProduct[i].count}</td>
-         <td class="data">${dataProduct[i].price}</td>
-         <td class="data">${dataProduct[i].discount}</td>
-         <td class="data">${dataProduct[i].discountAmount}</td>
-         <td class="data">${dataProduct[i].total}</td>
-         <td><button>Sale</button></td> 
-        </tr>
-           `;
-      
-    }
-  }
-  document.getElementById("tbod").innerHTML = table;  
-}
-
-
-
 landingCreateBtn.addEventListener("click", () => {
   homeSection.classList.remove("show");
   homeSection.classList.add("hide");
@@ -596,8 +628,8 @@ landingCreateBtn.addEventListener("click", () => {
   searchSection.classList.add("hide");
   searchSection.classList.remove("show");
 
-    saleSection.classList.remove("show");
-    saleSection.classList.add("hide");
+  saleSection.classList.remove("show");
+  saleSection.classList.add("hide");
 });
 
 landingInventoryBtn.addEventListener("click", () => {
@@ -613,44 +645,28 @@ landingInventoryBtn.addEventListener("click", () => {
   searchSection.classList.add("show");
   searchSection.classList.remove("hide");
 
-    saleSection.classList.remove("show");
-    saleSection.classList.add("hide");
-
+  saleSection.classList.remove("show");
+  saleSection.classList.add("hide");
 });
 
 createBtn.addEventListener("click", () => {
   mood = "create";
 });
 
-
-
 //sale listeners
-saleBtn.addEventListener('click', () => {
-  if (saleInput.value != "") {
+saleBtn.addEventListener("click", () => {
+  saleSearch(saleInput.value);
+  saleInput.value = "";
+  console.log("this is the click listener");
+});
+
+saleInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
     saleSearch(saleInput.value);
     saleInput.value = "";
-     saleSection.classList.remove("hide");
-     saleSection.classList.add("show");
-     saleTable.style.display = "block";
-    
-  } else {
-    saleTable.style.display = "none";
+    console.log("this is the keydown listener");
   }
-})
-
-saleInput.addEventListener('keydown', (event) => {
-
-  if (event.key === "Enter")
-  if (saleInput.value != "") {
-    saleSearch(saleInput.value);
-    inputSearch.value = "";
-     saleSection.classList.remove("hide");
-     saleSection.classList.add("show");
-     saleTable.style.display = "block";
-  } else {
-    saleTable.style.display = "none";
-  }
-})
+});
 
 //cancel listener
 function cancel() {

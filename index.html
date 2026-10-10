@@ -121,7 +121,7 @@
     </div> 
     <!-- Sale section--> 
     <div class="section hide" id="sale-section">
-      <div class="  ">
+      <div>
         <div class="sale-title">
           <h2>Sale Products</h2>
         </div>
@@ -129,11 +129,12 @@
           <label for="sale">Search Product</label>
           <div class="sale-s">
             <input onchange="saleSearch(this.value)" type="text" placeholder="reference title category" id="sale-input">
-            <button  id="sale-icon" type="button">🔍</button>
+            <button id="sale-icon" type="submit">🔍</button>
           </div>
+          <p class="sale-error-msg hide"></p>
         </div>
-      </div>
-        <div class="sale-table">
+      </div>  
+        <div class="sale-table hide">
           <div class="table">
             <div id="table-bod">
               <table>
