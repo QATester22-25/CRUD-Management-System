@@ -10,6 +10,8 @@ const submit = document.getElementById("submit");
 const cancelBtn = document.querySelector(".cancel-btn");
 const saleBtn = document.getElementById("sale-icon");
 const saleInput = document.getElementById("sale-input");
+const saleCancelBtn = document.querySelector(".sale-cancel-button");
+const saleSelect = document.getElementById("sale-count");
 
 const bodyContainer = document.querySelector(".container");
 const createSection = document.getElementById("create-section");
@@ -20,7 +22,7 @@ const showCreate = document.getElementById("show-create");
 const saleSection = document.getElementById("sale-section");
 const saleTable = document.querySelector(".sale-table");
 const saleHeader = document.querySelector(".sale-search");
-
+const saleNowSection = document.getElementById("sale-now-section");
 
 const errorRef = document.getElementById("ref");
 const errorCount = document.getElementById("count-error");
@@ -477,7 +479,6 @@ inputSearch.addEventListener("keydown", (event) => {
     }
 });
 
-
 //////////////////////SaleSearch function////////////////////////////////
 function saleSearch(value) {
   let table = "";
@@ -512,7 +513,7 @@ function saleSearch(value) {
           <td class="data">${dataProduct[i].discount}</td>
           <td class="data">${dataProduct[i].discountAmount}</td>
           <td class="data">${dataProduct[i].total}</td>
-          <td><button>Sale</button></td>
+          <td><button onclick="saleProduct(${i})" id="saleNow-btn">Sale</button></td>
         </tr>
       `;
     }
@@ -523,11 +524,10 @@ function saleSearch(value) {
     saleErrorMsg.classList.remove("hide");
     saleErrorMsg.classList.add("show");
     saleErrorMsg.innerHTML = "No product found";
-    saleHeader.style.marginTop = "80px"
+    saleHeader.style.marginTop = "80px";
     saleTable.classList.remove("show");
     saleTable.classList.add("hide");
     document.getElementById("tbod").innerHTML = "";
-
   } else {
     saleErrorMsg.classList.remove("show");
     saleErrorMsg.classList.add("hide");
@@ -539,6 +539,44 @@ function saleSearch(value) {
   }
 }
 
+function saleProduct(i) {
+  saleNowSection.classList.remove("hide");
+  saleNowSection.classList.add("show");
+
+  saleHeader.classList.remove("show");
+  saleHeader.classList.add("hide");
+
+  saleTable.classList.remove("show");
+  saleTable.classList.add("hide");
+  console.log(dataProduct[i]);
+
+  document.querySelector('.ref-resp').innerHTML = dataProduct[i].reference;
+  document.querySelector('.title-resp').innerHTML = dataProduct[i].title;
+  document.querySelector('.category-resp').innerHTML = dataProduct[i].category;
+  document.querySelector('.count-resp').innerHTML = dataProduct[i].count;
+  document.querySelector('.total-resp').innerHTML = dataProduct[i].total;
+
+
+
+
+
+
+}
+
+saleCancelBtn.addEventListener("click", () => {
+  saleNowSection.classList.add("hide");
+  saleNowSection.classList.remove("show");
+
+  saleHeader.classList.add("show");
+  saleHeader.classList.remove("hide");
+
+  saleTable.classList.add("show");
+  saleTable.classList.remove("hide");
+});
+
+saleSelect.addEventListener("change", () => {
+  document.querySelector('.sale-count-display').innerHTML = saleSelect.value;
+});
 
 //Nav buttons
 //show landing page
@@ -557,6 +595,9 @@ function showHomeSection() {
 
   saleSection.classList.remove("show");
   saleSection.classList.add("hide");
+
+  saleNowSection.classList.remove("show");
+  saleNowSection.classList.add("hide");
   clearData();
 }
 
@@ -577,6 +618,9 @@ function showInventorySection() {
 
   saleSection.classList.remove("show");
   saleSection.classList.add("hide");
+
+  saleNowSection.classList.remove("show");
+  saleNowSection.classList.add("hide");
 }
 
 //show create section
@@ -595,6 +639,9 @@ function showCreateSection() {
 
   saleSection.classList.remove("show");
   saleSection.classList.add("hide");
+
+  saleNowSection.classList.remove("show");
+  saleNowSection.classList.add("hide");
 }
 
 //show sale section
@@ -613,6 +660,12 @@ function showSaleSection() {
 
   saleSection.classList.add("show");
   saleSection.classList.remove("hide");
+
+  saleNowSection.classList.remove("show");
+  saleNowSection.classList.add("hide");
+
+  saleHeader.classList.remove("hide");
+  saleHeader.classList.add("show");
 }
 
 landingCreateBtn.addEventListener("click", () => {
@@ -630,6 +683,9 @@ landingCreateBtn.addEventListener("click", () => {
 
   saleSection.classList.remove("show");
   saleSection.classList.add("hide");
+
+  saleNowSection.classList.remove("show");
+  saleNowSection.classList.add("hide");
 });
 
 landingInventoryBtn.addEventListener("click", () => {
@@ -647,6 +703,9 @@ landingInventoryBtn.addEventListener("click", () => {
 
   saleSection.classList.remove("show");
   saleSection.classList.add("hide");
+
+  saleNowSection.classList.remove("show");
+  saleNowSection.classList.add("hide");
 });
 
 createBtn.addEventListener("click", () => {

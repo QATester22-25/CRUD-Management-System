@@ -319,7 +319,7 @@ input:focus {
 }
 
 .title h2{
-  margin-right: 20px;
+  margin-right: 2 0px;
 }
 
 .total-title {
@@ -661,8 +661,8 @@ table button {
 }
 
 .sale-header{
-  width: 80%;
-  margin: 10px auto;
+  width: 60%;
+  margin: 30px auto;
 }
 
 
@@ -673,10 +673,12 @@ table button {
   font-size: 30px;
   font-weight: 500;
   margin-top: 100px;
+  margin-left: 500px;
 }
 
 .sale-search{
-  margin-top: 80px;  
+  width: 80%;
+  margin: 30px auto;
 }
 
 .sale-search label{
@@ -715,4 +717,113 @@ color: #5a1943f7;
   font-size: 20px;
   font-weight: 300; 
   color: red;
+}
+
+.sale-flex{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin: 30px;
+  border-radius: 8px;
+  border: 2px solid   #436084;
+  box-shadow: 5px 5px 10px 8px #436084;
+}
+
+.sale-ref,.saleNow-title,.sale-category,.sale-count,.sale-total,.select-label,.sale-count-display{
+  display: flex;
+  justify-content: space-between;
+  margin-left: 100px;
+  color: rgb(126, 57, 115);
+  font-family: "Poppins", sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+}
+
+.ref-resp,.title-resp,.category-resp,.count-resp,.total-resp,.sale-count-display,#sale-count {
+  margin-left: 50px ;
+  font-weight: bold;
+  color: #31549f;
+}
+
+.select-section{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+p .label{
+  padding: 10px 20px ;
+}
+
+#sale-count{
+ border: none;
+  outline: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-family: "Poppins", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  background:  #631a50;
+  color: #ece7e7;
+  width: 100px;
+  text-align: center;
+  cursor: pointer;
+}
+
+
+.select-section option{
+  background:  #631a50;
+  color: #ece7e7;
+}
+
+.sale-2{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.sale-3{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.sale-button{
+  width: 200px;
+  height: 70px;
+  background: #2d5382;
+  color: white;
+  font-size: 28px;
+  border: none;
+  outline: none;
+  margin: 10px auto;
+}
+
+
+.sale-button:hover {
+  background:#184379;
+}
+
+.sale-button:active {
+  background:#436084;
+}
+
+.sale-cancel-button{
+  width: 200px;
+  height: 70px;
+  background: #a52222;
+  color: white;
+  font-size: 28px;
+  border: none;
+  outline: none;
+  margin: 10px auto;
+}
+.sale-cancel-button:hover{
+  background: #951010;
+}
+
+.sale-cancel-button:active{
+  background: #9e4848;
 }
