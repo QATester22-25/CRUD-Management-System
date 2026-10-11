@@ -672,8 +672,10 @@ table button {
   font-family: "Poppins", sans-serif;
   font-size: 30px;
   font-weight: 500;
-  margin-top: 100px;
+  margin-top: 50px;
+  margin-bottom: 50px;
   margin-left: 500px;
+  text-shadow: 8px 4px 5px #a8b2c8;
 }
 
 .sale-search{
@@ -723,26 +725,33 @@ color: #5a1943f7;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  margin: 30px;
+  margin: 0 30px;
   border-radius: 8px;
   border: 2px solid   #436084;
-  box-shadow: 5px 5px 10px 8px #436084;
+  box-shadow: 5px 5px 10px 8px #818e9f; 
 }
 
-.sale-ref,.saleNow-title,.sale-category,.sale-count,.sale-total,.select-label,.sale-count-display{
+.sale-ref,.saleNow-title,.sale-category,.sale-count,.sale-total,.select-label,.sale-count-display,.stat{
   display: flex;
   justify-content: space-between;
-  margin-left: 100px;
   color: rgb(126, 57, 115);
   font-family: "Poppins", sans-serif;
   font-size: 28px;
   font-weight: 400;
+  border-bottom:1px dotted #324172;
 }
 
-.ref-resp,.title-resp,.category-resp,.count-resp,.total-resp,.sale-count-display,#sale-count {
-  margin-left: 50px ;
+.ref-resp,.title-resp,.category-resp,.count-resp,.total-resp,#sale-count {
   font-weight: bold;
   color: #31549f;
+  margin-left: 50px;
+}
+
+.sale-count-display,.sale-amount-display{
+  font-size: 30px;
+  font-weight: bold;
+  color: #31549f;
+  border: none;
 }
 
 .select-section{
@@ -768,6 +777,8 @@ p .label{
   width: 100px;
   text-align: center;
   cursor: pointer;
+  margin-left: 20px;
+  text-align: center;
 }
 
 
@@ -776,18 +787,54 @@ p .label{
   color: #ece7e7;
 }
 
+.sale-1{
+  padding: 5px 50px;
+  margin: 20px;
+  border: 2px solid   #436084;
+  border-radius: 8px;
+  box-shadow: 5px 5px 10px 8px #818e9f;
+}
+
 .sale-2{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 50px;
+  margin:  20px;
+  border: 2px solid   #436084;
+  border-radius: 8px;
+  box-shadow: 5px 5px 10px 8px #818e9f;
+}
+
+#sale-2-total{
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
+.tsa{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.stat{
+  margin-right: 10px;
+}
+
+
 .sale-3{
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 50px;
+  border: 2px solid   #436084;
+  border-radius: 8px;
+  box-shadow: 5px 5px 10px 8px #818e9f; 
 }
 
 .sale-button{

@@ -79,7 +79,7 @@ function getDiscount() {
 }
 
 ///////////////// 2- get total - //////////////////////////////
-function getTotal() {
+function getTotal() { 
   //result is required
   if (price.value != "") {
     let result = rate;
@@ -212,6 +212,7 @@ submit.onclick = function () {
           console.log("I'm the product index in update mood " + tmp);
           submit.innerHTML = "Create";
           count.removeAttribute("disabled", "");
+          
 
           //save product in localstorage
           localStorage.setItem("product", JSON.stringify(dataProduct));
@@ -359,6 +360,8 @@ function updateProduct(i) {
   cancelBtn.style.display = "block";
   submit.style.background = "rgb(147, 100, 147)";
   totalTitle.innerText = "";
+  document.querySelector(".price-discount-labels").style.marginTop = "0px";
+  document.querySelector(".prod-mang-title").style.marginBottom = "5px";
 }
 
 ///////////////////////////Sale product/////////////////////////////////////
@@ -539,6 +542,8 @@ function saleSearch(value) {
   }
 }
 
+let I;
+
 function saleProduct(i) {
   saleNowSection.classList.remove("hide");
   saleNowSection.classList.add("show");
@@ -556,11 +561,7 @@ function saleProduct(i) {
   document.querySelector('.count-resp').innerHTML = dataProduct[i].count;
   document.querySelector('.total-resp').innerHTML = dataProduct[i].total;
 
-
-
-
-
-
+    I = i;
 }
 
 saleCancelBtn.addEventListener("click", () => {
@@ -572,14 +573,61 @@ saleCancelBtn.addEventListener("click", () => {
 
   saleTable.classList.add("show");
   saleTable.classList.remove("hide");
+
+  clearSaleData();
 });
 
 saleSelect.addEventListener("change", () => {
-  document.querySelector('.sale-count-display').innerHTML = saleSelect.value;
-});
+  let saleTotal =
+    parsePrice(dataProduct[I].total);
+  let saleValue = saleSelect.value;
+  let saleTotalDispaly = saleTotal * saleValue ;
 
-//Nav buttons
-//show landing page
+  if (saleValue != 0) {
+     document.querySelector(".sale-count-display").innerHTML =
+       `${saleSelect.value} ${dataProduct[I].title} ${dataProduct[I].category} will be saled`;
+     document.querySelector(".stat").innerHTML = "Total Amount: ";
+     document.querySelector(".sale-amount-display").innerHTML =
+       ` ${saleTotalDispaly.toLocaleString("fr-FR", {
+         minimumFractionDigits: 3,
+         maximumFractionDigits: 3,
+       })}`;
+  } else {
+    document.querySelector(".sale-count-display").innerHTML =
+      "Please select the number of products to sale";
+      document.querySelector(".stat").innerHTML = "";
+    document.querySelector(".sale-amount-display").innerHTML = "";
+  }
+ 
+  
+  
+  
+
+
+  
+});
+  
+function parsePrice(value) {
+  return Number(
+    String(value)
+      .replace(/[ \u00A0 ]/g, "")
+      .replace(",", "."),
+  );
+}
+
+function clearSaleData() {
+  document.querySelector('.sale-count-display').innerHTML = '';
+  document.querySelector(".ref-resp").innerHTML = "";
+  document.querySelector(".title-resp").innerHTML = "";
+  document.querySelector(".category-resp").innerHTML = "";
+  document.querySelector(".count-resp").innerHTML = "";
+  document.querySelector(".total-resp").innerHTML = "";
+  saleSelect.value = 0;
+  document.querySelector(".stat").innerHTML = "";
+  document.querySelector(".sale-amount-display").innerHTML = "";
+}
+
+  //show landing page
 function showHomeSection() {
   homeSection.classList.remove("hide");
   homeSection.classList.add("show");
@@ -598,6 +646,7 @@ function showHomeSection() {
 
   saleNowSection.classList.remove("show");
   saleNowSection.classList.add("hide");
+  clearSaleData();
   clearData();
 }
 
@@ -621,6 +670,7 @@ function showInventorySection() {
 
   saleNowSection.classList.remove("show");
   saleNowSection.classList.add("hide");
+  clearSaleData();
 }
 
 //show create section
@@ -642,6 +692,7 @@ function showCreateSection() {
 
   saleNowSection.classList.remove("show");
   saleNowSection.classList.add("hide");
+  clearSaleData();
 }
 
 //show sale section
@@ -666,6 +717,7 @@ function showSaleSection() {
 
   saleHeader.classList.remove("hide");
   saleHeader.classList.add("show");
+  clearSaleData();
 }
 
 landingCreateBtn.addEventListener("click", () => {
@@ -686,6 +738,7 @@ landingCreateBtn.addEventListener("click", () => {
 
   saleNowSection.classList.remove("show");
   saleNowSection.classList.add("hide");
+  clearSaleData();
 });
 
 landingInventoryBtn.addEventListener("click", () => {
@@ -706,6 +759,7 @@ landingInventoryBtn.addEventListener("click", () => {
 
   saleNowSection.classList.remove("show");
   saleNowSection.classList.add("hide");
+  clearSaleData();
 });
 
 createBtn.addEventListener("click", () => {

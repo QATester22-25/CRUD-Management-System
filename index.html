@@ -53,7 +53,7 @@
     <div class="section hide" id="create-section">
       <div class="crud">
         <div class="head">
-          <h2>PRODUCT MANAGEMENT SYSTEM</h2>
+          <h2 class="prod-mang-title">PRODUCT MANAGEMENT SYSTEM</h2>
         </div>
         <div id="create-notification" class="notification">
         </div>
@@ -61,7 +61,7 @@
           <div id="header">
             <div id="reference-label">
               <label for="reference">Reference</label>
-              <input type="number" placeholder="Enter product reference" id="reference" autofocus>
+              <input type="integer" placeholder="Enter product reference" id="reference" autofocus>
               <P id="ref"></P>
             </div>
             <div id="title-label">
@@ -185,24 +185,32 @@
               <p class="total-resp">#Total</p>
             </div>
           </div>
-          <div class="sale-2">
-            <div class="select-section">
-              <p class="select-label">Number of products to sale:</p>
-              <select name="select" id="sale-count">
-                <option class="sale-option" value="1">1</option>
-                <option class="sale-option" value="2" selected>2</option>
-                <option class="sale-option" value="3">3</option>
-                <option class="sale-option" value="4">4</option>
-                <option class="sale-option" value="5">5</option>
-                <option class="sale-option" value="6">6</option>
-                <option class="sale-option" value="7">7</option>
-                <option class="sale-option" value="8">8</option>
-                <option class="sale-option" value="9">9</option>
-                <option class="sale-option" value="10">10</option>
-              </select>
+          <div id="sale-2-total">
+            <div class="sale-2">
+              <div class="select-section">
+                <p class="select-label">Number of products to sale:</p>
+                <select name="select" id="sale-count">
+                  <option class="sale-option" value="0" selected>-</option>
+                  <option class="sale-option" value="1">1</option>
+                  <option class="sale-option" value="2">2</option>
+                  <option class="sale-option" value="3">3</option>
+                  <option class="sale-option" value="4">4</option>
+                  <option class="sale-option" value="5">5</option>
+                  <option class="sale-option" value="6">6</option>
+                  <option class="sale-option" value="7">7</option>
+                  <option class="sale-option" value="8">8</option>
+                  <option class="sale-option" value="9">9</option>
+                  <option class="sale-option" value="10">10</option>
+                </select>
+              </div>
+              <div>
+                <span class="sale-count-display"></span>
+            
+              </div>
             </div>
-            <div>
-              <span class="sale-count-display">Count Display</span>
+            <div class="tsa">
+              <p class="stat"></p>
+              <span class="sale-amount-display"></span>
             </div>
           </div>
           <div class="sale-3">
