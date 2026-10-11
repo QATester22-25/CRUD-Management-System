@@ -91,7 +91,7 @@ function getTotal() {
 
     total.classList.add("total");
     totalTitle.innerText = "TOTAL";
-    total.style.background = "rgb(88, 12, 12)";
+    total.style.background = " #26449d";
 
     //price is empty
   } else {

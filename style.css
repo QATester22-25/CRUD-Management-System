@@ -5,7 +5,7 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #F0E9B6;
+  background: rgb(214, 212, 212);
 }
 
 .navbar {
@@ -17,7 +17,7 @@ body {
 
   padding: 40px;
 
-  background: #744577;
+  background: #20508b;
   color: white;
 
   position: fixed;
@@ -32,7 +32,7 @@ body {
 #search {
   margin-left: 10px;  
   background: #F0E9B6;
-  color: #74204e;
+  color: #20508b;
   height: 45px;
   border: none;
   outline: none;
@@ -41,7 +41,7 @@ body {
 
 .navbar button:hover {
   color: #f6f2d0;
-  background: #734a60;
+  background: #4f6ea0;
   padding-bottom: 10px;
   border-bottom: 0.1px solid #F0E9B6;
 } 
@@ -69,14 +69,14 @@ body {
 
 .landing h1 {
   font-weight: bold;
-  color: #6e0c42;
+  color: #176d5f;
   text-shadow: 2px 2px 5px#cfd7e6;
 }
 
 .landing p{
   font-weight: 300;
   font-size: 30px;
-  color: #7d4a5f;
+  color: #213e95;
   text-shadow: 2px 2px 5px #d3c4cc;
 }
 
@@ -131,7 +131,8 @@ main {
   font-family: "Poppins", sans-serif;
   font-size: larger;
   font-weight: 600;
-  color: #8B5E3C;
+  color:  #1c3378;
+  text-shadow: 5px 8px 10px #31549f;
   
   
 }
@@ -154,7 +155,7 @@ input {
   border-radius: 8px;
   padding: 4px 0;
   background: #fdfeff;
-  color: #65134ff7;
+  color: #213e95;
   transition: 0.5s ease-in-out;
 }
 
@@ -165,7 +166,7 @@ input[type="number"]::-webkit-outer-spprice-inputin-button {
 }
 
 input::placeholder {
-  color: #480e36b2;
+  color: #20508b;
   opacity: 1;
 }
 
@@ -174,11 +175,11 @@ input:focus::placeholder {
 }
 
 input:focus {
-  background: #d4c2a7;
-  color: rgb(122, 22, 22);
+  background: #e2ebf3;
+  color: #213e95;
   font-family: "Times New Roman", Times, serif;
   font-weight: 600;
-  border: 2px solid hsla(0, 17%, 73%, 0.969);
+  border: 1px solid #213e95;
 }
 
 .ref-error,
@@ -219,7 +220,7 @@ input:focus {
 }
 
 #header label {
-  color: #5a1943f7;
+  color: #213e95;
   visibility: hidden;
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
@@ -257,7 +258,7 @@ input:focus {
   font-family: "Poppins", sans-serif;
   font-size: 20px;
   font-weight: 600;
-  background:  #631a50;
+  background: #213e95;
   color: #ece7e7;
   width: 150px;
   text-align: center;
@@ -265,8 +266,8 @@ input:focus {
 }
 
 .discount-label option {
-  color:  #50404b;
-  background: #ece7e7;
+  color:  white;
+  background:  #213e95;
 }
 
 
@@ -303,7 +304,7 @@ input:focus {
 }
 
 .price-discount-labels label {
-  color: #6e2747f7;
+  color: #213e95;
   margin-top: 5px;
 }
 
@@ -311,19 +312,20 @@ input:focus {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgb(104, 44, 85);
+  color: rgb(9, 62, 136);
   font-family: "Poppins", sans-serif;
   font-size: 20px;
   font-weight: 500;
   margin: 35px auto ;
+  text-shadow: 5px 8px 10px #20508b;
 }
 
 .title h2{
-  margin-right: 2 0px;
+  margin-right: 20px;
 }
 
 .total-title {
-  color: rgb(126, 57, 115);
+  color:  #213e95;
   font-family: "Poppins", sans-serif;
   font-size: 20px;
   font-weight: 300;
@@ -337,7 +339,7 @@ input:focus {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  background: rgb(88, 12, 12);
+  background:  #213e95;
   color: rgb(255, 255, 255);
   padding: 10px 40px;
   border-radius: 8px;
@@ -366,22 +368,23 @@ button {
 
 .submit-btn {
   width: 100%;
-  background: #2d5382;
+  background: #2b7979;
   color: white;
   font-size: 28px;
   border: none;
   outline: none;
   margin: 10px auto;
+
 }
 
 .submit-btn:hover {
-  background:#184379;
-  border: none;
+  background:#186565;
+  border-radius: 8px;
   outline: none;
 }
 
 .submit-btn:active {
-  background:#3c5b81;
+  background:#5d9b9b;
 }
 
 button:hover {
@@ -480,7 +483,7 @@ table button {
   color: rgb(241, 241, 243);
   border-radius: 5px;
   border: none;
-  background: rgb(52, 75, 151);
+  background: rgb(78, 68, 171);
   font-size: 20px;
   font-weight: 300;
   text-align: center;
@@ -492,14 +495,14 @@ table button {
 
 #update:hover {
   letter-spacing: normal;
-  background:rgb(90, 108, 171);
+  background: rgb(47, 38, 129);
 }
 #update:active {
   background: rgb(78, 139, 183);
 }
 
 #delete {
-  background: rgb(150, 35, 27);
+  background: rgb(191, 23, 11);
   color: white;
   border-radius: 5px;
   padding: 5px;
@@ -507,7 +510,7 @@ table button {
 }
 
 #delete:hover {
-  background: rgb(198, 79, 71);
+  background: rgb(132, 14, 6);
   letter-spacing: normal;
 }
 #delete:active {
@@ -518,14 +521,14 @@ table button {
 #deleteAll {
   width: 50%;
   height: 40px;
-  background: rgb(122, 46, 41);
+  background: rgb(191, 23, 11);
   color: white;
   margin-left: 400px;
 }
 
 
 #deleteAll:hover {
-  background: rgb(161, 44, 36);
+ background: rgb(132, 14, 6);
   letter-spacing: 2px ;
 
 }
@@ -668,7 +671,7 @@ table button {
 
 .sale-title{
   align-self: center; 
-  color: rgb(104, 44, 85);
+  color: #436fa7fc ;
   font-family: "Poppins", sans-serif;
   font-size: 30px;
   font-weight: 500;
@@ -680,16 +683,43 @@ table button {
 
 .sale-search{
   width: 80%;
-  margin: 30px auto;
+  margin: 100px auto;
 }
 
 .sale-search label{
   color: #5a1943f7;
+  
 }
 
 #sale-input{
 color: #5a1943f7;
-  height: 40px;
+  height: 50px;
+  border: 1px solid #50404b;
+  box-shadow: 5px 8px 10px #50404b;
+}
+
+#sale-icon{
+  height: 50px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #50404b;
+  outline: none;
+  margin: 5px;
+  padding: 4px;
+  box-shadow: 5px 8px 10px #50404b;
+}
+
+
+#saleNow-btn{
+  color: white;
+  background: rgb(29, 111, 119);
+}
+
+#saleNow-btn:hover{
+  background: rgb(17, 91, 98);
+}
+#saleNow-btn:active{
+  background: rgb(75, 115, 118);
 }
 
 .sale-table{
@@ -702,16 +732,7 @@ color: #5a1943f7;
   justify-content: center;
 }
 
-#sale-icon{
-  height: 40px;
-  background: white;
-  border-radius: 8px;
-  border: none;
-  outline: none;
-  margin: 5px;
-  padding: 4px;
-    
-}
+
 
 .sale-error-msg{
   margin-top: 10px;
@@ -728,29 +749,58 @@ color: #5a1943f7;
   margin: 0 30px;
   border-radius: 8px;
   border: 2px solid   #436084;
-  box-shadow: 5px 5px 10px 8px #818e9f; 
+  box-shadow: 5px 5px 10px 8px #39559c; 
+  background: #7290b7fc ;
 }
 
-.sale-ref,.saleNow-title,.sale-category,.sale-count,.sale-total,.select-label,.sale-count-display,.stat{
+.sale-ref,.saleNow-title,.sale-category,.sale-count,.sale-count-display{
   display: flex;
   justify-content: space-between;
-  color: rgb(126, 57, 115);
+  color: white;
   font-family: "Poppins", sans-serif;
   font-size: 28px;
   font-weight: 400;
-  border-bottom:1px dotted #324172;
+  border-bottom:1px dotted #ffffff;
+}
+
+.sale-total{
+  display: flex;
+  justify-content: space-between;
+  color: white;
+  font-family: "Poppins", sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+}
+
+.select-label,.stat{
+  display: flex;
+  justify-content: space-between;
+  color:#fdfeff;
+  font-family: "Poppins", sans-serif;
+  font-size: 28px;
+  font-weight: 400;
 }
 
 .ref-resp,.title-resp,.category-resp,.count-resp,.total-resp,#sale-count {
-  font-weight: bold;
-  color: #31549f;
+  font-weight: 500;
+  color: #091870;
   margin-left: 50px;
 }
 
-.sale-count-display,.sale-amount-display{
+.sale-count-display{
   font-size: 30px;
-  font-weight: bold;
-  color: #31549f;
+  font-weight: 500;
+  color: #0b1f4b;
+  border: none;
+  margin-top: 50px;
+  padding-bottom: 25px;
+  border-bottom: 1px dotted #ffffff;
+}
+
+.sale-amount-display{
+  font-size: 25px;
+  font-weight: 500;
+  color: #0b1f4b;
   border: none;
 }
 
@@ -772,7 +822,7 @@ p .label{
   font-family: "Poppins", sans-serif;
   font-size: 20px;
   font-weight: 600;
-  background:  #631a50;
+  background:  #183675;
   color: #ece7e7;
   width: 100px;
   text-align: center;
@@ -783,16 +833,16 @@ p .label{
 
 
 .select-section option{
-  background:  #631a50;
+  background:  #183675;
   color: #ece7e7;
 }
 
 .sale-1{
-  padding: 5px 50px;
+  padding: 15px 50px;
   margin: 20px;
   border: 2px solid   #436084;
   border-radius: 8px;
-  box-shadow: 5px 5px 10px 8px #818e9f;
+  box-shadow: 5px 5px 10px 8px #eae5e5;
 }
 
 .sale-2{
@@ -801,10 +851,10 @@ p .label{
   align-items: center;
   justify-content: center;
   padding: 10px 50px;
-  margin:  20px;
+  margin: 20px;
   border: 2px solid   #436084;
   border-radius: 8px;
-  box-shadow: 5px 5px 10px 8px #818e9f;
+  box-shadow: 5px 5px 10px 8px #eae5e5;
 }
 
 #sale-2-total{
@@ -818,7 +868,6 @@ p .label{
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 50px;
 }
 
 .stat{
@@ -831,18 +880,19 @@ p .label{
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 50px;
+  padding: 80px 50px;
   border: 2px solid   #436084;
   border-radius: 8px;
-  box-shadow: 5px 5px 10px 8px #818e9f; 
+  box-shadow: 5px 5px 10px 8px #eae5e5;
 }
 
 .sale-button{
   width: 200px;
-  height: 70px;
-  background: #2d5382;
+  height: 80px;
+  background: #173d88;
   color: white;
   font-size: 28px;
+  font-weight: bold;
   border: none;
   outline: none;
   margin: 10px auto;
@@ -850,7 +900,8 @@ p .label{
 
 
 .sale-button:hover {
-  background:#184379;
+  background: #0b2f75;
+  border: 1px solid white;
 }
 
 .sale-button:active {
@@ -859,8 +910,8 @@ p .label{
 
 .sale-cancel-button{
   width: 200px;
-  height: 70px;
-  background: #a52222;
+  height: 80px;
+  background: #8c1d1d;
   color: white;
   font-size: 28px;
   border: none;
@@ -868,9 +919,10 @@ p .label{
   margin: 10px auto;
 }
 .sale-cancel-button:hover{
-  background: #951010;
+  background: #800000;
+  border: 1px solid white;
 }
 
 .sale-cancel-button:active{
-  background: #9e4848;
+  background: #994343;
 }
