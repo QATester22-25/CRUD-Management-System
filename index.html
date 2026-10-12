@@ -15,7 +15,7 @@
       <div>
         <button onclick="showHomeSection()" id="home-btn">Home</button>
         <button onclick="showCreateSection()" id="create-btn">Create Product</button>
-        <button onclick=" showSaleSection()" id="sale-btn">Sale Product</button>
+        <button onclick="showSaleSection()" id="sale-btn">Sale Product</button>
         <button onclick="showInventorySection()" id="inventory-btn">Inventory Management</button>
       </div>
       <div class="search hide">
@@ -113,7 +113,7 @@
           <h3 class="total-title"></h3>
           <small id="total"> </small>
         </div>
-        <button class="submit-btn" id="submit" type="button">Create</button>
+        <button onclick="showCreateSection()" class="submit-btn" id="submit" type="button">Create</button>
         <button onclick="cancel()" class="cancel-btn"  type="button">Cancel</button>
         <div class="outputs">
         </div>
@@ -125,6 +125,7 @@
         <div class="sale-title">
           <h2>Sale Products</h2>
         </div>
+        <div id="sale-notification" class="notification"></div>
         <div class="sale-search">
           <label for="sale">Search Product</label>
           <div class="sale-s">
@@ -188,7 +189,7 @@
           <div id="sale-2-total">
             <div class="sale-2">
               <div class="select-section">
-                <p class="select-label">Number of products to sale:</p>
+                <p class="select-label">Products to sale:</p>
                 <select name="select" id="sale-count">
                   <option class="sale-option" value="0" selected>-</option>
                   <option class="sale-option" value="1">1</option>
@@ -214,7 +215,7 @@
             </div>
           </div>
           <div class="sale-3">
-            <button class="sale-button" type="button">Sale</button>
+            <button onclick="saleNow(I)" class="sale-button" type="button">Sale</button>
             <button class="sale-cancel-button" type="button">Cancel</button>
           </div>
         </div>

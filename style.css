@@ -5,7 +5,7 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: rgb(214, 212, 212);
+  background: rgb(242, 233, 233);
 }
 
 .navbar {
@@ -17,7 +17,7 @@ body {
 
   padding: 40px;
 
-  background: #20508b;
+  background: #124e98;
   color: white;
 
   position: fixed;
@@ -32,7 +32,9 @@ body {
 #search {
   margin-left: 10px;  
   background: #F0E9B6;
-  color: #20508b;
+  color: #2d6ab4;
+  font-size: 22px;
+  font-weight: 300;
   height: 45px;
   border: none;
   outline: none;
@@ -41,9 +43,9 @@ body {
 
 .navbar button:hover {
   color: #f6f2d0;
-  background: #4f6ea0;
+  background: #2d6fa9;
   padding-bottom: 10px;
-  border-bottom: 0.1px solid #F0E9B6;
+  border-bottom: 0.1px solid white;
 } 
 
 #search-title:hover{
@@ -69,14 +71,14 @@ body {
 
 .landing h1 {
   font-weight: bold;
-  color: #176d5f;
-  text-shadow: 2px 2px 5px#cfd7e6;
+  color: #2a4c8f;
+  text-shadow: 8px 5px 5px#4d6aa1;
 }
 
 .landing p{
   font-weight: 300;
   font-size: 30px;
-  color: #213e95;
+  color: #1171ac;
   text-shadow: 2px 2px 5px #d3c4cc;
 }
 
@@ -89,12 +91,35 @@ body {
 }
 #create,#inventory,#sale{
 margin-right: 20px;
-background: #31549f;
 padding: 10px 20px;
 }
 
-#create:hover,#inventory:hover,#sale:hover{
-background: #183675;
+#create{
+  background: #31649f;
+}
+
+
+#inventory{
+  background: #562b8f;
+}
+
+#sale{
+  background: #14645a;
+}
+
+
+#create:hover{
+background: #1d4676;
+letter-spacing: 1px;
+box-shadow:3px 2px 3px 3px #232323;
+}
+#inventory:hover{
+background: #4e2682;
+letter-spacing: 1px;
+box-shadow:3px 2px 3px 3px #232323;
+}
+#sale:hover{
+background: #125148;
 letter-spacing: 1px;
 box-shadow:3px 2px 3px 3px #232323;
 }
@@ -132,9 +157,7 @@ main {
   font-size: larger;
   font-weight: 600;
   color:  #1c3378;
-  text-shadow: 5px 8px 10px #31549f;
-  
-  
+  text-shadow: 5px 8px 5px #d7dce5;
 }
 
 .head h2 {
@@ -166,7 +189,7 @@ input[type="number"]::-webkit-outer-spprice-inputin-button {
 }
 
 input::placeholder {
-  color: #20508b;
+  color: #667990;
   opacity: 1;
 }
 
@@ -368,7 +391,7 @@ button {
 
 .submit-btn {
   width: 100%;
-  background: #2b7979;
+  background: #3f8383;
   color: white;
   font-size: 28px;
   border: none;
@@ -461,13 +484,13 @@ table th {
   position: sticky;
   top: 0;
   z-index: 999;
-  background-color: #0d1e64;
+  background-color: #104390;
 }
 
 table .data {
   border: 2px solid rgb(135, 134, 134);
   font-family: "Poppins", sans-serif;
-  font-size: 20px;
+  font-size: 25px;
   font-weight: 500;
   background: white;
   color: #324172;
@@ -483,7 +506,7 @@ table button {
   color: rgb(241, 241, 243);
   border-radius: 5px;
   border: none;
-  background: rgb(78, 68, 171);
+  background: #2d6fa9;
   font-size: 20px;
   font-weight: 300;
   text-align: center;
@@ -495,7 +518,7 @@ table button {
 
 #update:hover {
   letter-spacing: normal;
-  background: rgb(47, 38, 129);
+  background: #135b9b;
 }
 #update:active {
   background: rgb(78, 139, 183);
@@ -678,7 +701,7 @@ table button {
   margin-top: 50px;
   margin-bottom: 50px;
   margin-left: 500px;
-  text-shadow: 8px 4px 5px #a8b2c8;
+  text-shadow: 8px 4px 5px #d2d6e0;
 }
 
 .sale-search{
@@ -687,15 +710,15 @@ table button {
 }
 
 .sale-search label{
-  color: #5a1943f7;
+  color: #2c4889f7;
   
 }
 
 #sale-input{
-color: #5a1943f7;
+  color: #2c4889f7;
   height: 50px;
-  border: 1px solid #50404b;
-  box-shadow: 5px 8px 10px #50404b;
+  border: 1px solid #325087;
+  box-shadow: 8px 4px 5px #d2d6e0;
 }
 
 #sale-icon{
@@ -706,7 +729,7 @@ color: #5a1943f7;
   outline: none;
   margin: 5px;
   padding: 4px;
-  box-shadow: 5px 8px 10px #50404b;
+  box-shadow: 8px 4px 5px #d2d6e0;
 }
 
 
@@ -749,24 +772,24 @@ color: #5a1943f7;
   margin: 0 30px;
   border-radius: 8px;
   border: 2px solid   #436084;
-  box-shadow: 5px 5px 10px 8px #39559c; 
-  background: #7290b7fc ;
+  box-shadow: 8px 4px 5px #5d7fab;
+  background: #fffffffc ;
 }
 
 .sale-ref,.saleNow-title,.sale-category,.sale-count,.sale-count-display{
   display: flex;
   justify-content: space-between;
-  color: white;
+  color: rgb(23, 65, 194);
   font-family: "Poppins", sans-serif;
   font-size: 28px;
   font-weight: 400;
-  border-bottom:1px dotted #ffffff;
+  border-bottom: 1px dotted rgb(23, 65, 194);
 }
 
 .sale-total{
   display: flex;
   justify-content: space-between;
-  color: white;
+  color: rgb(23, 65, 194);
   font-family: "Poppins", sans-serif;
   font-size: 28px;
   font-weight: 400;
@@ -775,7 +798,7 @@ color: #5a1943f7;
 .select-label,.stat{
   display: flex;
   justify-content: space-between;
-  color:#fdfeff;
+  color: rgb(23, 65, 194);
   font-family: "Poppins", sans-serif;
   font-size: 28px;
   font-weight: 400;
@@ -789,18 +812,18 @@ color: #5a1943f7;
 
 .sale-count-display{
   font-size: 30px;
-  font-weight: 500;
-  color: #0b1f4b;
+  font-weight: bold;
+  color: #0c0a95;
   border: none;
   margin-top: 50px;
   padding-bottom: 25px;
-  border-bottom: 1px dotted #ffffff;
+  border-bottom: 1px dotted rgb(23, 65, 194);
 }
 
 .sale-amount-display{
   font-size: 25px;
-  font-weight: 500;
-  color: #0b1f4b;
+  font-weight: bold;
+  color: #0c3283;
   border: none;
 }
 
@@ -842,7 +865,7 @@ p .label{
   margin: 20px;
   border: 2px solid   #436084;
   border-radius: 8px;
-  box-shadow: 5px 5px 10px 8px #eae5e5;
+  box-shadow: 8px 4px 5px #5d7fab;
 }
 
 .sale-2{
@@ -854,7 +877,7 @@ p .label{
   margin: 20px;
   border: 2px solid   #436084;
   border-radius: 8px;
-  box-shadow: 5px 5px 10px 8px #eae5e5;
+  box-shadow: 8px 4px 5px #5d7fab;
 }
 
 #sale-2-total{
@@ -883,7 +906,7 @@ p .label{
   padding: 80px 50px;
   border: 2px solid   #436084;
   border-radius: 8px;
-  box-shadow: 5px 5px 10px 8px #eae5e5;
+  box-shadow: 8px 4px 5px #5d7fab;
 }
 
 .sale-button{

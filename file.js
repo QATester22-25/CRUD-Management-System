@@ -12,6 +12,7 @@ const saleBtn = document.getElementById("sale-icon");
 const saleInput = document.getElementById("sale-input");
 const saleCancelBtn = document.querySelector(".sale-cancel-button");
 const saleSelect = document.getElementById("sale-count");
+const saleProductBtn = document.querySelector(".sale-button");
 
 const bodyContainer = document.querySelector(".container");
 const createSection = document.getElementById("create-section");
@@ -30,6 +31,7 @@ const errorPrice = document.getElementById("price-error");
 const createNotification = document.getElementById("create-notification");
 const inventoryNotification = document.getElementById("inventory-notification");
 const saleErrorMsg = document.querySelector(".sale-error-msg");
+const saleNotification = document.getElementById('sale-notification');
 
 const reference = document.getElementById("reference");
 const title = document.getElementById("title");
@@ -212,7 +214,6 @@ submit.onclick = function () {
           console.log("I'm the product index in update mood " + tmp);
           submit.innerHTML = "Create";
           count.removeAttribute("disabled", "");
-          
 
           //save product in localstorage
           localStorage.setItem("product", JSON.stringify(dataProduct));
@@ -227,7 +228,6 @@ submit.onclick = function () {
           createNotification.classList.remove("error-notification");
           showNotification("Updated successfully");
           showInventorySection();
-          console.log("mood: " + mood);
           //catch error
         } catch (error) {
           showNotification("An error has been occured");
@@ -265,7 +265,6 @@ function clearData() {
   errorPrice.innerText = "";
   total.classList.remove("total");
   inputSearch.value = "";
-  submit.style.background = "#2d5382";
 }
 
 //Read - show products
@@ -345,11 +344,11 @@ function updateProduct(i) {
   count.value = dataProduct[i].count;
 
   //hide count input and label
-  count.style.display = "none";
+ // count.style.display = "none";
 
   //change create button to update
   submit.innerHTML = "Update";
-
+  cancelBtn.style.display = "block";
   tmp = i;
 
   getDiscount();
@@ -357,7 +356,7 @@ function updateProduct(i) {
 
   mood = "update";
 
-  cancelBtn.style.display = "block";
+  
   submit.style.background = "rgb(147, 100, 147)";
   totalTitle.innerText = "";
   document.querySelector(".price-discount-labels").style.marginTop = "0px";
@@ -397,12 +396,13 @@ function showNotification(message) {
   createNotification.classList.add("show");
   inventoryNotification.innerText = message;
   inventoryNotification.classList.add("show");
-  submit.style.background = "#2d5382";
-
+  saleNotification.innerHTML = message;
+  saleNotification.classList.add('show');
   setTimeout(() => {
     createNotification.classList.remove("show");
     inventoryNotification.classList.remove("show");
-  }, 5000);
+    saleNotification.classList.remove('show');
+  }, 3000);
 }
 
 price.addEventListener("blur", () => {
@@ -553,7 +553,6 @@ function saleProduct(i) {
 
   saleTable.classList.remove("show");
   saleTable.classList.add("hide");
-  console.log(dataProduct[i]);
 
   document.querySelector('.ref-resp').innerHTML = dataProduct[i].reference;
   document.querySelector('.title-resp').innerHTML = dataProduct[i].title;
@@ -562,6 +561,37 @@ function saleProduct(i) {
   document.querySelector('.total-resp').innerHTML = dataProduct[i].total;
 
     I = i;
+}
+
+function saleNow(I) {
+  dataProduct = JSON.parse(localStorage.product);
+  console.log(dataProduct[I].count > selectSaleValue);
+  const countRemaining = dataProduct[I].count - Number(selectSaleValue);
+  if (dataProduct[I].count > Number(selectSaleValue)) {
+    dataProduct[I].count = countRemaining;
+    localStorage.setItem("product", JSON.stringify(dataProduct));
+    console.log(dataProduct[I].count);
+    showNotification("The products have been saled");
+    saleNotification.classList.remove("error-notification");
+
+    document.querySelector(".ref-resp").innerHTML = dataProduct[I].reference;
+    document.querySelector(".title-resp").innerHTML = dataProduct[I].title;
+    document.querySelector(".category-resp").innerHTML =
+      dataProduct[I].category;
+    document.querySelector(".count-resp").innerHTML = dataProduct[I].count;
+    document.querySelector(".total-resp").innerHTML = dataProduct[I].total;
+    
+    showProductData();
+    setTimeout(() => {
+      showSaleSection();
+    }, 3000);
+    
+  } else {
+    showNotification("No enough products to sale!")
+     saleNotification.classList.add("error-notification");
+  }
+    
+  console.log(dataProduct)
 }
 
 saleCancelBtn.addEventListener("click", () => {
@@ -577,6 +607,7 @@ saleCancelBtn.addEventListener("click", () => {
   clearSaleData();
 });
 
+let selectSaleValue;
 saleSelect.addEventListener("change", () => {
   let saleTotal =
     parsePrice(dataProduct[I].total);
@@ -598,13 +629,8 @@ saleSelect.addEventListener("change", () => {
       document.querySelector(".stat").innerHTML = "";
     document.querySelector(".sale-amount-display").innerHTML = "";
   }
- 
   
-  
-  
-
-
-  
+  selectSaleValue = Number(saleValue);
 });
   
 function parsePrice(value) {
@@ -692,8 +718,15 @@ function showCreateSection() {
 
   saleNowSection.classList.remove("show");
   saleNowSection.classList.add("hide");
+  if (mood != "update") {
+    cancelBtn.style.display = "none";
+  }
   clearSaleData();
 }
+
+submit.addEventListener('click', () => {
+  submit.style.background = "#295951";
+})
 
 //show sale section
 function showSaleSection() {
@@ -738,6 +771,7 @@ landingCreateBtn.addEventListener("click", () => {
 
   saleNowSection.classList.remove("show");
   saleNowSection.classList.add("hide");
+  submit.style.background = "#295951";
   clearSaleData();
 });
 
@@ -763,14 +797,13 @@ landingInventoryBtn.addEventListener("click", () => {
 });
 
 createBtn.addEventListener("click", () => {
-  mood = "create";
+  mood != "update";
 });
 
 //sale listeners
 saleBtn.addEventListener("click", () => {
   saleSearch(saleInput.value);
   saleInput.value = "";
-  console.log("this is the click listener");
 });
 
 saleInput.addEventListener("keydown", (event) => {
