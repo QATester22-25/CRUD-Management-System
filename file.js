@@ -456,28 +456,45 @@ function searchProduct(value) {
     }
   }
 
-  document.getElementById("tbody").innerHTML = table;
+  
+  if (table === "") {
+    document.getElementById("table-body").classList.add('hide');
+    document.querySelector(".no-products").classList.remove('hide');    
+    
+  } else {
+    document.getElementById("tbody").innerHTML = table;
+    document.getElementById("table-body").classList.remove("hide");
+    document.querySelector(".no-products").classList.add("hide");
+  }
 }
 
 searchBtn.addEventListener("click", () => {
-  if (inputSearch.value) {
+  if (inputSearch.value.trim() != "") {
     searchProduct(inputSearch.value);
     deleteAllBtn.classList.add("delete-all-hide");
+    ocument.querySelector(".sale-img").classList.add("hide");
     inputSearch.value = "";
   } else {
     deleteAllBtn.classList.remove("delete-all-hide");
+    document.querySelector(".no-products").classList.add("hide");
+    document.getElementById("table-body").classList.remove("hide");
+    document.querySelector(".sale-img").classList.add("hide");
     showProductData();
   }
 });
 
 inputSearch.addEventListener("keydown", (event) => {
   if (event.key === "Enter")
-    if (inputSearch.value) {
+    if (inputSearch.value.trim() != "") {
       searchProduct(inputSearch.value);
       deleteAllBtn.classList.add("delete-all-hide");
       inputSearch.value = "";
+      document.getElementById("sale_img").classList.add('hide');
     } else {
       deleteAllBtn.classList.remove("delete-all-hide");
+      document.querySelector(".no-products").classList.add("hide");
+      document.getElementById("table-body").classList.remove("hide");
+     document.getElementById("sale_img").classList.add("hide");
       showProductData();
     }
 });
@@ -560,6 +577,7 @@ function saleProduct(i) {
   document.querySelector('.count-resp').innerHTML = dataProduct[i].count;
   document.querySelector('.total-resp').innerHTML = dataProduct[i].total;
 
+  document.getElementById("sale_img").classList.add("hide");
     I = i;
 }
 
@@ -586,6 +604,7 @@ function saleNow(I) {
       showProductData();
       setTimeout(() => {
         showSaleSection();
+        document.getElementById('sale_img').classList.remove('hide');
       }, 3000);
     } else {
       showNotification("No enough products to sale!");
@@ -807,6 +826,7 @@ createBtn.addEventListener("click", () => {
 saleBtn.addEventListener("click", () => {
   saleSearch(saleInput.value);
   saleInput.value = "";
+  document.getElementById("sale_img").classList.add("hide");
 });
 
 saleInput.addEventListener("keydown", (event) => {
@@ -814,6 +834,7 @@ saleInput.addEventListener("keydown", (event) => {
     saleSearch(saleInput.value);
     saleInput.value = "";
     console.log("this is the keydown listener");
+    document.getElementById('sale_img').classList.add('hide');
   }
 });
 

@@ -27,27 +27,28 @@
   </nav>      
   <main>
     <section id="home-section" class="show">
-
-      <div class="landing">
-        <h1>PRODUCT MANAGEMENT SYSTEM</h1>
-
-        <p>
-          Manage your products easily.
-        </p>
-
-        <div class="landing-btn">
-          <button  onclick="showCreateSection()" id="create">
-            Create Product
-          </button>
-          <button  onclick=" showSaleSection()" id="sale">
-            Sale Product
-          </button>
-          <button onclick="showInventorySection()" id="inventory">      
-            Show Inventory
-          </button>
+      <div id="landing-imgs">
+        <div class="landing-img-1">
+          <img class="land-1" src="./images/crud_img.webp" alt="crud-img">
+        </div>
+        <div class="landing">
+          <h1>PRODUCT MANAGEMENT SYSTEM</h1>
+          <p>
+            Manage your products easily.
+          </p>
+          <div class="landing-btn">
+            <button  onclick="showCreateSection()" id="create">
+              Create Product
+            </button>
+            <button  onclick=" showSaleSection()" id="sale">
+              Sale Product
+            </button>
+            <button onclick="showInventorySection()" id="inventory">
+              Show Inventory
+            </button>
+          </div>
         </div>
       </div>
-
     </section>
     <!-- CREATE PRODUCT -->
     <div class="section hide" id="create-section">
@@ -134,7 +135,10 @@
           </div>
           <p class="sale-error-msg hide"></p>
         </div>
-      </div>  
+      </div>
+      <div class="sale-img hide">
+        <img  id="sale_img" src="./images/sale-photo.jpeg" alt="sale_image">
+      </div>
         <div class="sale-table hide">
           <div class="table">
             <div id="table-bod">
@@ -221,14 +225,14 @@
         </div>
         
      </div>
-    <!-- INVENTORY -->
+    <!-- INVENTORY -->  
     <div class="section hide" id="inventory-section">
 
       <div class="title">
         <h2>INVENTORY MANAGEMENT</h2>
         <p>Create - Read - Update - Delete</p>
       </div>
-
+      <h2 class="no-products  hide">No products found</h2>
       <div class="table">
         <table id="table-body">
           <thead>
