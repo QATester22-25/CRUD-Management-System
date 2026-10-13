@@ -459,12 +459,16 @@ function searchProduct(value) {
   
   if (table === "") {
     document.getElementById("table-body").classList.add('hide');
-    document.querySelector(".no-products").classList.remove('hide');    
+    document.querySelector(".no-products").classList.remove('hide');  
+    document.querySelector(".no_products_img").classList.remove('hide');
+  
     
   } else {
     document.getElementById("tbody").innerHTML = table;
     document.getElementById("table-body").classList.remove("hide");
     document.querySelector(".no-products").classList.add("hide");
+    document.querySelector(".no_products_img").classList.add("hide");
+
   }
 }
 
@@ -472,13 +476,14 @@ searchBtn.addEventListener("click", () => {
   if (inputSearch.value.trim() != "") {
     searchProduct(inputSearch.value);
     deleteAllBtn.classList.add("delete-all-hide");
-    ocument.querySelector(".sale-img").classList.add("hide");
+    document.querySelector(".sale-img").classList.add("hide");
     inputSearch.value = "";
   } else {
     deleteAllBtn.classList.remove("delete-all-hide");
     document.querySelector(".no-products").classList.add("hide");
     document.getElementById("table-body").classList.remove("hide");
     document.querySelector(".sale-img").classList.add("hide");
+     document.querySelector(".no_products_img").classList.add("hide");
     showProductData();
   }
 });
@@ -494,7 +499,8 @@ inputSearch.addEventListener("keydown", (event) => {
       deleteAllBtn.classList.remove("delete-all-hide");
       document.querySelector(".no-products").classList.add("hide");
       document.getElementById("table-body").classList.remove("hide");
-     document.getElementById("sale_img").classList.add("hide");
+      document.getElementById("sale_img").classList.add("hide");
+      document.querySelector(".no_products_img").classList.add("hide");
       showProductData();
     }
 });
