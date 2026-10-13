@@ -72,7 +72,7 @@ body {
 .landing h1 {
   font-weight: bold;
   color: #2a4c8f;
-  text-shadow: 8px 5px 5px#4d6aa1;
+  text-shadow: 2px 5px 5px #8ea1c5;
 }
 
 .landing p{
@@ -95,31 +95,31 @@ padding: 10px 20px;
 }
 
 #create{
-  background: #31649f;
+  background: #517baa;
 }
 
 
 #inventory{
-  background: #562b8f;
+  background: #6d558d;
 }
 
 #sale{
-  background: #14645a;
+  background: #3a8a81;
 }
 
 
 #create:hover{
-background: #1d4676;
+background: #3b6da5;
 letter-spacing: 1px;
 box-shadow:3px 2px 3px 3px #232323;
 }
 #inventory:hover{
-background: #4e2682;
+background: #724ca5;  
 letter-spacing: 1px;
 box-shadow:3px 2px 3px 3px #232323;
 }
 #sale:hover{
-background: #125148;
+background: #268577;
 letter-spacing: 1px;
 box-shadow:3px 2px 3px 3px #232323;
 }

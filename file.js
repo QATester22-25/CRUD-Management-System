@@ -565,33 +565,36 @@ function saleProduct(i) {
 
 function saleNow(I) {
   dataProduct = JSON.parse(localStorage.product);
-  console.log(dataProduct[I].count > selectSaleValue);
   const countRemaining = dataProduct[I].count - Number(selectSaleValue);
-  if (dataProduct[I].count > Number(selectSaleValue)) {
-    dataProduct[I].count = countRemaining;
-    localStorage.setItem("product", JSON.stringify(dataProduct));
-    console.log(dataProduct[I].count);
-    showNotification("The products have been saled");
-    saleNotification.classList.remove("error-notification");
+  if (Number(selectSaleValue > 0)) {
+    if (dataProduct[I].count > Number(selectSaleValue)) {
+      dataProduct[I].count = countRemaining;
+      localStorage.setItem("product", JSON.stringify(dataProduct));
+      console.log(dataProduct[I].count);
+      showNotification(
+        `${saleSelect.value} ${dataProduct[I].title} ${dataProduct[I].category} have been saled`,
+      );
+      saleNotification.classList.remove("error-notification");
 
-    document.querySelector(".ref-resp").innerHTML = dataProduct[I].reference;
-    document.querySelector(".title-resp").innerHTML = dataProduct[I].title;
-    document.querySelector(".category-resp").innerHTML =
-      dataProduct[I].category;
-    document.querySelector(".count-resp").innerHTML = dataProduct[I].count;
-    document.querySelector(".total-resp").innerHTML = dataProduct[I].total;
-    
-    showProductData();
-    setTimeout(() => {
-      showSaleSection();
-    }, 3000);
-    
+      document.querySelector(".ref-resp").innerHTML = dataProduct[I].reference;
+      document.querySelector(".title-resp").innerHTML = dataProduct[I].title;
+      document.querySelector(".category-resp").innerHTML =
+        dataProduct[I].category;
+      document.querySelector(".count-resp").innerHTML = dataProduct[I].count;
+      document.querySelector(".total-resp").innerHTML = dataProduct[I].total;
+
+      showProductData();
+      setTimeout(() => {
+        showSaleSection();
+      }, 3000);
+    } else {
+      showNotification("No enough products to sale!");
+      saleNotification.classList.add("error-notification");
+    }
   } else {
-    showNotification("No enough products to sale!")
-     saleNotification.classList.add("error-notification");
+    showNotification("Please select the number of products to sale");
+    saleNotification.classList.add("error-notification");
   }
-    
-  console.log(dataProduct)
 }
 
 saleCancelBtn.addEventListener("click", () => {
