@@ -718,6 +718,8 @@ function showInventorySection() {
 
   saleNowSection.classList.remove("show");
   saleNowSection.classList.add("hide");
+  document.getElementById('sale_img').classList.remove('hide');
+
   clearSaleData();
 }
 
@@ -772,6 +774,9 @@ function showSaleSection() {
 
   saleHeader.classList.remove("hide");
   saleHeader.classList.add("show");
+  document.getElementById('sale_img').classList.remove('hide');
+  saleErrorMsg.classList.remove('show');
+  saleErrorMsg.classList.add('hide');
   clearSaleData();
 }
 
