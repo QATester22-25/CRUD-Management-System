@@ -99,7 +99,7 @@ body {
   width: 300px;
   height: 500px;
   margin-top: 50px;
-  box-shadow: 3px 5px 8px #104390;
+  box-shadow: 5px 8px 10px 5px #616b7a;
 }
 
 #create,#inventory,#sale{
@@ -762,9 +762,9 @@ table button {
 
 .sale-img img{
   width: 700px;
-  height: 150px;
+  height: 250px;
   margin-top: 20px;
-  box-shadow: 3px 5px 8px #252e6d;
+  box-shadow: 3px 5px 8px 3px #aa8383;
 }
 
 
