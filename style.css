@@ -367,7 +367,7 @@ input:focus {
   color: red;
   font-family: "Poppins",sans-serif;
   font-size: 30px;
-  margin: 100px auto;
+  margin: 50px auto;
 }
 
 .total-title {
@@ -754,13 +754,20 @@ table button {
   box-shadow: 8px 4px 5px #d2d6e0;
 }
 
-.sale-img{
+.sale-img , .no_product{
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .sale-img img{
+  width: 700px;
+  height: 250px;
+  margin-top: 20px;
+  box-shadow: 3px 5px 8px 3px #aa8383;
+}
+
+.no_product img{
   width: 700px;
   height: 250px;
   margin-top: 20px;
