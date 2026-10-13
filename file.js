@@ -10,6 +10,9 @@ const submit = document.getElementById("submit");
 const cancelBtn = document.querySelector(".cancel-btn");
 const saleBtn = document.getElementById("sale-icon");
 const saleInput = document.getElementById("sale-input");
+const saleCancelBtn = document.querySelector(".sale-cancel-button");
+const saleSelect = document.getElementById("sale-count");
+const saleProductBtn = document.querySelector(".sale-button");
 
 const bodyContainer = document.querySelector(".container");
 const createSection = document.getElementById("create-section");
@@ -20,7 +23,7 @@ const showCreate = document.getElementById("show-create");
 const saleSection = document.getElementById("sale-section");
 const saleTable = document.querySelector(".sale-table");
 const saleHeader = document.querySelector(".sale-search");
-
+const saleNowSection = document.getElementById("sale-now-section");
 
 const errorRef = document.getElementById("ref");
 const errorCount = document.getElementById("count-error");
@@ -28,6 +31,7 @@ const errorPrice = document.getElementById("price-error");
 const createNotification = document.getElementById("create-notification");
 const inventoryNotification = document.getElementById("inventory-notification");
 const saleErrorMsg = document.querySelector(".sale-error-msg");
+const saleNotification = document.getElementById('sale-notification');
 
 const reference = document.getElementById("reference");
 const title = document.getElementById("title");
@@ -77,7 +81,7 @@ function getDiscount() {
 }
 
 ///////////////// 2- get total - //////////////////////////////
-function getTotal() {
+function getTotal() { 
   //result is required
   if (price.value != "") {
     let result = rate;
@@ -89,7 +93,7 @@ function getTotal() {
 
     total.classList.add("total");
     totalTitle.innerText = "TOTAL";
-    total.style.background = "rgb(88, 12, 12)";
+    total.style.background = " #26449d";
 
     //price is empty
   } else {
@@ -224,7 +228,6 @@ submit.onclick = function () {
           createNotification.classList.remove("error-notification");
           showNotification("Updated successfully");
           showInventorySection();
-          console.log("mood: " + mood);
           //catch error
         } catch (error) {
           showNotification("An error has been occured");
@@ -262,7 +265,6 @@ function clearData() {
   errorPrice.innerText = "";
   total.classList.remove("total");
   inputSearch.value = "";
-  submit.style.background = "#2d5382";
 }
 
 //Read - show products
@@ -342,11 +344,11 @@ function updateProduct(i) {
   count.value = dataProduct[i].count;
 
   //hide count input and label
-  count.style.display = "none";
+ // count.style.display = "none";
 
   //change create button to update
   submit.innerHTML = "Update";
-
+  cancelBtn.style.display = "block";
   tmp = i;
 
   getDiscount();
@@ -354,9 +356,11 @@ function updateProduct(i) {
 
   mood = "update";
 
-  cancelBtn.style.display = "block";
+  
   submit.style.background = "rgb(147, 100, 147)";
   totalTitle.innerText = "";
+  document.querySelector(".price-discount-labels").style.marginTop = "0px";
+  document.querySelector(".prod-mang-title").style.marginBottom = "5px";
 }
 
 ///////////////////////////Sale product/////////////////////////////////////
@@ -392,12 +396,13 @@ function showNotification(message) {
   createNotification.classList.add("show");
   inventoryNotification.innerText = message;
   inventoryNotification.classList.add("show");
-  submit.style.background = "#2d5382";
-
+  saleNotification.innerHTML = message;
+  saleNotification.classList.add('show');
   setTimeout(() => {
     createNotification.classList.remove("show");
     inventoryNotification.classList.remove("show");
-  }, 5000);
+    saleNotification.classList.remove('show');
+  }, 3000);
 }
 
 price.addEventListener("blur", () => {
@@ -451,32 +456,48 @@ function searchProduct(value) {
     }
   }
 
-  document.getElementById("tbody").innerHTML = table;
+  
+  if (table === "") {
+    document.getElementById("table-body").classList.add('hide');
+    document.querySelector(".no-products").classList.remove('hide');    
+    
+  } else {
+    document.getElementById("tbody").innerHTML = table;
+    document.getElementById("table-body").classList.remove("hide");
+    document.querySelector(".no-products").classList.add("hide");
+  }
 }
 
 searchBtn.addEventListener("click", () => {
-  if (inputSearch.value) {
+  if (inputSearch.value.trim() != "") {
     searchProduct(inputSearch.value);
     deleteAllBtn.classList.add("delete-all-hide");
+    ocument.querySelector(".sale-img").classList.add("hide");
     inputSearch.value = "";
   } else {
     deleteAllBtn.classList.remove("delete-all-hide");
+    document.querySelector(".no-products").classList.add("hide");
+    document.getElementById("table-body").classList.remove("hide");
+    document.querySelector(".sale-img").classList.add("hide");
     showProductData();
   }
 });
 
 inputSearch.addEventListener("keydown", (event) => {
   if (event.key === "Enter")
-    if (inputSearch.value) {
+    if (inputSearch.value.trim() != "") {
       searchProduct(inputSearch.value);
       deleteAllBtn.classList.add("delete-all-hide");
       inputSearch.value = "";
+      document.getElementById("sale_img").classList.add('hide');
     } else {
       deleteAllBtn.classList.remove("delete-all-hide");
+      document.querySelector(".no-products").classList.add("hide");
+      document.getElementById("table-body").classList.remove("hide");
+     document.getElementById("sale_img").classList.add("hide");
       showProductData();
     }
 });
-
 
 //////////////////////SaleSearch function////////////////////////////////
 function saleSearch(value) {
@@ -512,7 +533,7 @@ function saleSearch(value) {
           <td class="data">${dataProduct[i].discount}</td>
           <td class="data">${dataProduct[i].discountAmount}</td>
           <td class="data">${dataProduct[i].total}</td>
-          <td><button>Sale</button></td>
+          <td><button onclick="saleProduct(${i})" id="saleNow-btn">Sale</button></td>
         </tr>
       `;
     }
@@ -523,11 +544,10 @@ function saleSearch(value) {
     saleErrorMsg.classList.remove("hide");
     saleErrorMsg.classList.add("show");
     saleErrorMsg.innerHTML = "No product found";
-    saleHeader.style.marginTop = "80px"
+    saleHeader.style.marginTop = "80px";
     saleTable.classList.remove("show");
     saleTable.classList.add("hide");
     document.getElementById("tbod").innerHTML = "";
-
   } else {
     saleErrorMsg.classList.remove("show");
     saleErrorMsg.classList.add("hide");
@@ -539,9 +559,123 @@ function saleSearch(value) {
   }
 }
 
+let I;
 
-//Nav buttons
-//show landing page
+function saleProduct(i) {
+  saleNowSection.classList.remove("hide");
+  saleNowSection.classList.add("show");
+
+  saleHeader.classList.remove("show");
+  saleHeader.classList.add("hide");
+
+  saleTable.classList.remove("show");
+  saleTable.classList.add("hide");
+
+  document.querySelector('.ref-resp').innerHTML = dataProduct[i].reference;
+  document.querySelector('.title-resp').innerHTML = dataProduct[i].title;
+  document.querySelector('.category-resp').innerHTML = dataProduct[i].category;
+  document.querySelector('.count-resp').innerHTML = dataProduct[i].count;
+  document.querySelector('.total-resp').innerHTML = dataProduct[i].total;
+
+  document.getElementById("sale_img").classList.add("hide");
+    I = i;
+}
+
+function saleNow(I) {
+  dataProduct = JSON.parse(localStorage.product);
+  const countRemaining = dataProduct[I].count - Number(selectSaleValue);
+  if (Number(selectSaleValue > 0)) {
+    if (dataProduct[I].count > Number(selectSaleValue)) {
+      dataProduct[I].count = countRemaining;
+      localStorage.setItem("product", JSON.stringify(dataProduct));
+      console.log(dataProduct[I].count);
+      showNotification(
+        `${saleSelect.value} ${dataProduct[I].title} ${dataProduct[I].category} have been saled`,
+      );
+      saleNotification.classList.remove("error-notification");
+
+      document.querySelector(".ref-resp").innerHTML = dataProduct[I].reference;
+      document.querySelector(".title-resp").innerHTML = dataProduct[I].title;
+      document.querySelector(".category-resp").innerHTML =
+        dataProduct[I].category;
+      document.querySelector(".count-resp").innerHTML = dataProduct[I].count;
+      document.querySelector(".total-resp").innerHTML = dataProduct[I].total;
+
+      showProductData();
+      setTimeout(() => {
+        showSaleSection();
+        document.getElementById('sale_img').classList.remove('hide');
+      }, 3000);
+    } else {
+      showNotification("No enough products to sale!");
+      saleNotification.classList.add("error-notification");
+    }
+  } else {
+    showNotification("Please select the number of products to sale");
+    saleNotification.classList.add("error-notification");
+  }
+}
+
+saleCancelBtn.addEventListener("click", () => {
+  saleNowSection.classList.add("hide");
+  saleNowSection.classList.remove("show");
+
+  saleHeader.classList.add("show");
+  saleHeader.classList.remove("hide");
+
+  saleTable.classList.add("show");
+  saleTable.classList.remove("hide");
+
+  clearSaleData();
+});
+
+let selectSaleValue;
+saleSelect.addEventListener("change", () => {
+  let saleTotal =
+    parsePrice(dataProduct[I].total);
+  let saleValue = saleSelect.value;
+  let saleTotalDispaly = saleTotal * saleValue ;
+
+  if (saleValue != 0) {
+     document.querySelector(".sale-count-display").innerHTML =
+       `${saleSelect.value} ${dataProduct[I].title} ${dataProduct[I].category} will be saled`;
+     document.querySelector(".stat").innerHTML = "Total Amount: ";
+     document.querySelector(".sale-amount-display").innerHTML =
+       ` ${saleTotalDispaly.toLocaleString("fr-FR", {
+         minimumFractionDigits: 3,
+         maximumFractionDigits: 3,
+       })}`;
+  } else {
+    document.querySelector(".sale-count-display").innerHTML =
+      "Please select the number of products to sale";
+      document.querySelector(".stat").innerHTML = "";
+    document.querySelector(".sale-amount-display").innerHTML = "";
+  }
+  
+  selectSaleValue = Number(saleValue);
+});
+  
+function parsePrice(value) {
+  return Number(
+    String(value)
+      .replace(/[ \u00A0 ]/g, "")
+      .replace(",", "."),
+  );
+}
+
+function clearSaleData() {
+  document.querySelector('.sale-count-display').innerHTML = '';
+  document.querySelector(".ref-resp").innerHTML = "";
+  document.querySelector(".title-resp").innerHTML = "";
+  document.querySelector(".category-resp").innerHTML = "";
+  document.querySelector(".count-resp").innerHTML = "";
+  document.querySelector(".total-resp").innerHTML = "";
+  saleSelect.value = 0;
+  document.querySelector(".stat").innerHTML = "";
+  document.querySelector(".sale-amount-display").innerHTML = "";
+}
+
+  //show landing page
 function showHomeSection() {
   homeSection.classList.remove("hide");
   homeSection.classList.add("show");
@@ -557,6 +691,10 @@ function showHomeSection() {
 
   saleSection.classList.remove("show");
   saleSection.classList.add("hide");
+
+  saleNowSection.classList.remove("show");
+  saleNowSection.classList.add("hide");
+  clearSaleData();
   clearData();
 }
 
@@ -577,6 +715,10 @@ function showInventorySection() {
 
   saleSection.classList.remove("show");
   saleSection.classList.add("hide");
+
+  saleNowSection.classList.remove("show");
+  saleNowSection.classList.add("hide");
+  clearSaleData();
 }
 
 //show create section
@@ -595,7 +737,18 @@ function showCreateSection() {
 
   saleSection.classList.remove("show");
   saleSection.classList.add("hide");
+
+  saleNowSection.classList.remove("show");
+  saleNowSection.classList.add("hide");
+  if (mood != "update") {
+    cancelBtn.style.display = "none";
+  }
+  clearSaleData();
 }
+
+submit.addEventListener('click', () => {
+  submit.style.background = "#295951";
+})
 
 //show sale section
 function showSaleSection() {
@@ -613,6 +766,13 @@ function showSaleSection() {
 
   saleSection.classList.add("show");
   saleSection.classList.remove("hide");
+
+  saleNowSection.classList.remove("show");
+  saleNowSection.classList.add("hide");
+
+  saleHeader.classList.remove("hide");
+  saleHeader.classList.add("show");
+  clearSaleData();
 }
 
 landingCreateBtn.addEventListener("click", () => {
@@ -630,6 +790,11 @@ landingCreateBtn.addEventListener("click", () => {
 
   saleSection.classList.remove("show");
   saleSection.classList.add("hide");
+
+  saleNowSection.classList.remove("show");
+  saleNowSection.classList.add("hide");
+  submit.style.background = "#295951";
+  clearSaleData();
 });
 
 landingInventoryBtn.addEventListener("click", () => {
@@ -647,17 +812,21 @@ landingInventoryBtn.addEventListener("click", () => {
 
   saleSection.classList.remove("show");
   saleSection.classList.add("hide");
+
+  saleNowSection.classList.remove("show");
+  saleNowSection.classList.add("hide");
+  clearSaleData();
 });
 
 createBtn.addEventListener("click", () => {
-  mood = "create";
+  mood != "update";
 });
 
 //sale listeners
 saleBtn.addEventListener("click", () => {
   saleSearch(saleInput.value);
   saleInput.value = "";
-  console.log("this is the click listener");
+  document.getElementById("sale_img").classList.add("hide");
 });
 
 saleInput.addEventListener("keydown", (event) => {
@@ -665,6 +834,7 @@ saleInput.addEventListener("keydown", (event) => {
     saleSearch(saleInput.value);
     saleInput.value = "";
     console.log("this is the keydown listener");
+    document.getElementById('sale_img').classList.add('hide');
   }
 });
 
