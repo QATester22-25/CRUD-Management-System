@@ -31,7 +31,7 @@ const errorPrice = document.getElementById("price-error");
 const createNotification = document.getElementById("create-notification");
 const inventoryNotification = document.getElementById("inventory-notification");
 const saleErrorMsg = document.querySelector(".sale-error-msg");
-const saleNotification = document.getElementById('sale-notification');
+const saleNotification = document.getElementById("sale-notification");
 
 const reference = document.getElementById("reference");
 const title = document.getElementById("title");
@@ -51,37 +51,35 @@ const inputSearch = document.getElementById("search");
 //initialize empty variable;
 let rate;
 
+
 function getDiscount() {
   const select = document.getElementById("discount");
-  let index = select.selectedIndex;
-  ///////////////////////////
-  console.log(index);
-  //////////////////////////
-  let selectedValue = select.options[index].value;
-  let t = selectedValue / 100;
-  let convertedDiscount = price.value * t;
 
-  if (price.value > 0 && discount.value > 0) {
-    discountAmount.innerHTML = Number(convertedDiscount).toLocaleString(
-      "fr-FR",
-      {
-        minimumFractionDigits: 3,
-        maximumFractionDigits: 3,
-      },
-    );
+  if (!select || select.selectedIndex < 0) {
+    console.error("Discount select ou option sélectionnée introuvable");
+    return;
+  }
+
+  const selectedValue = Number(select.value);
+  const t = selectedValue / 100;
+  const convertedDiscount = Number(price.value) * t;
+
+  if (Number(price.value) > 0 && selectedValue > 0) {
+    discountAmount.innerHTML = convertedDiscount.toLocaleString("fr-FR", {
+      minimumFractionDigits: 3,
+      maximumFractionDigits: 3,
+    });
   } else {
     discountAmount.innerHTML = "";
   }
-  //price after discount
-  let newPrice = price.value - convertedDiscount;
 
-  rate = newPrice;
+  rate = Number(price.value) - convertedDiscount;
 
   getTotal();
 }
 
 ///////////////// 2- get total - //////////////////////////////
-function getTotal() { 
+function getTotal() {
   //result is required
   if (price.value != "") {
     let result = rate;
@@ -110,14 +108,51 @@ discount.addEventListener("change", function () {
 
 let dataProduct;
 
-// If product in local storage
-if (localStorage.product != null) {
-  dataProduct = JSON.parse(localStorage.product);
+function enrichProduct(product) {
+  const productPrice = Number(product.price);
+  const discountRate = Number(product.discount);
 
-  // local storage empty
-} else {
-  dataProduct = [];
+  const discountValue = (productPrice * discountRate) / 100;
+  const totalValue = productPrice - discountValue;
+
+  return {
+    ...product,
+    discountAmount: discountValue.toLocaleString("fr-FR", {
+      minimumFractionDigits: 3,
+      maximumFractionDigits: 3,
+    }),
+    total: totalValue.toLocaleString("fr-FR", {
+      minimumFractionDigits: 3,
+      maximumFractionDigits: 3,
+    }),
+  };
 }
+
+async function loadProducts() {
+  try {
+    const response = await fetch("http://localhost:3000/api/products", {
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      throw new Error("Impossible de récupérer les produits");
+    }
+
+    const products = await response.json();
+
+    dataProduct = products.map(enrichProduct);
+
+    showProductData();
+    showSaleProduct();
+
+    console.log("Produits chargés depuis MySQL :", dataProduct);
+  } catch (error) {
+    console.error("Erreur de chargement :", error);
+    showNotification("Impossible de charger les produits");
+  }
+}
+
+loadProducts();
 
 //initialize empty variable;
 let tmp;
@@ -126,7 +161,7 @@ let tmp;
 let mood = "create";
 
 //////////////// 3- Submit for Create / Update product - ////////////////////////////
-submit.onclick = function () {
+submit.onclick = async function () {
   //declare product object
   let newProduct = {
     reference: reference.value,
@@ -145,111 +180,114 @@ submit.onclick = function () {
 
     if (mood === "create") {
       cancelBtn.style.display = "none";
-      //check reference
-      let refer = document.getElementById("reference").value;
-      let data = JSON.parse(localStorage.getItem("product")) || [];
-      let existsRef = data.some((product) => product.reference === refer);
 
-      //same reference
-      if (existsRef) {
-        errorRef.classList.add("ref-error");
-        errorRef.innerText = "Reference already exists, please try another!";
-        return;
+      try {
+        const response = await fetch("http://localhost:3000/api/products", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            reference: newProduct.reference.trim(),
+            title: newProduct.title,
+            category: newProduct.category,
+            count: Number(newProduct.count),
+            price: Number(newProduct.price),
+            discount: Number(newProduct.discount),
+          }),
+        });
 
-        //reference doesn't exist
-      } else {
-        try {
-          //push new product
-          dataProduct.push(newProduct);
+        const result = await response.json();
 
-          //save product in localstorage
-          localStorage.setItem("product", JSON.stringify(dataProduct));
-
-          showProductData();
-          clearData();
-
-          createNotification.classList.remove("error-notification");
-          showNotification("Product created successfully");
-
-          errorRef.classList.remove("ref-error");
-          errorRef.innerText = "";
-          totalTitle.innerText = "";
-
-          console.log("mood: " + mood);
-
-          //Catch error
-        } catch (error) {
-          showNotification("An error has occured");
-          console.log(error.message);
+        if (!response.ok) {
+          showNotification(
+            result.message || "Unable to create product"
+          );
+          return;
         }
+
+        // Reload products from MySQL
+        await loadProducts();
+
+        clearData();
+
+        createNotification.classList.remove("error-notification");
+        showNotification("Product created successfully");
+
+        errorRef.classList.remove("ref-error");
+        errorRef.innerText = "";
+        totalTitle.innerText = "";
+
+        console.log("Product created in MySQL:", result);
+      } catch (error) {
+        showNotification("Unable to connect to the server");
+        console.error("Create product error:", error);
       }
-      //////else if mood is !create
     } else {
-      //////////////////Update product///////////////////////////////////
+      // UPDATE product in MySQL
 
-      mood != "create";
+      const productId = dataProduct[tmp].id;
 
-      let refer = document.getElementById("reference").value.trim();
-      let data = JSON.parse(localStorage.getItem("product")) || [];
-      let existsRef = data.some(
-        (product, index) => product.reference === refer && index !== tmp,
-      );
+      try {
+        errorRef.classList.remove("ref-error");
+        errorRef.innerText = "";
 
-      //Reference exits
-      if (existsRef) {
-        errorRef.classList.add("ref-error");
-        errorRef.innerText =
-          "This Reference already exists, please try another!";
-        return;
+        const response = await fetch(
+          `http://localhost:3000/api/products/${productId}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              reference: newProduct.reference.trim(),
+              title: newProduct.title,
+              category: newProduct.category,
+              count: Number(newProduct.count),
+              price: Number(newProduct.price),
+              discount: Number(newProduct.discount),
+            }),
+          }
+        );
 
-        //Reference doesn't exits
-      } else {
-        try {
-          errorRef.classList.remove("ref-error");
-          errorRef.innerText = "";
+        const result = await response.json();
 
-          dataProduct[tmp] = newProduct;
-          console.log(dataProduct[tmp]);
-          mood = "update";
-          console.log("I'm the product index in update mood " + tmp);
-          submit.innerHTML = "Create";
-          count.removeAttribute("disabled", "");
+        if (!response.ok) {
+          if (response.status === 409) {
+            errorRef.classList.add("ref-error");
+            errorRef.innerText = result.message;
+          } else {
+            showNotification(
+              result.message || "Unable to update product"
+            );
+          }
 
-          //save product in localstorage
-          localStorage.setItem("product", JSON.stringify(dataProduct));
-          count.style.display = "block";
-          totalTitle.innerText = "";
-          showProductData();
-          /////////////////////////////
-          showInventorySection();
-          /////////////////////////////////
-          clearData();
-
-          createNotification.classList.remove("error-notification");
-          showNotification("Updated successfully");
-          showInventorySection();
-          //catch error
-        } catch (error) {
-          showNotification("An error has been occured");
-          console.log(error.message);
+          return;
         }
+
+        // Reload the latest products from MySQL
+        await loadProducts();
+
+        mood = "create";
+        submit.innerHTML = "Create";
+        count.removeAttribute("disabled");
+        count.style.display = "block";
+        totalTitle.innerText = "";
+
+        showInventorySection();
+        clearData();
+
+        createNotification.classList.remove("error-notification");
+        showNotification("Updated successfully");
+
+        console.log("Product updated in MySQL:", result);
+      } catch (error) {
+        showNotification("Unable to connect to the server");
+        console.error("Update product error:", error);
       }
     }
-  } else if (!count.value && price.value > 0) {
-    errorCount.innerText = "*";
-    errorPrice.innerText = "";
-    errorCount.classList.add("count-error");
-  } else if (!price.value && !count.value) {
-    errorPrice.innerText = "*";
-    errorCount.innerText = "*";
-    errorPrice.classList.add("price-error");
-    errorCount.classList.add("count-error");
-  } else {
-    errorPrice.innerText = "*";
-    errorCount.innerText = "";
-    errorPrice.classList.add("price-error");
   }
-};
+}
 
 //clear inputs
 function clearData() {
@@ -301,11 +339,6 @@ function showProductData() {
   deleteAllBtn.classList.remove("delete-all-hide");
 }
 
-//call showProduct function
-if (dataProduct.length) {
-  showProductData();
-}
-
 //delete
 function deleteProduct(i) {
   dataProduct = dataProduct.filter((product, index) => {
@@ -335,32 +368,37 @@ function deleteAll() {
 
 //Update
 function updateProduct(i) {
-  //restore values to input fields
-  reference.value = dataProduct[i].reference;
-  title.value = dataProduct[i].title;
-  category.value = dataProduct[i].category;
-  price.value = dataProduct[i].price;
-  discount.value = dataProduct[i].discount;
-  count.value = dataProduct[i].count;
+  // Retrieve the selected product
+  const product = dataProduct[i];
+  console.log("Produit sélectionné :", product);
+  console.log("Mode :", mood);
 
-  //hide count input and label
- // count.style.display = "none";
+  // Fill the inputs
+  reference.value = product.reference;
+  title.value = product.title;
+  category.value = product.category;
+  price.value = product.price;
+  discount.value = String(Number(product.discount));
+  count.value = product.count;
 
-  //change create button to update
+  // Switch to update mode
+  tmp = i;
+  mood = "update";
+
   submit.innerHTML = "Update";
   cancelBtn.style.display = "block";
-  tmp = i;
+  submit.style.background = "rgb(147, 100, 147)";
 
+  // Recalculate discount and total
   getDiscount();
   getTotal();
 
-  mood = "update";
-
-  
-  submit.style.background = "rgb(147, 100, 147)";
   totalTitle.innerText = "";
   document.querySelector(".price-discount-labels").style.marginTop = "0px";
   document.querySelector(".prod-mang-title").style.marginBottom = "5px";
+
+  // Display the create section
+  showCreateSection();
 }
 
 ///////////////////////////Sale product/////////////////////////////////////
@@ -385,11 +423,6 @@ function showSaleProduct() {
   document.getElementById("tbod").innerHTML = table;
 }
 
-//call sale function
-if (dataProduct.length) {
-  showSaleProduct();
-}
-
 //Notification
 function showNotification(message) {
   createNotification.innerText = message;
@@ -397,11 +430,11 @@ function showNotification(message) {
   inventoryNotification.innerText = message;
   inventoryNotification.classList.add("show");
   saleNotification.innerHTML = message;
-  saleNotification.classList.add('show');
+  saleNotification.classList.add("show");
   setTimeout(() => {
     createNotification.classList.remove("show");
     inventoryNotification.classList.remove("show");
-    saleNotification.classList.remove('show');
+    saleNotification.classList.remove("show");
   }, 3000);
 }
 
@@ -456,19 +489,15 @@ function searchProduct(value) {
     }
   }
 
-  
   if (table === "") {
-    document.getElementById("table-body").classList.add('hide');
-    document.querySelector(".no-products").classList.remove('hide');  
-    document.querySelector(".no_products_img").classList.remove('hide');
-  
-    
+    document.getElementById("table-body").classList.add("hide");
+    document.querySelector(".no-products").classList.remove("hide");
+    document.querySelector(".no_products_img").classList.remove("hide");
   } else {
     document.getElementById("tbody").innerHTML = table;
     document.getElementById("table-body").classList.remove("hide");
     document.querySelector(".no-products").classList.add("hide");
     document.querySelector(".no_products_img").classList.add("hide");
-
   }
 }
 
@@ -483,7 +512,7 @@ searchBtn.addEventListener("click", () => {
     document.querySelector(".no-products").classList.add("hide");
     document.getElementById("table-body").classList.remove("hide");
     document.querySelector(".sale-img").classList.add("hide");
-     document.querySelector(".no_products_img").classList.add("hide");
+    document.querySelector(".no_products_img").classList.add("hide");
     showProductData();
   }
 });
@@ -494,7 +523,7 @@ inputSearch.addEventListener("keydown", (event) => {
       searchProduct(inputSearch.value);
       deleteAllBtn.classList.add("delete-all-hide");
       inputSearch.value = "";
-      document.getElementById("sale_img").classList.add('hide');
+      document.getElementById("sale_img").classList.add("hide");
     } else {
       deleteAllBtn.classList.remove("delete-all-hide");
       document.querySelector(".no-products").classList.add("hide");
@@ -577,14 +606,14 @@ function saleProduct(i) {
   saleTable.classList.remove("show");
   saleTable.classList.add("hide");
 
-  document.querySelector('.ref-resp').innerHTML = dataProduct[i].reference;
-  document.querySelector('.title-resp').innerHTML = dataProduct[i].title;
-  document.querySelector('.category-resp').innerHTML = dataProduct[i].category;
-  document.querySelector('.count-resp').innerHTML = dataProduct[i].count;
-  document.querySelector('.total-resp').innerHTML = dataProduct[i].total;
+  document.querySelector(".ref-resp").innerHTML = dataProduct[i].reference;
+  document.querySelector(".title-resp").innerHTML = dataProduct[i].title;
+  document.querySelector(".category-resp").innerHTML = dataProduct[i].category;
+  document.querySelector(".count-resp").innerHTML = dataProduct[i].count;
+  document.querySelector(".total-resp").innerHTML = dataProduct[i].total;
 
   document.getElementById("sale_img").classList.add("hide");
-    I = i;
+  I = i;
 }
 
 function saleNow(I) {
@@ -610,7 +639,7 @@ function saleNow(I) {
       showProductData();
       setTimeout(() => {
         showSaleSection();
-        document.getElementById('sale_img').classList.remove('hide');
+        document.getElementById("sale_img").classList.remove("hide");
       }, 3000);
     } else {
       showNotification("No enough products to sale!");
@@ -643,46 +672,48 @@ saleCancelBtn.addEventListener("click", () => {
 
 let selectSaleValue;
 saleSelect.addEventListener("change", () => {
-  let saleTotal =
-    parsePrice(dataProduct[I].total);
+  let saleTotal = parsePrice(dataProduct[I].total);
   let saleValue = saleSelect.value;
-  let saleTotalDispaly = saleTotal * saleValue ;
+  let saleTotalDispaly = saleTotal * saleValue;
 
   if (saleValue != 0) {
-     document.querySelector(".sale-count-display").innerHTML =
-       `${saleSelect.value} ${dataProduct[I].title} ${dataProduct[I].category} will be saled`;
-     document.querySelector(".stat").innerHTML = "Total Amount:";
-     document.querySelector(".sale-amount-display").innerHTML =
-       ` ${saleTotalDispaly.toLocaleString("fr-FR", {
-         minimumFractionDigits: 3,
-         maximumFractionDigits: 3,
-       })}`;
-    document.querySelector(".tax").innerHTML ="Taxes 18%: ";
-    document.querySelector('.sale-taxes-display').innerHTML = `${(saleTotalDispaly * 0.18).toLocaleString("fr-FR", {
-         minimumFractionDigits: 3,
-         maximumFractionDigits: 3,
-       })}`;
-    document.querySelector(".net").innerHTML = "Net amount: ";
-    document.querySelector(".sale-net-display").innerHTML =
-      `${(saleTotalDispaly - saleTotalDispaly * 0.18).toLocaleString("fr-FR", {
-         minimumFractionDigits: 3,
-         maximumFractionDigits: 3,
+    document.querySelector(".sale-count-display").innerHTML =
+      `${saleSelect.value} ${dataProduct[I].title} ${dataProduct[I].category} will be saled`;
+    document.querySelector(".stat").innerHTML = "Total Amount:";
+    document.querySelector(".sale-amount-display").innerHTML =
+      ` ${saleTotalDispaly.toLocaleString("fr-FR", {
+        minimumFractionDigits: 3,
+        maximumFractionDigits: 3,
       })}`;
-    
-    } else {
+    document.querySelector(".tax").innerHTML = "Taxes 18%: ";
+    document.querySelector(".sale-taxes-display").innerHTML = `${(
+      saleTotalDispaly * 0.18
+    ).toLocaleString("fr-FR", {
+      minimumFractionDigits: 3,
+      maximumFractionDigits: 3,
+    })}`;
+    document.querySelector(".net").innerHTML = "Net amount: ";
+    document.querySelector(".sale-net-display").innerHTML = `${(
+      saleTotalDispaly -
+      saleTotalDispaly * 0.18
+    ).toLocaleString("fr-FR", {
+      minimumFractionDigits: 3,
+      maximumFractionDigits: 3,
+    })}`;
+  } else {
     document.querySelector(".sale-count-display").innerHTML =
       "Please select the number of products to sale";
-      document.querySelector(".stat").innerHTML = "";
+    document.querySelector(".stat").innerHTML = "";
     document.querySelector(".sale-amount-display").innerHTML = "";
-     document.querySelector(".tax").innerHTML ="";
-    document.querySelector('.sale-taxes-display').innerHTML = "";
+    document.querySelector(".tax").innerHTML = "";
+    document.querySelector(".sale-taxes-display").innerHTML = "";
     document.querySelector(".net").innerHTML = "";
     document.querySelector(".sale-net-display").innerHTML = "";
   }
-  
+
   selectSaleValue = Number(saleValue);
 });
-  
+
 function parsePrice(value) {
   return Number(
     String(value)
@@ -692,7 +723,7 @@ function parsePrice(value) {
 }
 
 function clearSaleData() {
-  document.querySelector('.sale-count-display').innerHTML = '';
+  document.querySelector(".sale-count-display").innerHTML = "";
   document.querySelector(".ref-resp").innerHTML = "";
   document.querySelector(".title-resp").innerHTML = "";
   document.querySelector(".category-resp").innerHTML = "";
@@ -703,7 +734,7 @@ function clearSaleData() {
   document.querySelector(".sale-amount-display").innerHTML = "";
 }
 
-  //show landing page
+//show landing page
 function showHomeSection() {
   homeSection.classList.remove("hide");
   homeSection.classList.add("show");
@@ -746,7 +777,7 @@ function showInventorySection() {
 
   saleNowSection.classList.remove("show");
   saleNowSection.classList.add("hide");
-  document.getElementById('sale_img').classList.remove('hide');
+  document.getElementById("sale_img").classList.remove("hide");
 
   clearSaleData();
 }
@@ -776,9 +807,9 @@ function showCreateSection() {
   clearSaleData();
 }
 
-submit.addEventListener('click', () => {
+submit.addEventListener("click", () => {
   submit.style.background = "#295951";
-})
+});
 
 //show sale section
 function showSaleSection() {
@@ -802,9 +833,9 @@ function showSaleSection() {
 
   saleHeader.classList.remove("hide");
   saleHeader.classList.add("show");
-  document.getElementById('sale_img').classList.remove('hide');
-  saleErrorMsg.classList.remove('show');
-  saleErrorMsg.classList.add('hide');
+  document.getElementById("sale_img").classList.remove("hide");
+  saleErrorMsg.classList.remove("show");
+  saleErrorMsg.classList.add("hide");
 
   document.querySelector(".sale-amount-display").innerHTML = "";
   document.querySelector(".tax").innerHTML = "";
@@ -877,8 +908,7 @@ saleInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
     saleSearch(saleInput.value);
     saleInput.value = "";
-    console.log("this is the keydown listener");
-    document.getElementById('sale_img').classList.add('hide');
+    document.getElementById("sale_img").classList.add("hide");
   }
 });
 
