@@ -632,6 +632,12 @@ saleCancelBtn.addEventListener("click", () => {
   saleTable.classList.add("show");
   saleTable.classList.remove("hide");
 
+  document.querySelector(".sale-amount-display").innerHTML = "";
+  document.querySelector(".tax").innerHTML = "";
+  document.querySelector(".sale-taxes-display").innerHTML = "";
+  document.querySelector(".net").innerHTML = "";
+  document.querySelector(".sale-net-display").innerHTML = "";
+
   clearSaleData();
 });
 
@@ -645,17 +651,33 @@ saleSelect.addEventListener("change", () => {
   if (saleValue != 0) {
      document.querySelector(".sale-count-display").innerHTML =
        `${saleSelect.value} ${dataProduct[I].title} ${dataProduct[I].category} will be saled`;
-     document.querySelector(".stat").innerHTML = "Total Amount: ";
+     document.querySelector(".stat").innerHTML = "Total Amount:";
      document.querySelector(".sale-amount-display").innerHTML =
        ` ${saleTotalDispaly.toLocaleString("fr-FR", {
          minimumFractionDigits: 3,
          maximumFractionDigits: 3,
        })}`;
-  } else {
+    document.querySelector(".tax").innerHTML ="Taxes 18%: ";
+    document.querySelector('.sale-taxes-display').innerHTML = `${(saleTotalDispaly * 0.18).toLocaleString("fr-FR", {
+         minimumFractionDigits: 3,
+         maximumFractionDigits: 3,
+       })}`;
+    document.querySelector(".net").innerHTML = "Net amount: ";
+    document.querySelector(".sale-net-display").innerHTML =
+      `${(saleTotalDispaly - saleTotalDispaly * 0.18).toLocaleString("fr-FR", {
+         minimumFractionDigits: 3,
+         maximumFractionDigits: 3,
+      })}`;
+    
+    } else {
     document.querySelector(".sale-count-display").innerHTML =
       "Please select the number of products to sale";
       document.querySelector(".stat").innerHTML = "";
     document.querySelector(".sale-amount-display").innerHTML = "";
+     document.querySelector(".tax").innerHTML ="";
+    document.querySelector('.sale-taxes-display').innerHTML = "";
+    document.querySelector(".net").innerHTML = "";
+    document.querySelector(".sale-net-display").innerHTML = "";
   }
   
   selectSaleValue = Number(saleValue);
@@ -783,6 +805,12 @@ function showSaleSection() {
   document.getElementById('sale_img').classList.remove('hide');
   saleErrorMsg.classList.remove('show');
   saleErrorMsg.classList.add('hide');
+
+  document.querySelector(".sale-amount-display").innerHTML = "";
+  document.querySelector(".tax").innerHTML = "";
+  document.querySelector(".sale-taxes-display").innerHTML = "";
+  document.querySelector(".net").innerHTML = "";
+  document.querySelector(".sale-net-display").innerHTML = "";
   clearSaleData();
 }
 
@@ -838,6 +866,11 @@ saleBtn.addEventListener("click", () => {
   saleSearch(saleInput.value);
   saleInput.value = "";
   document.getElementById("sale_img").classList.add("hide");
+  document.querySelector(".sale-amount-display").innerHTML = "";
+  document.querySelector(".tax").innerHTML = "";
+  document.querySelector(".sale-taxes-display").innerHTML = "";
+  document.querySelector(".net").innerHTML = "";
+  document.querySelector(".sale-net-display").innerHTML = "";
 });
 
 saleInput.addEventListener("keydown", (event) => {

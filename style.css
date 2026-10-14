@@ -763,7 +763,8 @@ table button {
 .sale-img img{
   width: 700px;
   height: 250px;
-  margin-top: 20px;
+  margin-top: -20px;
+  border-radius: 8px;
   box-shadow: 3px 5px 8px 3px #aa8383;
 }
 
@@ -779,6 +780,8 @@ table button {
 #saleNow-btn{
   color: white;
   background: rgb(29, 111, 119);
+  height: 55px;
+  margin: 5px auto;
 }
 
 #saleNow-btn:hover{
@@ -838,10 +841,28 @@ table button {
   font-weight: 400;
 }
 
-.select-label,.stat{
+.select-label,.stat, .net{
   display: flex;
   justify-content: space-between;
   color: rgb(23, 65, 194);
+  font-family: "Poppins", sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+}
+
+.tax{
+  display: flex;
+  justify-content: space-between;
+  color: rgb(158, 5, 28);
+  font-family: "Poppins", sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+}
+
+.net{
+  display: flex;
+  justify-content: space-between;
+  color: rgb(7, 79, 44);
   font-family: "Poppins", sans-serif;
   font-size: 28px;
   font-weight: 400;
@@ -868,7 +889,24 @@ table button {
   font-weight: bold;
   color: #0c3283;
   border: none;
+  margin-left: 20px;
 }
+
+ .sale-taxes-display{
+  font-size: 25px;
+  font-weight: bold;
+  color: rgb(158, 5, 28);
+  border: none;
+  margin-left: 20px;
+ }
+ 
+ .sale-net-display{
+  font-size: 25px;
+  font-weight: bold;
+  color: rgb(7, 79, 44);
+  border: none;
+  margin-left: 20px;
+ }
 
 .select-section{
   display: flex;
@@ -915,7 +953,7 @@ p .label{
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   padding: 10px 50px;
   margin: 20px;
   border: 2px solid   #436084;
@@ -927,19 +965,22 @@ p .label{
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 .tsa{
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 .stat{
   margin-right: 10px;
 }
 
+.tax , .net{
+  margin-right: 30px;
+}
 
 .sale-3{
   display: flex;
