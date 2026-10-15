@@ -162,6 +162,7 @@ let mood = "create";
 
 //////////////// 3- Submit for Create / Update product - ////////////////////////////
 submit.onclick = async function () {
+
   //declare product object
   let newProduct = {
     reference: reference.value,
@@ -174,11 +175,13 @@ submit.onclick = async function () {
     total: total.innerHTML,
   };
 
-  //price and count are not empty
+
   if (price.value > 0 && count.value > 0) {
+
     //////////////////////Create Product///////////////////////////////////////
 
     if (mood === "create") {
+
       cancelBtn.style.display = "none";
 
       try {
@@ -219,6 +222,7 @@ submit.onclick = async function () {
         totalTitle.innerText = "";
 
         console.log("Product created in MySQL:", result);
+
       } catch (error) {
         showNotification("Unable to connect to the server");
         console.error("Create product error:", error);
@@ -280,7 +284,7 @@ submit.onclick = async function () {
         createNotification.classList.remove("error-notification");
         showNotification("Updated successfully");
 
-        console.log("Product updated in MySQL:", result);
+        console.log("Product updated in MySQL:", result, newProduct);
       } catch (error) {
         showNotification("Unable to connect to the server");
         console.error("Update product error:", error);
@@ -339,31 +343,77 @@ function showProductData() {
   deleteAllBtn.classList.remove("delete-all-hide");
 }
 
-//delete
-function deleteProduct(i) {
-  dataProduct = dataProduct.filter((product, index) => {
-    return index !== i;
-  });
+//delete product  
+async function deleteProduct(i) {
+  // Get the MySQL ID of the selected product
+  const productId = dataProduct[i].id;
 
-  //update localstorage
-  localStorage.product = JSON.stringify(dataProduct);
-  showProductData();
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/products/${productId}`,
+      {
+        method: "DELETE",
+      },
+    );
 
-  //notification
-  showNotification("The product has been deleted");
-  inventoryNotification.classList.add("error-notification");
-  createNotification.classList.remove("error-notification");
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || "Unable to delete product.");
+    }
+
+    // Refresh products from MySQL
+    await loadProducts();
+
+    // Notification
+    showNotification("The product has been deleted");
+    inventoryNotification.classList.add("error-notification");
+    createNotification.classList.remove("error-notification");
+  } catch (error) {
+    console.error("Delete product error:", error);
+    showNotification("Error deleting product");
+  }
 }
 
-//delete All
-function deleteAll() {
-  localStorage.clear();
-  dataProduct.splice(0);
-  deleteAllBtn.innerHTML = "";
-  showProductData();
-  //notification
-  showNotification("All products has been deleted");
-  createNotification.classList.add("error-notification");
+
+// Delete All
+async function deleteAll() {
+  try {
+    const response = await fetch(
+      "http://localhost:3000/api/products",
+      {
+        method: "DELETE",
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        result.message || "Unable to delete all products."
+      );
+    }
+
+    // Refresh products from MySQL
+    await loadProducts();
+
+    // Clear the button content
+    deleteAllBtn.innerHTML = "";
+    document.getElementById("tbod").innerHTML = "";
+    document.getElementById("table-body").classList.add("hide");
+    document.querySelector(".no-products").classList.remove("hide");
+    document.querySelector(".no_products_img").classList.remove("hide");
+
+
+    // Notification
+    showNotification("All products have been deleted");
+    createNotification.classList.add("error-notification");
+    console.log("all products have been deleted from db")
+
+  } catch (error) {
+    console.error("Delete all products error:", error);
+    showNotification("Error deleting all products");
+  }
 }
 
 //Update
@@ -509,10 +559,9 @@ searchBtn.addEventListener("click", () => {
     inputSearch.value = "";
   } else {
     deleteAllBtn.classList.remove("delete-all-hide");
-    document.querySelector(".no-products").classList.add("hide");
-    document.getElementById("table-body").classList.remove("hide");
-    document.querySelector(".sale-img").classList.add("hide");
-    document.querySelector(".no_products_img").classList.add("hide");
+    document.querySelector(".no-products").classList.remove("hide");
+    document.getElementById("table-body").classList.add("hide");
+    document.querySelector(".no_products_img").classList.remove("hide");
     showProductData();
   }
 });
@@ -526,10 +575,9 @@ inputSearch.addEventListener("keydown", (event) => {
       document.getElementById("sale_img").classList.add("hide");
     } else {
       deleteAllBtn.classList.remove("delete-all-hide");
-      document.querySelector(".no-products").classList.add("hide");
-      document.getElementById("table-body").classList.remove("hide");
-      document.getElementById("sale_img").classList.add("hide");
-      document.querySelector(".no_products_img").classList.add("hide");
+      document.querySelector(".no-products").classList.remove("hide");
+      document.getElementById("table-body").classList.add("hide");
+      document.querySelector(".no_products_img").classList.remove("hide");
       showProductData();
     }
 });

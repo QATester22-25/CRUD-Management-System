@@ -163,6 +163,54 @@ app.put("/api/products/:id", async (req, res) => {
   }
 });
 
+// DELETE a product
+app.delete("/api/products/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const [result] = await db.execute(
+      "DELETE FROM products WHERE id = ?",
+      [Number(id)]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        message: "Product not found.",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Product deleted successfully.",
+    });
+  } catch (error) {
+    console.error("Delete product error:", error);
+
+    return res.status(500).json({
+      message: "Unable to delete product.",
+    });
+  }
+});
+
+
+// DELETE ALL products
+app.delete("/api/products", async (req, res) => {
+  try {
+    const [result] = await db.execute(
+      "DELETE FROM products"
+    );
+
+    return res.status(200).json({
+      message: "All products deleted successfully.",
+      deletedCount: result.affectedRows,
+    });
+  } catch (error) {
+    console.error("Delete all products error:", error);
+
+    return res.status(500).json({
+      message: "Unable to delete all products.",
+    });
+  }
+});
 
 // Démarrer le serveur
 app.listen(PORT, () => {
