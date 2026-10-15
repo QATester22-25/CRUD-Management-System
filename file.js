@@ -55,10 +55,7 @@ let rate;
 function getDiscount() {
   const select = document.getElementById("discount");
 
-  if (!select || select.selectedIndex < 0) {
-    console.error("Discount select ou option sélectionnée introuvable");
-    return;
-  }
+  
 
   const selectedValue = Number(select.value);
   const t = selectedValue / 100;
@@ -664,37 +661,76 @@ function saleProduct(i) {
   I = i;
 }
 
-function saleNow(I) {
-  dataProduct = JSON.parse(localStorage.product);
-  const countRemaining = dataProduct[I].count - Number(selectSaleValue);
-  if (Number(selectSaleValue > 0)) {
-    if (dataProduct[I].count > Number(selectSaleValue)) {
-      dataProduct[I].count = countRemaining;
-      localStorage.setItem("product", JSON.stringify(dataProduct));
-      console.log(dataProduct[I].count);
-      showNotification(
-        `${saleSelect.value} ${dataProduct[I].title} ${dataProduct[I].category} have been saled`,
-      );
-      saleNotification.classList.remove("error-notification");
+//sale products
+async function saleNow(i) {
+  const product = dataProduct[i];
 
-      document.querySelector(".ref-resp").innerHTML = dataProduct[I].reference;
-      document.querySelector(".title-resp").innerHTML = dataProduct[I].title;
-      document.querySelector(".category-resp").innerHTML =
-        dataProduct[I].category;
-      document.querySelector(".count-resp").innerHTML = dataProduct[I].count;
-      document.querySelector(".total-resp").innerHTML = dataProduct[I].total;
+  if (!product) {
+    showNotification("Product not found!");
+    saleNotification.classList.add("error-notification");
+    return;
+  }
 
-      showProductData();
-      setTimeout(() => {
-        showSaleSection();
-        document.getElementById("sale_img").classList.remove("hide");
-      }, 3000);
-    } else {
-      showNotification("No enough products to sale!");
-      saleNotification.classList.add("error-notification");
+  const productId = product.id;
+  const quantity = Number(selectSaleValue);
+
+  if (!Number.isInteger(quantity) || !quantity) {
+    showNotification("Please select the number of products to sell");
+    saleNotification.classList.add("error-notification");
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/products/${productId}/sale`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ quantity }),
+      },
+    );
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || "Unable to complete the sale.");
     }
-  } else {
-    showNotification("Please select the number of products to sale");
+
+    // Reload products from MySQL
+    await loadProducts();
+
+    // Get the updated product
+    const updatedProduct = dataProduct.find((p) => p.id === productId);
+
+    if (updatedProduct) {
+      document.querySelector(".ref-resp").textContent =
+        updatedProduct.reference;
+
+      document.querySelector(".title-resp").textContent = updatedProduct.title;
+
+      document.querySelector(".category-resp").textContent =
+        updatedProduct.category;
+
+      document.querySelector(".count-resp").textContent = updatedProduct.count;
+
+      document.querySelector(".total-resp").textContent = updatedProduct.total;
+    }
+
+    showNotification(
+      `${quantity} ${product.title} ${product.category} sold successfully`,
+    );
+
+    saleNotification.classList.remove("error-notification");
+
+    setTimeout(() => {
+      showSaleSection();
+      document.getElementById("sale_img").classList.remove("hide");
+    }, 3000);
+  } catch (error) {
+    console.error("Sale error:", error);
+    showNotification(error.message || "Error completing the sale");
     saleNotification.classList.add("error-notification");
   }
 }

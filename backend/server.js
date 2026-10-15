@@ -212,6 +212,66 @@ app.delete("/api/products", async (req, res) => {
   }
 });
 
+
+// SELL products
+app.post("/api/products/:id/sale", async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const quantity = Number(req.body.quantity);
+
+    if (
+      !Number.isInteger(id) ||
+      id <= 0 ||
+      !Number.isInteger(quantity) ||
+      quantity <= 0
+    ) {
+      return res.status(400).json({
+        message: "Invalid product ID or quantity.",
+      });
+    }
+
+    const [result] = await db.execute(
+      `UPDATE products
+       SET count = count - ?
+       WHERE id = ? AND count >= ?`,
+      [quantity, id, quantity]
+    );
+
+    if (result.affectedRows === 0) {
+      const [products] = await db.execute(
+        "SELECT id, count FROM products WHERE id = ?",
+        [id]
+      );
+
+      if (products.length === 0) {
+        return res.status(404).json({
+          message: "Product not found.",
+        });
+      }
+
+      return res.status(409).json({
+        message: "Not enough products in stock!",
+      });
+    }
+
+    const [products] = await db.execute(
+      "SELECT * FROM products WHERE id = ?",
+      [id]
+    );
+
+    return res.status(200).json({
+      message: "Sale completed successfully.",
+      product: products[0],
+    });
+  } catch (error) {
+    console.error("Sale error:", error);
+
+    return res.status(500).json({
+      message: "Unable to complete the sale.",
+    });
+  }
+});
+
 // Démarrer le serveur
 app.listen(PORT, () => {
   console.log(`Serveur démarré sur http://localhost:${PORT}`);
