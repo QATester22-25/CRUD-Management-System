@@ -48,6 +48,10 @@ body {
   border-bottom: 0.1px solid white;
 } 
 
+#search-title{
+  margin-right: 5px;
+}
+
 #search-title:hover{
   background: none;
   padding-bottom: 0;
@@ -592,6 +596,7 @@ table button {
 .search {
   position: relative;
   width: 250px;
+  margin-right: 10px;
 }
 
 .search label {
@@ -1032,4 +1037,39 @@ p .label{
 
 .sale-cancel-button:active{
   background: #994343;
+}
+
+.auth-section {
+    max-width: 400px;
+    margin: 60px auto;
+    padding: 25px;
+    border-radius: 10px;
+    background: white;
+    color: #222;
+}
+
+.auth-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.auth-section input {
+    padding: 10px;
+    margin-bottom: 10px;
+    background: rgb(196, 227, 252);
+}
+
+.auth-section button {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.auth-section p {
+    overflow-wrap: anywhere;
+}
+
+#logout-btn{
+  margin-left: 15px;
+  padding: 10px 15px;
 }

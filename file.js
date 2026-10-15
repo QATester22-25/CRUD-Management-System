@@ -51,11 +51,8 @@ const inputSearch = document.getElementById("search");
 //initialize empty variable;
 let rate;
 
-
 function getDiscount() {
   const select = document.getElementById("discount");
-
-  
 
   const selectedValue = Number(select.value);
   const t = selectedValue / 100;
@@ -129,10 +126,16 @@ async function loadProducts() {
   try {
     const response = await fetch("http://localhost:3000/api/products", {
       cache: "no-store",
+      credentials: "include",
     });
 
     if (!response.ok) {
-      throw new Error("Impossible de récupérer les produits");
+      const errorText = await response.text();
+
+      console.error("Statut HTTP :", response.status);
+      console.error("Réponse du serveur :", errorText);
+
+      throw new Error(`Erreur HTTP ${response.status}: ${errorText}`);
     }
 
     const products = await response.json();
@@ -140,7 +143,8 @@ async function loadProducts() {
     dataProduct = products.map(enrichProduct);
 
     /////////changed
-    if(dataProduct.length > 0){showProductData();
+    if (dataProduct.length > 0) {
+      showProductData();
       showSaleProduct();
       document.getElementById("table-body").classList.remove("hide");
       document.querySelector(".no-products").classList.add("hide");
@@ -149,9 +153,7 @@ async function loadProducts() {
       document.getElementById("table-body").classList.add("hide");
       document.querySelector(".no-products").classList.remove("hide");
       document.querySelector(".no_products_img").classList.remove("hide");
-
     }
-    
 
     console.log("Produits chargés depuis MySQL :", dataProduct);
   } catch (error) {
@@ -170,7 +172,6 @@ let mood = "create";
 
 //////////////// 3- Submit for Create / Update product - ////////////////////////////
 submit.onclick = async function () {
-
   //declare product object
   let newProduct = {
     reference: reference.value,
@@ -183,18 +184,16 @@ submit.onclick = async function () {
     total: total.innerHTML,
   };
 
-
   if (price.value > 0 && count.value > 0) {
-
     //////////////////////Create Product///////////////////////////////////////
 
     if (mood === "create") {
-
       cancelBtn.style.display = "none";
 
       try {
         const response = await fetch("http://localhost:3000/api/products", {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
@@ -211,9 +210,8 @@ submit.onclick = async function () {
         const result = await response.json();
 
         if (!response.ok) {
-          showNotification(
-            result.message || "Unable to create product"
-          );
+          createNotification.classList.add("error-notification");
+          showNotification(result.message || "Unable to create product");
           return;
         }
 
@@ -230,7 +228,6 @@ submit.onclick = async function () {
         totalTitle.innerText = "";
 
         console.log("Product created in MySQL:", result);
-
       } catch (error) {
         showNotification("Unable to connect to the server");
         console.error("Create product error:", error);
@@ -248,6 +245,7 @@ submit.onclick = async function () {
           `http://localhost:3000/api/products/${productId}`,
           {
             method: "PUT",
+            credentials: "include",
             headers: {
               "Content-Type": "application/json",
             },
@@ -259,7 +257,7 @@ submit.onclick = async function () {
               price: Number(newProduct.price),
               discount: Number(newProduct.discount),
             }),
-          }
+          },
         );
 
         const result = await response.json();
@@ -269,9 +267,7 @@ submit.onclick = async function () {
             errorRef.classList.add("ref-error");
             errorRef.innerText = result.message;
           } else {
-            showNotification(
-              result.message || "Unable to update product"
-            );
+            showNotification(result.message || "Unable to update product");
           }
 
           return;
@@ -299,7 +295,7 @@ submit.onclick = async function () {
       }
     }
   }
-}
+};
 
 //clear inputs
 function clearData() {
@@ -343,11 +339,11 @@ function showProductData() {
     //add deleteAll button if there's at list one product
     if (dataProduct.length > 0) {
       deleteAllBtn.innerHTML = `<button  onclick="deleteAll()" id="deleteAll">Delete All (${dataProduct.length})</button>`;
-    } else if(dataProduct.length === 0) {
-    document.getElementById("table-body").classList.add("hide");
-    document.querySelector(".no-products").classList.remove("hide");
+    } else if (dataProduct.length === 0) {
+      document.getElementById("table-body").classList.add("hide");
+      document.querySelector(".no-products").classList.remove("hide");
       document.querySelector(".no_products_img").classList.remove("hide");
-      console.log(dataProduct.length)
+      console.log(dataProduct.length);
     }
   }
 
@@ -356,7 +352,7 @@ function showProductData() {
   deleteAllBtn.classList.remove("delete-all-hide");
 }
 
-//delete product  
+//delete product
 async function deleteProduct(i) {
   // Get the MySQL ID of the selected product
   const productId = dataProduct[i].id;
@@ -366,6 +362,7 @@ async function deleteProduct(i) {
       `http://localhost:3000/api/products/${productId}`,
       {
         method: "DELETE",
+        credentials: "include",
       },
     );
 
@@ -388,23 +385,18 @@ async function deleteProduct(i) {
   }
 }
 
-
 // Delete All
 async function deleteAll() {
   try {
-    const response = await fetch(
-      "http://localhost:3000/api/products",
-      {
-        method: "DELETE",
-      }
-    );
+    const response = await fetch("http://localhost:3000/api/products", {
+      method: "DELETE",
+      credentials: "include",
+    });
 
     const result = await response.json();
 
     if (!response.ok) {
-      throw new Error(
-        result.message || "Unable to delete all products."
-      );
+      throw new Error(result.message || "Unable to delete all products.");
     }
 
     // Refresh products from MySQL
@@ -417,12 +409,10 @@ async function deleteAll() {
     document.querySelector(".no-products").classList.remove("hide");
     document.querySelector(".no_products_img").classList.remove("hide");
 
-
     // Notification
     showNotification("All products have been deleted");
     createNotification.classList.add("error-notification");
-    console.log("all products have been deleted from db")
-
+    console.log("all products have been deleted from db");
   } catch (error) {
     console.error("Delete all products error:", error);
     showNotification("Error deleting all products");
@@ -701,6 +691,7 @@ async function saleNow(i) {
       `http://localhost:3000/api/products/${productId}/sale`,
       {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -1015,3 +1006,170 @@ saleInput.addEventListener("keydown", (event) => {
 function cancel() {
   location.reload();
 }
+
+
+// AUTHENTICATION
+
+const API_URL = "http://localhost:3000/api";
+
+const loginSection = document.getElementById("login-section");
+const registerSection = document.getElementById("register-section");
+const appSection = document.getElementById("app-section");
+
+// Switch between login and register
+document.getElementById("show-register").addEventListener("click", () => {
+    loginSection.classList.add("hide");
+    registerSection.classList.remove("hide");
+});
+
+document.getElementById("show-login").addEventListener("click", () => {
+    registerSection.classList.add("hide");
+    loginSection.classList.remove("hide");
+});
+
+// Registration
+document.getElementById("register-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const username = document.getElementById("register-username").value;
+    const email = document.getElementById("register-email").value;
+    const password = document.getElementById("register-password").value;
+    const message = document.getElementById("register-message");
+
+    try {
+        const response = await fetch(`${API_URL}/auth/register`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ username, email, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            message.textContent = data.message || "Registration failed.";
+            return;
+        }
+
+        message.textContent = "Registration successful! Please log in.";
+        document.getElementById("register-form").reset();
+
+    } catch (error) {
+        console.error("Registration error:", error);
+        message.textContent = "Unable to contact the server.";
+    }
+});
+
+
+// LOGIN
+document.getElementById("login-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const email = document.getElementById("login-email").value;
+    const password = document.getElementById("login-password").value;
+    const message = document.getElementById("login-message");
+
+    try {
+        const response = await fetch(`${API_URL}/auth/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            message.textContent = data.message || "Login failed.";
+            return;
+        }
+
+        message.textContent = "";
+
+        loginSection.classList.add("hide");
+        registerSection.classList.add("hide");
+        appSection.classList.remove("hide");
+
+        // Load products after successful login
+        await loadProducts();
+
+        document.getElementById("login-form").reset();
+
+    } catch (error) {
+        console.error("Login error:", error);
+        message.textContent = "Unable to contact the server.";
+    }
+});
+
+// CHECK EXISTING SESSION
+async function checkSession() {
+    try {
+        const response = await fetch(`${API_URL}/auth/me`, {
+            method: "GET",
+            credentials: "include"
+        });
+
+        if (!response.ok) {
+            // No valid session: display login
+            appSection.classList.add("hide");
+            registerSection.classList.add("hide");
+            loginSection.classList.remove("hide");
+            return;
+        }
+
+        // A valid session exists: display the CRUD
+        loginSection.classList.add("hide");
+        registerSection.classList.add("hide");
+        appSection.classList.remove("hide");
+
+        await loadProducts();
+
+    } catch (error) {
+        console.error("Session verification error:", error);
+
+        appSection.classList.add("hide");
+        registerSection.classList.add("hide");
+        loginSection.classList.remove("hide");
+    }
+}
+
+checkSession();
+
+
+// LOGOUT
+document.getElementById("logout-btn").addEventListener("click", async () => {
+    try {
+        const response = await fetch(`${API_URL}/auth/logout`, {
+            method: "POST",
+            credentials: "include"
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            console.error("Logout failed:", data.message);
+            showNotification("Unable to log out");
+            return;
+        }
+
+        // Hide the CRUD and registration sections
+        appSection.classList.add("hide");
+        registerSection.classList.add("hide");
+
+        // Display the login section
+        loginSection.classList.remove("hide");
+
+        // Clear the login form
+        document.getElementById("login-form").reset();
+        document.getElementById("login-message").textContent = "";
+
+        showNotification("Logged out successfully");
+
+    } catch (error) {
+        console.error("Logout error:", error);
+        showNotification("Unable to contact the server");
+    }
+});

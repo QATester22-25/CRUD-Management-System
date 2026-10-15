@@ -9,266 +9,316 @@
 </head>
 
 <body>
-  <nav class="navbar">
-    <h2>CRUD Product Manager</h2>
-    <div class="nav">
-      <div>
-        <button onclick="showHomeSection()" id="home-btn">Home</button>
-        <button onclick="showCreateSection()" id="create-btn">Create Product</button>
-        <button onclick="showSaleSection()" id="sale-btn">Sale Product</button>
-        <button onclick="showInventorySection()" id="inventory-btn">Inventory Management</button>
-      </div>
-      <div class="search hide">
-        <input onchange="searchProduct(this.value)" id="search" type="text" placeholder="reference-title-category">
-        <button id="search-title" type="button">🔍</button>
-        </input>
-      </div>
-    </div>
-  </nav>      
-  <main>
-    <section id="home-section" class="show">
-      <div id="landing-imgs">
-        <div class="landing-img-1">
-          <img class="land-1" src="./images/crud_img.webp" alt="crud-img">
-        </div>
-        <div class="landing">
-          <h1>PRODUCT MANAGEMENT SYSTEM</h1>
-          <p>
-            Manage your products easily.
-          </p>
-          <div class="landing-btn">
-            <button  onclick="showCreateSection()" id="create">
-              Create Product
-            </button>
-            <button  onclick=" showSaleSection()" id="sale">
-              Sale Product
-            </button>
-            <button onclick="showInventorySection()" id="inventory">
-              Show Inventory
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- CREATE PRODUCT -->
-    <div class="section hide" id="create-section">
-      <div class="crud">
-        <div class="head">
-          <h2 class="prod-mang-title">PRODUCT MANAGEMENT SYSTEM</h2>
-        </div>
-        <div id="create-notification" class="notification">
-        </div>
-        <div class="inputs">
-          <div id="header">
-            <div id="reference-label">
-              <label for="reference">Reference</label>
-              <input type="integer" placeholder="Enter product reference" id="reference" autofocus>
-              <P id="ref"></P>
-            </div>
-            <div id="title-label">
-              <label for="title">Title</label>
-              <input placeholder="Product title" type="text" id="title" required>
-            </div>
-            <div id="category-label">
-              <label for="category">Category</label>
-              <input placeholder="Product category" type="text" id="category">
-            </div>
-            <div id="count-label">
-              <label class="count" for="count">Count</label>
-              <div class="count-error-section">
-                <input placeholder="Count" type="number" onkeydown="if(event.key === '-') event.preventDefault()"
-                  id="count" min="1" step="1" oninput="if(this.value < 1) this.value = ''">
-                <P id="count-error"></P>
-              </div>
-            </div>
-          </div>
-          <div class="price-discount-labels">
-            <div id="price-label"><label label for="price">Price</label></div>
-            <div id="discount-label"><label for="discount">Discount</label></div>
-          </div>
-          <div class="price">
-            <div class="price-label">
-              <input onkeyup="getDiscount()" onkeydown="if(event.key === '-') event.preventDefault()"
-                pLaceholder="price" type="number" id="price" min="0" step="0.01" required inputmode="decimal">
-              <P id="price-error"></P>
-            </div>
-            <div class="discount">
-              <div class="discount-label">
-                <select onselect="getTotal()" name="select" id="discount">
-                  <option value="0" selected >0%</option>
-                  <option value="10" class="discount-option">10%</option>
-                  <option value="15" class="discount-option">15%</option>
-                  <option value="20" class="discount-option">20%</option>
-                  <option value="25" class="discount-option">25%</option>
-                  <option value="30" class="discount-option">30%</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="amount-section">
-            <span class="span span-hide"></span>
-            <p class="discount-amount amount-hide"></p>
-          </div>
-        </div>
-        <div class="total-section">
-          <h3 class="total-title"></h3>
-          <small id="total"> </small>
-        </div>
-        <button onclick="showCreateSection()" class="submit-btn" id="submit" type="button">Create</button>
-        <button onclick="cancel()" class="cancel-btn"  type="button">Cancel</button>
-        <div class="outputs">
-        </div>
-      </div>
-    </div> 
-    <!-- Sale search section--> 
-    <div class="section hide" id="sale-section">
-      <div>
-        <div class="sale-title">
-          <h2>Sale Products</h2>
-        </div>
-        <div id="sale-notification" class="notification"></div>
-        <div class="sale-search">
-          <label for="sale">Search Product</label>
-          <div class="sale-s">
-            <input onchange="saleSearch(this.value)" type="text" placeholder="reference title category" id="sale-input">
-            <button id="sale-icon" type="submit">🔍</button>
-          </div>
-          <p class="sale-error-msg hide"></p>
-        </div>
-      </div>
-      <div class="sale-img hide">
-        <img  id="sale_img" src="./images/sale.jpg" alt="sale_image">
-      </div>
-        <div class="sale-table hide">
-          <div class="table">
-            <div id="table-bod">
-              <table>
-                <thead>
-                  <tr>
-                    <th>ref</th>
-                    <th>title</th>
-                    <th>category</th>
-                    <th>count</th>
-                    <th>price</th>
-                    <th>discount rate</th>
-                    <th>discount amount</th>
-                    <th>total</th>
-                    <th>sale</th>
-                  </tr>
-                </thead>
-                <tbody id="tbod">
+  <section id="login-section" class="auth-section">
+    <h2>Login</h2>
+  
+    <form id="login-form">
+      <label for="login-email">Email</label>
+      <input type="email" id="login-email" required>
+  
+      <label for="login-password">Password</label>
+      <input type="password" id="login-password" required>
+  
+      <button type="submit">Login</button>
+  
+      <p id="login-message"></p>
+    </form>
+  
+    <p>
+      Don't have an account?
+      <button type="button" id="show-register">
+        Register
+      </button>
+    </p>
+  </section>
+
+  <section id="register-section" class="auth-section hide">
+    <h2>Register</h2>
+  
+    <form id="register-form">
+      <label for="register-username">Username</label>
+      <input type="text" id="register-username" required maxlength="50">
+  
+      <label for="register-email">Email</label>
+      <input type="email" id="register-email" required maxlength="255">
+  
+      <label for="register-password">Password</label>
+      <input type="password" id="register-password" required minlength="8">
+  
+      <button type="submit">Create account</button>
+  
+      <p id="register-message"></p>
+    </form>
+  
+    <p>
+      Already have an account?
+      <button type="button" id="show-login">
+        Login
+      </button>
+    </p>
+  </section>
+  <div id="app-section" class="hide">
+    <nav class="navbar">
+      <h2>CRUD Product Manager</h2>
+      <div class="nav">
+        <div>
+          <button onclick="showHomeSection()" id="home-btn">Home</button>
+          <button onclick="showCreateSection()" id="create-btn">Create Product</button>
+          <button onclick="showSaleSection()" id="sale-btn">Sale Product</button>
+          <button onclick="showInventorySection()" id="inventory-btn">Inventory Management</button>
           
-                </tbody>
-              </table>
         </div>
+        <div class="search hide">
+          <input onchange="searchProduct(this.value)" id="search" type="text" placeholder="reference-title-category">
+          <button id="search-title" type="button">🔍</button>
+          </input>
+        </div>
+        <button type="button" id="logout-btn">Logout</button>
+      </div>
+    </nav>
+    <main>
+      <section id="home-section" class="show">
+        <div id="landing-imgs">
+          <div class="landing-img-1">
+            <img class="land-1" src="./images/crud_img.webp" alt="crud-img">
+          </div>
+          <div class="landing">
+            <h1>PRODUCT MANAGEMENT SYSTEM</h1>
+            <p>
+              Manage your products easily.
+            </p>
+            <div class="landing-btn">
+              <button  onclick="showCreateSection()" id="create">
+                Create Product
+              </button>
+              <button  onclick=" showSaleSection()" id="sale">
+                Sale Product
+              </button>
+              <button onclick="showInventorySection()" id="inventory">
+                Show Inventory
+              </button>
+            </div>
           </div>
         </div>
-      
-    </div> 
-    <!-- Sale section-->
-      <div class="section hide" id="sale-now-section">
-        <div class="sale-flex">
-          <div class="sale-1">
-            <div class="sale-ref">
-              <p class="label">Reference:</p>
-              <p class="ref-resp">#Ref</p>
-            </div>
-            <div class="saleNow-title">
-              <p class="label">Title:</p>
-              <p class="title-resp">#Title</p>
-            </div>
-            <div class="sale-category">
-              <p class="label">Category:</p>
-              <p class="category-resp">#Category</p>
-            </div>
-            <div class="sale-count">
-              <p class="label">Count:</p>
-              <p class="count-resp">#Count</p>
-            </div>
-            <div class="sale-total">
-              <p class="label">Total:</p>
-              <p class="total-resp">#Total</p>
-            </div>
+      </section>
+      <!-- CREATE PRODUCT -->
+      <div class="section hide" id="create-section">
+        <div class="crud">
+          <div class="head">
+            <h2 class="prod-mang-title">PRODUCT MANAGEMENT SYSTEM</h2>
           </div>
-          <div id="sale-2-total">
-            <div class="sale-2">
-              <div class="select-section">
-                <p class="select-label">Products to sale:</p>
-                <select name="select" id="sale-count">
-                  <option class="sale-option" value="0" selected>-</option>
-                  <option class="sale-option" value="1">1</option>
-                  <option class="sale-option" value="2">2</option>
-                  <option class="sale-option" value="3">3</option>
-                  <option class="sale-option" value="4">4</option>
-                  <option class="sale-option" value="5">5</option>
-                  <option class="sale-option" value="6">6</option>
-                  <option class="sale-option" value="7">7</option>
-                  <option class="sale-option" value="8">8</option>
-                  <option class="sale-option" value="9">9</option>
-                  <option class="sale-option" value="10">10</option>
-                </select>
+          <div id="create-notification" class="notification">
+          </div>
+          <div class="inputs">
+            <div id="header">
+              <div id="reference-label">
+                <label for="reference">Reference</label>
+                <input type="integer" placeholder="Enter product reference" id="reference" autofocus>
+                <P id="ref"></P>
               </div>
-              
+              <div id="title-label">
+                <label for="title">Title</label>
+                <input placeholder="Product title" type="text" id="title" required>
+              </div>
+              <div id="category-label">
+                <label for="category">Category</label>
+                <input placeholder="Product category" type="text" id="category">
+              </div>
+              <div id="count-label">
+                <label class="count" for="count">Count</label>
+                <div class="count-error-section">
+                  <input placeholder="Count" type="number" onkeydown="if(event.key === '-') event.preventDefault()"
+                    id="count" min="1" step="1" oninput="if(this.value < 1) this.value = ''">
+                  <P id="count-error"></P>
+                </div>
+              </div>
             </div>
-            <div>
-              <span class="sale-count-display"></span>
+            <div class="price-discount-labels">
+              <div id="price-label"><label label for="price">Price</label></div>
+              <div id="discount-label"><label for="discount">Discount</label></div>
             </div>
-            <div class="tsa">
-              <p class="stat"></p>
-              <span class="sale-amount-display"></span>
+            <div class="price">
+              <div class="price-label">
+                <input onkeyup="getDiscount()" onkeydown="if(event.key === '-') event.preventDefault()"
+                  pLaceholder="price" type="number" id="price" min="0" step="0.01" required inputmode="decimal">
+                <P id="price-error"></P>
+              </div>
+              <div class="discount">
+                <div class="discount-label">
+                  <select onselect="getTotal()" name="select" id="discount">
+                    <option value="0" selected >0%</option>
+                    <option value="10" class="discount-option">10%</option>
+                    <option value="15" class="discount-option">15%</option>
+                    <option value="20" class="discount-option">20%</option>
+                    <option value="25" class="discount-option">25%</option>
+                    <option value="30" class="discount-option">30%</option>
+                  </select>
+                </div>
+              </div>
             </div>
-            <div class="tsa">
-              <p class="tax"></p>
-              <span class="sale-taxes-display"></span>
-            </div>
-            <div class="tsa">
-              <p class="net"></p>
-              <span class="sale-net-display"></span>
+            <div class="amount-section">
+              <span class="span span-hide"></span>
+              <p class="discount-amount amount-hide"></p>
             </div>
           </div>
-          <div class="sale-3">
-            <button onclick="saleNow(I)" class="sale-button" type="button">Sale</button>
-            <button class="sale-cancel-button" type="button">Cancel</button>
+          <div class="total-section">
+            <h3 class="total-title"></h3>
+            <small id="total"> </small>
+          </div>
+          <button onclick="showCreateSection()" class="submit-btn" id="submit" type="button">Create</button>
+          <button onclick="cancel()" class="cancel-btn"  type="button">Cancel</button>
+          <div class="outputs">
           </div>
         </div>
-        
-     </div>
-    <!-- INVENTORY -->  
-    <div class="section hide" id="inventory-section">
-
-      <div class="title">
-        <h2>INVENTORY MANAGEMENT</h2>
-        <p>Create - Read - Update - Delete</p>
       </div>
-      <h2 class="no-products hide">No products found</h2>
-      <div class="no_product">
-        <img class="no_products_img hide" src="./images/no-products-found.avif" alt="no-products">
+      <!-- Sale search section-->
+      <div class="section hide" id="sale-section">
+        <div>
+          <div class="sale-title">
+            <h2>Sale Products</h2>
+          </div>
+          <div id="sale-notification" class="notification"></div>
+          <div class="sale-search">
+            <label for="sale">Search Product</label>
+            <div class="sale-s">
+              <input onchange="saleSearch(this.value)" type="text" placeholder="reference title category" id="sale-input">
+              <button id="sale-icon" type="submit">🔍</button>
+            </div>
+            <p class="sale-error-msg hide"></p>
+          </div>
+        </div>
+        <div class="sale-img hide">
+          <img  id="sale_img" src="./images/sale.jpg" alt="sale_image">
+        </div>
+          <div class="sale-table hide">
+            <div class="table">
+              <div id="table-bod">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>ref</th>
+                      <th>title</th>
+                      <th>category</th>
+                      <th>count</th>
+                      <th>price</th>
+                      <th>discount rate</th>
+                      <th>discount amount</th>
+                      <th>total</th>
+                      <th>sale</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbod">
+    
+                  </tbody>
+                </table>
+          </div>
+            </div>
+          </div>
+    
       </div>
-      <div class="table">
-        <table id="table-body">
-          <thead>
-            <tr>
-              <th>ref</th>
-              <th>title</th>
-              <th>category</th>
-              <th>count</th>
-              <th>price</th>
-              <th>discount rate</th>
-              <th>discount amount</th>
-              <th>total</th>
-              <th>update</th>
-              <th>delete</th>
-            </tr>
-          </thead>
-          <tbody id="tbody">
-          </tbody>
-        </table>
-
+      <!-- Sale section-->
+        <div class="section hide" id="sale-now-section">
+          <div class="sale-flex">
+            <div class="sale-1">
+              <div class="sale-ref">
+                <p class="label">Reference:</p>
+                <p class="ref-resp">#Ref</p>
+              </div>
+              <div class="saleNow-title">
+                <p class="label">Title:</p>
+                <p class="title-resp">#Title</p>
+              </div>
+              <div class="sale-category">
+                <p class="label">Category:</p>
+                <p class="category-resp">#Category</p>
+              </div>
+              <div class="sale-count">
+                <p class="label">Count:</p>
+                <p class="count-resp">#Count</p>
+              </div>
+              <div class="sale-total">
+                <p class="label">Total:</p>
+                <p class="total-resp">#Total</p>
+              </div>
+            </div>
+            <div id="sale-2-total">
+              <div class="sale-2">
+                <div class="select-section">
+                  <p class="select-label">Products to sale:</p>
+                  <select name="select" id="sale-count">
+                    <option class="sale-option" value="0" selected>-</option>
+                    <option class="sale-option" value="1">1</option>
+                    <option class="sale-option" value="2">2</option>
+                    <option class="sale-option" value="3">3</option>
+                    <option class="sale-option" value="4">4</option>
+                    <option class="sale-option" value="5">5</option>
+                    <option class="sale-option" value="6">6</option>
+                    <option class="sale-option" value="7">7</option>
+                    <option class="sale-option" value="8">8</option>
+                    <option class="sale-option" value="9">9</option>
+                    <option class="sale-option" value="10">10</option>
+                  </select>
+                </div>
+    
+              </div>
+              <div>
+                <span class="sale-count-display"></span>
+              </div>
+              <div class="tsa">
+                <p class="stat"></p>
+                <span class="sale-amount-display"></span>
+              </div>
+              <div class="tsa">
+                <p class="tax"></p>
+                <span class="sale-taxes-display"></span>
+              </div>
+              <div class="tsa">
+                <p class="net"></p>
+                <span class="sale-net-display"></span>
+              </div>
+            </div>
+            <div class="sale-3">
+              <button onclick="saleNow(I)" class="sale-button" type="button">Sale</button>
+              <button class="sale-cancel-button" type="button">Cancel</button>
+            </div>
+          </div>
+    
+       </div>
+      <!-- INVENTORY -->
+      <div class="section hide" id="inventory-section">
+        <div class="title">
+          <h2>INVENTORY MANAGEMENT</h2>
+          <p>Create - Read - Update - Delete</p>
+        </div>
+        <h2 class="no-products hide">No products found</h2>
+        <div class="no_product">
+          <img class="no_products_img hide" src="./images/no-products-found.avif" alt="no-products">
+        </div>
+        <div class="table">
+          <table id="table-body">
+            <thead>
+              <tr>
+                <th>ref</th>
+                <th>title</th>
+                <th>category</th>
+                <th>count</th>
+                <th>price</th>
+                <th>discount rate</th>
+                <th>discount amount</th>
+                <th>total</th>
+                <th>update</th>
+                <th>delete</th>
+              </tr>
+            </thead>
+            <tbody id="tbody">
+            </tbody>
+          </table>
+        </div>
+        <div id="delete-all"></div>
+        <div id="inventory-notification" class="notification"></div>
       </div>
-      <div id="delete-all"></div>
-      <div id="inventory-notification" class="notification"></div>
-    </div>
-  </main>
+    </main>
+  </div>
 
   <script src="file.js"></script>
 </body>
