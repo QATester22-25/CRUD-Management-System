@@ -139,8 +139,19 @@ async function loadProducts() {
 
     dataProduct = products.map(enrichProduct);
 
-    showProductData();
-    showSaleProduct();
+    /////////changed
+    if(dataProduct.length > 0){showProductData();
+      showSaleProduct();
+      document.getElementById("table-body").classList.remove("hide");
+      document.querySelector(".no-products").classList.add("hide");
+      document.querySelector(".no_products_img").classList.add("hide");
+    } else {
+      document.getElementById("table-body").classList.add("hide");
+      document.querySelector(".no-products").classList.remove("hide");
+      document.querySelector(".no_products_img").classList.remove("hide");
+
+    }
+    
 
     console.log("Produits chargés depuis MySQL :", dataProduct);
   } catch (error) {
@@ -330,8 +341,13 @@ function showProductData() {
       </tr>`;
 
     //add deleteAll button if there's at list one product
-    if (dataProduct.length) {
+    if (dataProduct.length > 0) {
       deleteAllBtn.innerHTML = `<button  onclick="deleteAll()" id="deleteAll">Delete All (${dataProduct.length})</button>`;
+    } else if(dataProduct.length === 0) {
+    document.getElementById("table-body").classList.add("hide");
+    document.querySelector(".no-products").classList.remove("hide");
+      document.querySelector(".no_products_img").classList.remove("hide");
+      console.log(dataProduct.length)
     }
   }
 
@@ -861,7 +877,6 @@ function showInventorySection() {
 
   saleNowSection.classList.remove("show");
   saleNowSection.classList.add("hide");
-  document.getElementById("sale_img").classList.remove("hide");
 
   clearSaleData();
 }
