@@ -162,7 +162,7 @@ async function loadProducts() {
   }
 }
 
-loadProducts();
+//loadProducts();
 
 //initialize empty variable;
 let tmp;
@@ -732,7 +732,7 @@ async function saleNow(i) {
     saleNotification.classList.remove("error-notification");
 
     setTimeout(() => {
-      showSaleSection();
+      showInventorySection();
       document.getElementById("sale_img").classList.remove("hide");
     }, 3000);
   } catch (error) {
